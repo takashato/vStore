@@ -7,7 +7,7 @@ async function init() {
 
     try {
         await db.sequelize.authenticate();
-        console.log('Connected to database.');
+        console.log('>>> Connected to database');
     } catch (e) {
         console.error('Can\'t connect to database.\n', e);
         process.exit();
