@@ -1,4 +1,4 @@
-import initHapi from './hapi';
+import {init as initHapi} from './hapi';
 import {init as initDb} from './db';
 
 const init = async () => {

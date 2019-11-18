@@ -28,7 +28,11 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.INTEGER(11),
 			allowNull: false
 		},
-		create_date: {
+		created_at: {
+			type: DataTypes.DATE,
+			allowNull: true
+		},
+		updated_at: {
 			type: DataTypes.DATE,
 			allowNull: true
 		}
