@@ -27,7 +27,7 @@ export async function authenticate(request, h) {
         return ResponseBuilder.inputError(h, "Mật khẩu không đúng", 'incorrect_password');
     }
 
-    let token = JWT.sign({id: staff.id}, secureConfig.jwtSecret);
+    let token = JWT.sign({id: staff.id}, secureConfig.jwtSecret, {expiresIn: '30d'});
     return {
         id: staff.id,
         token: token,
