@@ -1,26 +1,61 @@
 import React from 'react';
-import logo from './logo.svg';
+import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import './App.css';
+import {BrowserRouter, Redirect, Route, Switch, withRouter} from "react-router-dom";
+import LoginLayout from "./components/layouts/LoginLayout";
+import MainLayout from "./components/layouts/MainLayout";
+import {connect, Provider} from "react-redux";
+import reducers from "./redux/reducers/combined";
+import {applyMiddleware, createStore} from "redux";
+import thunk from "redux-thunk";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const store = createStore(reducers, applyMiddleware(thunk));
+
+class App extends React.Component {
+    state = {
+        loggedIn: false
+    };
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.staff.token == null && this.props.staff.token != null) {
+            this.setState({loggedIn: true});
+        }
+    }
+
+    render() {
+        return (
+            <BrowserRouter>
+                {this.state.loggedIn
+                    ? <Redirect from='/login' to='/'/>
+                    : <Redirect from='*' to='/login'/>
+                }
+                <Switch>
+                    <Route path='/login'>
+                        <LoginLayout/>
+                    </Route>
+                    <Route>
+                        <MainLayout/>
+                    </Route>
+                </Switch>
+            </BrowserRouter>
+        );
+    }
 }
 
-export default App;
+const mapStateToProps = state => {
+    return {
+        staff: state.staff
+    };
+};
+
+const VisibleApp = connect(mapStateToProps, null)(App);
+
+function ProvidedApp() {
+    return (
+        <Provider store={store}>
+            <VisibleApp/>
+        </Provider>
+    );
+}
+
+export default ProvidedApp;
