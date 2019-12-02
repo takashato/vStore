@@ -11,7 +11,7 @@ const {Header} = Layout;
 class TopBar extends React.Component {
     doLogout(e) {
         message.destroy();
-        localStorage.removeItem('session_token');
+        sessionStorage.removeItem('session_token');
         this.props.setToken(null);
         message.success('Đăng xuất thành công!');
     }

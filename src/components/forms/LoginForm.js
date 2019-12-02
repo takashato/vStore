@@ -18,7 +18,7 @@ class NormalLoginForm extends React.Component {
                     let res = await axios.post('/staff/auth', {username: values.username, password: values.password});
                     await message.success('Đăng nhập thành công!', 0.5);
                     this.props.setToken(res.data.token);
-                    localStorage.setItem('session_token', res.data.token);
+                    sessionStorage.setItem('session_token', res.data.token);
                 } catch (err) {
                     console.log(err);
                     message.error(err.response.data.userMessage ? err.response.data.userMessage : 'Đăng nhập thất bại!');

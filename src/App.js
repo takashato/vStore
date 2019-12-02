@@ -61,7 +61,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         getTokenFromStorage: () => {
-            let token = localStorage.getItem('session_token');
+            let token = sessionStorage.getItem('session_token');
             dispatch(setToken(token));
         }
     };
