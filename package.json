@@ -2,7 +2,7 @@
   "name": "vstore-web",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3000",
+  "proxy": "http://localhost:3001",
   "dependencies": {
     "antd": "^3.26.0",
     "axios": "^0.19.0",
