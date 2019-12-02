@@ -8,26 +8,36 @@ import {connect, Provider} from "react-redux";
 import reducers from "./redux/reducers/combined";
 import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
+import {setToken} from "./redux/actions/staff";
 
 const store = createStore(reducers, applyMiddleware(thunk));
 
 class App extends React.Component {
     state = {
-        loggedIn: false
+        redirectToLogin: false,
     };
 
+    componentDidMount() {
+        this.props.getTokenFromStorage();
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.staff.token == null && this.props.staff.token != null) {
-            this.setState({loggedIn: true});
+        console.log('App updatd');
+        if (this.props.staff.token == null && !prevState.redirectToLogin) {
+            this.setState({redirectToLogin: true});
+        }
+        if (this.props.staff.token != null && prevState.redirectToLogin) {
+            this.setState({redirectToLogin: false});
         }
     }
 
     render() {
         return (
             <BrowserRouter>
-                {this.state.loggedIn
-                    ? <Redirect from='/login' to='/'/>
-                    : <Redirect from='*' to='/login'/>
+                {
+                    this.state.redirectToLogin
+                        ? <Redirect from='*' to='/login'/>
+                        : <Redirect from='/login' to='/'/>
                 }
                 <Switch>
                     <Route path='/login'>
@@ -48,7 +58,16 @@ const mapStateToProps = state => {
     };
 };
 
-const VisibleApp = connect(mapStateToProps, null)(App);
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        getTokenFromStorage: () => {
+            let token = localStorage.getItem('session_token');
+            dispatch(setToken(token));
+        }
+    };
+};
+
+const VisibleApp = connect(mapStateToProps, mapDispatchToProps)(App);
 
 function ProvidedApp() {
     return (
