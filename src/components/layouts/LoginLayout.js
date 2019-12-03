@@ -4,7 +4,6 @@ import {Divider} from 'antd';
 
 import './LoginLayout.css';
 
-
 class LoginLayout extends React.Component {
     render() {
         return (

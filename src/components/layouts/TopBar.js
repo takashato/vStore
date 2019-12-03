@@ -32,7 +32,7 @@ class TopBar extends React.Component {
             <Header style={{background: '#fff', padding: 0}}>
                 <div className='user-dropdown'>
                     <Dropdown overlay={this.userDropdown}>
-                        <span>admin</span>
+                        <span>admin <Icon type="down" /></span>
                     </Dropdown>
                 </div>
             </Header>

@@ -12,9 +12,11 @@ import {setToken} from "./redux/actions/staff";
 
 const store = createStore(reducers, applyMiddleware(thunk));
 
+
 class App extends React.Component {
     state = {
         redirectToLogin: false,
+        lastLocation: this.props.location.pathname === '/login' ? '/' : this.props.location.pathname,
     };
 
     componentDidMount() {
@@ -24,20 +26,24 @@ class App extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         console.log('App updatd');
         if (this.props.staff.token == null && !prevState.redirectToLogin) {
-            this.setState({redirectToLogin: true});
+            console.log('Redirect to login', this.props.location);
+            this.setState({redirectToLogin: true, lastLocation: this.props.location.pathname});
         }
         if (this.props.staff.token != null && prevState.redirectToLogin) {
+            console.log('Redirect to home');
             this.setState({redirectToLogin: false});
         }
     }
 
     render() {
+        console.log(this.state.lastLocation);
+
         return (
-            <BrowserRouter>
+            <>
                 {
                     this.state.redirectToLogin
                         ? <Redirect from='*' to='/login'/>
-                        : <Redirect from='/login' to='/'/>
+                        : <Redirect from='/login' to={this.state.lastLocation}/>
                 }
                 <Switch>
                     <Route path='/login'>
@@ -47,10 +53,11 @@ class App extends React.Component {
                         <MainLayout/>
                     </Route>
                 </Switch>
-            </BrowserRouter>
+            </>
         );
     }
 }
+
 
 const mapStateToProps = state => {
     return {
@@ -67,12 +74,22 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-const VisibleApp = connect(mapStateToProps, mapDispatchToProps)(App);
+const VisibleApp = withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+
+class AppContainer extends React.Component {
+    render() {
+        return (
+            <BrowserRouter>
+                <VisibleApp/>
+            </BrowserRouter>
+        );
+    }
+}
 
 function ProvidedApp() {
     return (
         <Provider store={store}>
-            <VisibleApp/>
+            <AppContainer/>
         </Provider>
     );
 }
