@@ -9,18 +9,20 @@ import reducers from "./redux/reducers/combined";
 import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
 import {setToken} from "./redux/actions/staff";
+import {Spin} from "antd";
 
 const store = createStore(reducers, applyMiddleware(thunk));
 
-
 class App extends React.Component {
     state = {
+        initialized: false,
         redirectToLogin: false,
         lastLocation: this.props.location.pathname === '/login' ? '/' : this.props.location.pathname,
     };
 
     componentDidMount() {
         this.props.getTokenFromStorage();
+        this.setState({initialized: true});
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -37,6 +39,14 @@ class App extends React.Component {
 
     render() {
         console.log(this.state.lastLocation);
+
+        if (!this.state.initialized) {
+            return (
+                <Spin tip="Đang tải...">
+                    <div className='loading-screen'/>
+                </Spin>
+            );
+        }
 
         return (
             <>
