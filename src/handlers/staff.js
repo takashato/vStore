@@ -33,3 +33,37 @@ export async function authenticate(request, h) {
         token: token,
     };
 }
+
+const casualStaffExportFields = ['id', 'username', 'full_name', 'email', 'group_id', 'created_at', 'updated_at'];
+
+export async function getAllStaff(request, h) {
+    let params = request.query;
+
+    let results = params.results;
+    if (!results) results = 10;
+    let page = params.page;
+    if (!page) page = 1;
+    let fields = params.fields;
+    let fieldList = fields ? fields.split(',') : [];
+
+    for (let i = 0; i < fieldList.length; ++i) {
+        if (!casualStaffExportFields.includes(fieldList[i])) {
+            return ResponseBuilder.inputError(h, 'Field list không hợp lệ.', 'invalid_field_list', 'field:' + fieldList[i]);
+        }
+    }
+
+    if (results < 1 || page < 1) {
+        return ResponseBuilder.inputError(h, 'Số kết quả / số trang không hợp lệ.', 'invalid_results_page_number');
+    }
+
+    let staffs = await Staff.findAll({
+        attributes: fieldList,
+        limit: parseInt(results),
+        offset: (page - 1) * results,
+    });
+    let count = await Staff.count();
+    return {
+        rows: staffs,
+        total: count,
+    };
+}
