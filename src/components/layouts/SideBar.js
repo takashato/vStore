@@ -1,32 +1,30 @@
 import React from 'react';
 import {Icon, Menu, Layout} from "antd";
+import {Link, withRouter} from "react-router-dom";
 
 const {Sider} = Layout;
 
 class SideBar extends React.Component {
     render() {
+        console.log(this.props.location);
         return (
             <Sider
                 breakpoint="lg"
                 collapsedWidth="0"
             >
                 <div className="logo" />
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-                    <Menu.Item key="1">
-                        <Icon type="user" />
-                        <span className="nav-text">nav 1</span>
+                <Menu theme="dark" mode="inline" defaultSelectedKeys={this.props.location.pathname}>
+                    <Menu.Item key="/dashboard">
+                        <Link to="/dashboard">
+                            <Icon type="dashboard" />
+                            <span>Trang chính</span>
+                        </Link>
                     </Menu.Item>
-                    <Menu.Item key="2">
-                        <Icon type="video-camera" />
-                        <span className="nav-text">nav 2</span>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                        <Icon type="upload" />
-                        <span className="nav-text">nav 3</span>
-                    </Menu.Item>
-                    <Menu.Item key="4">
-                        <Icon type="user" />
-                        <span className="nav-text">nav 4</span>
+                    <Menu.Item key="/staff">
+                        <Link to='/staff'>
+                            <Icon type="user" />
+                            <span>Nhân viên</span>
+                        </Link>
                     </Menu.Item>
                 </Menu>
             </Sider>
@@ -34,4 +32,4 @@ class SideBar extends React.Component {
     }
 }
 
-export default SideBar;
+export default withRouter(SideBar);
