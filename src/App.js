@@ -10,8 +10,7 @@ import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
 import {setToken} from "./redux/actions/staff";
 import {Spin} from "antd";
-
-const store = createStore(reducers, applyMiddleware(thunk));
+import store from "./store";
 
 class App extends React.Component {
     state = {

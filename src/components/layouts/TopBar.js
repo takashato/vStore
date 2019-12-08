@@ -4,16 +4,13 @@ import {Link} from "react-router-dom";
 
 import './TopBar.css';
 import {connect} from "react-redux";
-import {setToken} from "../../redux/actions/staff";
+import {doLogout, setToken} from "../../redux/actions/staff";
 
 const {Header} = Layout;
 
 class TopBar extends React.Component {
     doLogout(e) {
-        message.destroy();
-        sessionStorage.removeItem('session_token');
-        this.props.setToken(null);
-        message.success('Đăng xuất thành công!');
+        this.props.doLogout();
     }
 
     userDropdown = (
@@ -42,7 +39,7 @@ class TopBar extends React.Component {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        setToken: (token) => dispatch(setToken(token))
+        doLogout: () => dispatch(doLogout())
     };
 };
 
