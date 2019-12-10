@@ -35,6 +35,7 @@ export async function authenticate(request, h) {
 }
 
 const casualStaffExportFields = ['id', 'username', 'full_name', 'email', 'group_id', 'created_at', 'updated_at'];
+const editableStaffFields = ['full_name', 'email', 'group_id', 'password'];
 
 export async function getAllStaff(request, h) {
     let params = request.query;
@@ -44,7 +45,7 @@ export async function getAllStaff(request, h) {
     let page = params.page;
     if (!page) page = 1;
     let fields = params.fields;
-    let fieldList = fields ? fields.split(',') : [];
+    let fieldList = fields ? fields.split(',') : ['id'];
 
     for (let i = 0; i < fieldList.length; ++i) {
         if (!casualStaffExportFields.includes(fieldList[i])) {
@@ -66,6 +67,31 @@ export async function getAllStaff(request, h) {
         rows: staffs,
         total: count,
     };
+}
+
+export async function getStaff(request, h) {
+    let id = request.params.id;
+    let fields = request.query.fields;
+    let fieldList = fields ? fields.split(',') : ['id'];
+
+    if (!id) {
+        return ResponseBuilder.inputError(h, 'Yêu cầu ID.', 'missing_id');
+    }
+    for (let i = 0; i < fieldList.length; ++i) {
+        if (!casualStaffExportFields.includes(fieldList[i])) {
+            return ResponseBuilder.inputError(h, 'Field list không hợp lệ.', 'invalid_field_list', 'field:' + fieldList[i]);
+        }
+    }
+    let staff;
+    try {
+        staff = await Staff.findByPk(id, {attributes: fieldList});
+    } catch (err) {
+        console.log(err);
+    }
+    if (!staff) {
+        return ResponseBuilder.error(h, ResponseBuilder.NOT_FOUND, 'Nhân viên không tồn tại.', 'staff_not_found');
+    }
+    return staff;
 }
 
 export async function createStaff(request, h) {
@@ -103,6 +129,42 @@ export async function createStaff(request, h) {
         }
         return ResponseBuilder.inputError(h, 'Lỗi không xác định.', 'unknown_errror');
     } catch (err) {
-        return ResponseBuilder.inputError(h, 'Lỗi khi tạo nhân viên.', 'error_on_create', err);
+        return ResponseBuilder.error(h, ResponseBuilder.INTERNAL_ERROR, 'Lỗi khi tạo nhân viên.', 'error_on_create', err);
+    }
+}
+
+export async function updateStaff(request, h) {
+    let id = request.params.id;
+    let payload = request.payload;
+
+    let fieldList = Object.keys(payload);
+
+    let staff = await Staff.findByPk(id);
+    if (!staff) {
+        return ResponseBuilder.error(h, ResponseBuilder.NOT_FOUND, 'Nhân viên không tồn tại.', 'staff_not_found');
+    }
+
+    for (let i = 0; i < fieldList.length; ++i) {
+        let field = fieldList[i];
+        if (editableStaffFields.includes(field)) {
+            if (field === 'group_id' && (payload.group_id < 1 || payload.group_id > 3) ) {
+                return ResponseBuilder.inputError(h, 'Giá trị nhóm quyền không hợp lệ.', 'group_id_is_invalid');
+            }
+            if (field === 'password') {
+                if (payload.password < 5) {
+                    return ResponseBuilder.inputError(h, 'Mật khẩu phải dài từ 5 ký tự trở lên.', 'password_is_too_short');
+                }
+                staff.password = Bcrypt.hashSync(payload.password, Bcrypt.genSaltSync());
+                continue;
+            }
+            staff[field] = payload[field];
+        }
+    }
+    try {
+        if (await staff.save()) {
+            return {debug: staff};
+        }
+    } catch (err) {
+        return ResponseBuilder.error(h, ResponseBuilder.INTERNAL_ERROR, 'Lỗi khi cập nhật nhân viên.', 'error_on_update', err);
     }
 }

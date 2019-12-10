@@ -28,6 +28,11 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.INTEGER(11),
 			allowNull: false
 		},
+		active: {
+			type: DataTypes.INTEGER(1),
+			allowNull: false,
+			defaultValue: '1'
+		},
 		created_at: {
 			type: DataTypes.DATE,
 			allowNull: true

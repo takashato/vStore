@@ -1,4 +1,4 @@
-import {authenticate, createStaff, getAllStaff} from "../handlers/staff";
+import {authenticate, createStaff, getAllStaff, getStaff, updateStaff} from "../handlers/staff";
 
 function applyRoute(server) {
     server.route({
@@ -31,6 +31,30 @@ function applyRoute(server) {
             app: {
                 allowedGroups: [1] // Admin
             },
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/staff/{id}',
+        handler: getStaff,
+        options: {
+            auth: 'jwt',
+            app: {
+                allowedGroups: [1, 2] // Admin and staffs
+            }
+        }
+    });
+
+    server.route({
+        method: 'PUT',
+        path: '/staff/{id}',
+        handler: updateStaff,
+        options: {
+            auth: 'jwt',
+            app: {
+                allowedGroups: [1] // Admin and staffs
+            }
         }
     });
 }
