@@ -5,8 +5,9 @@ import SideBar from './SideBar';
 import TopBar from "./TopBar";
 import {Switch, Route} from "react-router-dom";
 import StaffPage from "../pages/StaffPage";
+import FooterLayout from "./FooterLayout";
 
-const {Header, Content, Footer, Sider} = Layout;
+const {Content} = Layout;
 
 class MainLayout extends React.Component {
     render() {
@@ -22,7 +23,7 @@ class MainLayout extends React.Component {
                             </Route>
                         </Switch>
                     </Content>
-                    <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>
+                    <FooterLayout/>
                 </Layout>
             </Layout>
         );
