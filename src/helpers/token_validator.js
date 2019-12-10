@@ -9,7 +9,7 @@ const validate = async function (decoded, request, h) {
         console.log(err);
         return {isValid: false};
     }
-    if (!staff) {
+    if (!staff || decoded.hash !== staff.password) {
         return {isValid: false};
     }
     request.staff = staff;

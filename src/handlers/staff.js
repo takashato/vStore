@@ -27,7 +27,10 @@ export async function authenticate(request, h) {
         return ResponseBuilder.inputError(h, "Mật khẩu không đúng", 'incorrect_password');
     }
 
-    let token = JWT.sign({id: staff.id}, secureConfig.jwtSecret, {expiresIn: '30d'});
+    let token = JWT.sign({
+        id: staff.id,
+        hash: staff.password,
+    }, secureConfig.jwtSecret, {expiresIn: '30d'});
     return {
         id: staff.id,
         token: token,
@@ -147,7 +150,7 @@ export async function updateStaff(request, h) {
     for (let i = 0; i < fieldList.length; ++i) {
         let field = fieldList[i];
         if (editableStaffFields.includes(field)) {
-            if (field === 'group_id' && (payload.group_id < 1 || payload.group_id > 3) ) {
+            if (field === 'group_id' && (payload.group_id < 1 || payload.group_id > 3)) {
                 return ResponseBuilder.inputError(h, 'Giá trị nhóm quyền không hợp lệ.', 'group_id_is_invalid');
             }
             if (field === 'password') {
