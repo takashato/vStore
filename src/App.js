@@ -9,7 +9,8 @@ import reducers from "./redux/reducers/combined";
 import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
 import {setToken} from "./redux/actions/staff";
-import {Spin} from "antd";
+import {ConfigProvider, Spin} from "antd";
+import viVN from "antd/es/locale/vi_VN";
 import store from "./store";
 
 class App extends React.Component {
@@ -98,7 +99,9 @@ class AppContainer extends React.Component {
 function ProvidedApp() {
     return (
         <Provider store={store}>
-            <AppContainer/>
+            <ConfigProvider locale={viVN}>
+                <AppContainer/>
+            </ConfigProvider>
         </Provider>
     );
 }

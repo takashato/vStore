@@ -13,7 +13,7 @@ export function setToken(token) {
     }
 }
 
-export function doLogout() {
+export function doLogout(msg = 'Đăng xuất thành công.', type = message.success) {
     return (dispatch, getState) => {
         message.destroy();
         // Remove token stored in session / local storage
@@ -22,7 +22,7 @@ export function doLogout() {
         dispatch({
             type: LOGOUT,
         });
-        message.success('Đăng xuất thành công!');
+        type(msg);
     };
 
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Layout, Menu, Icon} from 'antd';
+import {Layout, Menu, Icon, PageHeader} from 'antd';
 import './MainLayout.css';
 import SideBar from './SideBar';
 import TopBar from "./TopBar";
@@ -16,13 +16,11 @@ class MainLayout extends React.Component {
                 <Layout>
                     <TopBar/>
                     <Content style={{margin: '24px 16px 0'}}>
-                        <div style={{padding: 24, background: '#fff', minHeight: 360}}>
-                            <Switch>
-                                <Route exact path='/staff'>
-                                    <StaffPage/>
-                                </Route>
-                            </Switch>
-                        </div>
+                        <Switch>
+                            <Route exact path='/staff'>
+                                <StaffPage/>
+                            </Route>
+                        </Switch>
                     </Content>
                     <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>
                 </Layout>
