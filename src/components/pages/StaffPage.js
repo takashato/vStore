@@ -1,5 +1,19 @@
 import React from 'react';
-import {Table, message, PageHeader, Tag, Modal, Button, Popconfirm, Icon, Tooltip, Form, Input, Select} from 'antd';
+import {
+    Table,
+    message,
+    PageHeader,
+    Tag,
+    Modal,
+    Button,
+    Popconfirm,
+    Icon,
+    Tooltip,
+    Form,
+    Input,
+    Select,
+    Divider
+} from 'antd';
 import axios from "../../libs/axios";
 import {connect} from "react-redux";
 import moment from "moment";
@@ -72,11 +86,11 @@ class StaffPage extends React.Component {
             fixed: 'right',
             render: (text, record) =>
                 this.state.data.length >= 1 ? (
-                    <Popconfirm title="Bạn có chắc muốn xóa?" onConfirm={() => this.handleDelete(record.key)}>
-                        <Tooltip title="Xóa" placement="bottom">
-                            <Button type="danger"><Icon type="delete"/></Button>
+                    <>
+                        <Tooltip title="Sửa" placement="bottom">
+                            <Button icon="edit" onClick={() => this.handleEdit(record.id)}/>
                         </Tooltip>
-                    </Popconfirm>
+                    </>
                 ) : null,
         });
     }
@@ -124,6 +138,26 @@ class StaffPage extends React.Component {
         this.formRef.props.form.resetFields();
     };
 
+    handleEdit = async (id) => {
+        let res;
+        try {
+            res = await axios.get('/staff/' + id, {params: {fields: this.fields.join(',')}});
+        } catch (err) {
+            message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi lấy thông tin nhân viên.");
+            return;
+        }
+        this.setState({
+            modalVisible: true, isCreateModal: false, modalData: {
+                id: id,
+                username: res.data.username,
+                password: res.data.password,
+                full_name: res.data.full_name,
+                email: res.data.email,
+                group_id: res.data.group_id,
+            }
+        });
+    };
+
     setFormRef = formRef => this.formRef = formRef;
 
     cancelModal = () => {
@@ -142,10 +176,22 @@ class StaffPage extends React.Component {
                     .then((response) => {
                         message.success("Tạo nhân viên thành công.");
                         this.setState({modalVisible: false});
+                        form.resetFields();
                         this.getData();
                     })
                     .catch((err) => {
                         message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi tạo nhân viên mới.");
+                    });
+            } else {
+                axios.put("/staff/" + this.state.modalData.id, values)
+                    .then((response) => {
+                        message.success("Cập nhật thông tin nhân viên thành công.");
+                        this.setState({modalVisible: false});
+                        form.resetFields();
+                        this.getData();
+                    })
+                    .catch((err) => {
+                        message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi cập nhật thông tin nhân viên.");
                     });
             }
         });
@@ -201,7 +247,7 @@ const StaffModal = Form.create({name: 'staff_modal'})(
                             {getFieldDecorator('username', {
                                 rules: [{required: true, message: 'Vui lòng nhập tên đăng nhập.'}],
                                 initialValue: this.props.data.username
-                            })(<Input/>)}
+                            })(<Input disabled={!this.props.isCreate}/>)}
                         </Form.Item>
                         <Form.Item label="Mật khẩu">
                             {getFieldDecorator('password', this.props.isCreate ? {
