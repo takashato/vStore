@@ -67,3 +67,42 @@ export async function getAllStaff(request, h) {
         total: count,
     };
 }
+
+export async function createStaff(request, h) {
+    let payload = request.payload;
+
+    let username = payload.username;
+    let password = payload.password;
+    let full_name = payload.full_name;
+    let email = payload.email;
+    let group_id = payload.group_id;
+
+    if (!username || !password || !full_name || !group_id) {
+        return ResponseBuilder.inputError(h, 'Vui lòng không bỏ trống những ô có dấu (*)', 'missing_required_fields');
+    }
+    if (await Staff.findOne({where: {username: username}})) {
+        return ResponseBuilder.inputError(h, 'Tên tài khoản đã tồn tại.', 'username_is_not_available');
+    }
+    if (password.length < 5) {
+        return ResponseBuilder.inputError(h, 'Mật khẩu phải dài từ 5 ký tự trở lên.', 'password_is_too_short');
+    }
+    if (group_id < 1 || group_id > 3) {
+        return ResponseBuilder.inputError(h, 'Giá trị nhóm quyền không hợp lệ.', 'group_id_is_invalid');
+    }
+
+    let staff = Staff.build({
+        username: username,
+        password: Bcrypt.hashSync(password, Bcrypt.genSaltSync()),
+        email: email,
+        full_name: full_name,
+        group_id: group_id,
+    });
+    try {
+        if (await staff.save()) {
+            return {created_id: staff.id};
+        }
+        return ResponseBuilder.inputError(h, 'Lỗi không xác định.', 'unknown_errror');
+    } catch (err) {
+        return ResponseBuilder.inputError(h, 'Lỗi khi tạo nhân viên.', 'error_on_create', err);
+    }
+}

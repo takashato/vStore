@@ -1,4 +1,4 @@
-import {authenticate, getAllStaff} from "../handlers/staff";
+import {authenticate, createStaff, getAllStaff} from "../handlers/staff";
 
 function applyRoute(server) {
     server.route({
@@ -14,6 +14,18 @@ function applyRoute(server) {
         method: 'GET',
         path: '/staff',
         handler: getAllStaff,
+        options: {
+            auth: 'jwt',
+            app: {
+                allowedGroups: [1] // Admin
+            },
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/staff',
+        handler: createStaff,
         options: {
             auth: 'jwt',
             app: {
