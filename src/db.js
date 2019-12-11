@@ -6,7 +6,8 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.p
     dialect: dbConfig.dialect,
     define: {
         underscored: true,
-    }
+    },
+    timezone: dbConfig.timezone,
 });
 
 export default sequelize;
