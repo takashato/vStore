@@ -17,6 +17,7 @@ import {
 import axios from "../../libs/axios";
 import {connect} from "react-redux";
 import moment from "moment";
+import momentTz from "../../libs/moment";
 
 const userGroupIDMap = [
     {
@@ -63,7 +64,7 @@ class StaffPage extends React.Component {
             }, {
                 title: 'Ngày tạo',
                 dataIndex: 'created_at',
-                render: data => moment(data).format('HH:mm:ss DD/MM/YYYY'),
+                render: data => momentTz(data).format('HH:mm:ss DD/MM/YYYY'),
             }, {
                 title: 'Loại tài khoản',
                 dataIndex: 'group_id',
