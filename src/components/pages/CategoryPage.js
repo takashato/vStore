@@ -1,5 +1,5 @@
 import React from 'react';
-import {message, PageHeader, Table} from "antd";
+import {Button, Form, Input, message, Modal, PageHeader, Table, Tooltip} from "antd";
 import axios from "../../libs/axios";
 import momentTz from "../../libs/moment";
 
@@ -8,6 +8,9 @@ class CategoryPage extends React.Component {
         data: [],
         pagination: {},
         loading: false,
+        search: undefined,
+        modalVisible: false,
+        modalData: {},
     };
 
     constructor(props) {
@@ -29,11 +32,18 @@ class CategoryPage extends React.Component {
         this.fields = this.columns.map(e => e.dataIndex);
         this.columns.push({
             title: 'Hành động',
+            fixed: 'right',
+            render: (text, record) => (
+                <Tooltip title="Sửa" placement="bottom">
+                    <Button icon="edit" onClick={() => this.handleEditButton(record.id)}/>
+                </Tooltip>
+            )
         });
     }
 
     async getData(params = {}) {
-        this.setState({loading: true});
+        if (params.search === '') params.search = undefined;
+        this.setState({loading: true, search: params.search});
         try {
             let res = await axios.get('/category', {
                 params: {
@@ -43,13 +53,75 @@ class CategoryPage extends React.Component {
                 }
             });
             let pagination = {...this.state.pagination};
-            pagination.total = res.total || 0;
+            pagination.total = res.data.total || 0;
             this.setState({data: res.data.rows, pagination});
         } catch (err) {
             message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi lấy dữ liệu.');
         }
         this.setState({loading: false});
     }
+
+    handleTableChange = (pagination, filters, sorter) => {
+        const pager = {...this.state.pagination};
+        pager.current = pagination.current;
+        this.setState({pagination: pager});
+        this.getData({
+            results: pagination.pageSize,
+            page: pagination.current,
+            ...filters,
+        });
+    };
+
+    handleSearch = (value) => {
+        this.getData({search: value});
+    };
+
+    handleAddButton = (e) => {
+        this.setState({modalVisible: true, modalData: {}});
+        this.formRef.props.form.resetFields();
+    };
+
+    handleEditButton = (id) => {
+        axios.get('/category/' + id, {params: {fields: this.fields.join(',')}})
+            .then((res) => {
+                this.setState({modalVisible: true, modalData: res.data});
+                this.formRef.props.form.resetFields();
+            })
+            .catch((err) => {
+                message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi lấy dữ liệu.');
+            });
+    };
+
+    handleSubmit = async () => {
+        this.formRef.props.form.validateFields((err, values) => {
+            if (err) {
+                return;
+            }
+
+            if (!this.state.modalData.id) { // Create
+                axios.post('/category', {name: values.name})
+                    .then((res) => {
+                        message.success('Tạo danh mục thành công!');
+                        this.setState({modalVisible: false, modalData: {}});
+                        this.getData();
+                    })
+                    .catch((err) => {
+                        message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi tạo danh mục.');
+                    });
+                return;
+            }
+            // Update
+            axios.put('/category/' + this.state.modalData.id, {name: values.name})
+                .then((res) => {
+                    message.success('Cập nhật danh mục thành công!');
+                    this.setState({modalVisible: false, modalData: {}});
+                    this.getData();
+                })
+                .catch((err) => {
+                    message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi cập nhật mục.');
+                });
+        });
+    };
 
     componentDidMount() {
         this.getData();
@@ -66,11 +138,49 @@ class CategoryPage extends React.Component {
                     subTitle="Quản lý danh mục sản phẩm"
                 />
                 <div className="container">
-                    <Table columns={this.columns} dataSource={this.state.data} loading={this.state.loading}/>
+                    <Table columns={this.columns} rowKey="id" dataSource={this.state.data} loading={this.state.loading}
+                           onChange={this.handleTableChange} pagination={this.state.pagination} size="small"
+                           title={() => (
+                               <Form layout="inline">
+                                   <Form.Item>
+                                       <Button icon="plus" onClick={this.handleAddButton}>Thêm danh mục</Button>
+                                   </Form.Item>
+                                   <Form.Item>
+                                       <Input.Search placeholder="Tìm kiếm danh mục..." onSearch={this.handleSearch}/>
+                                   </Form.Item>
+                               </Form>
+                           )}/>
                 </div>
+                <AddCategoryModal wrappedComponentRef={(formRef) => this.formRef = formRef}
+                                  props={{
+                                      title: 'Danh mục',
+                                      visible: this.state.modalVisible,
+                                      onCancel: () => this.setState({modalVisible: false, modalData: {}}),
+                                      onOk: this.handleSubmit,
+                                  }} data={this.state.modalData}/>
             </div>
         );
     }
 }
+
+const AddCategoryModal = Form.create({name: 'category_modal'})(
+    class extends React.Component {
+        render() {
+            const {getFieldDecorator} = this.props.form;
+            return (
+                <Modal {...this.props.props}>
+                    <Form>
+                        <Form.Item label="Tên danh mục">
+                            {getFieldDecorator('name', {
+                                rules: [{required: true, message: 'Vui lòng nhập tên danh mục.'}],
+                                initialValue: this.props.data.name,
+                            })(<Input/>)}
+                        </Form.Item>
+                    </Form>
+                </Modal>
+            );
+        }
+    }
+);
 
 export default CategoryPage;
