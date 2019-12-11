@@ -218,6 +218,7 @@ class StaffPage extends React.Component {
                     <Button onClick={this.handleAddStaffButton} icon="user-add">Thêm nhân viên</Button>
                     <Table columns={this.columns} rowKey={record => record.id} loading={this.state.loading}
                            dataSource={this.state.data} onChange={this.handleTableChange}
+                           pagination={this.state.pagination}
                            scroll={{x: true}}
                     />
                 </div>
