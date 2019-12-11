@@ -11,18 +11,24 @@ class SideBar extends React.Component {
                 breakpoint="lg"
                 collapsedWidth="0"
             >
-                <div className="logo" />
+                <div className="logo"/>
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={this.props.location.pathname}>
                     <Menu.Item key="/dashboard">
                         <Link to="/dashboard">
-                            <Icon type="dashboard" />
+                            <Icon type="dashboard"/>
                             <span>Trang chính</span>
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="/staff">
                         <Link to='/staff'>
-                            <Icon type="user" />
+                            <Icon type="user"/>
                             <span>Nhân viên</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item key="/category">
+                        <Link to="/category">
+                            <Icon type="unordered-list"/>
+                            <span>Danh mục sản phẩm</span>
                         </Link>
                     </Menu.Item>
                 </Menu>

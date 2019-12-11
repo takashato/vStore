@@ -6,6 +6,7 @@ import TopBar from "./TopBar";
 import {Switch, Route} from "react-router-dom";
 import StaffPage from "../pages/StaffPage";
 import FooterLayout from "./FooterLayout";
+import CategoryPage from "../pages/CategoryPage";
 
 const {Content} = Layout;
 
@@ -20,6 +21,9 @@ class MainLayout extends React.Component {
                         <Switch>
                             <Route exact path='/staff'>
                                 <StaffPage/>
+                            </Route>
+                            <Route exact path='/category'>
+                                <CategoryPage/>
                             </Route>
                         </Switch>
                     </Content>
