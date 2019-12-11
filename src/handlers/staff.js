@@ -1,5 +1,6 @@
 import Bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";
+import {Op} from "sequelize";
 
 import secureConfig from "../config/secure";
 import Staff from "../models/staff_imported";
@@ -43,12 +44,11 @@ const editableStaffFields = ['full_name', 'email', 'group_id', 'password'];
 export async function getAllStaff(request, h) {
     let params = request.query;
 
-    let results = params.results;
-    if (!results) results = 10;
-    let page = params.page;
-    if (!page) page = 1;
+    let results = params.results || 10;
+    let page = params.page || 1;
     let fields = params.fields;
     let fieldList = fields ? fields.split(',') : ['id'];
+    let search = params.search;
 
     for (let i = 0; i < fieldList.length; ++i) {
         if (!casualStaffExportFields.includes(fieldList[i])) {
@@ -60,10 +60,20 @@ export async function getAllStaff(request, h) {
         return ResponseBuilder.inputError(h, 'Số kết quả / số trang không hợp lệ.', 'invalid_results_page_number');
     }
 
+    let options = {};
+    if (search) {
+        options.where = {
+            username: {
+                [Op.like]: '%' + search + '%',
+            }
+        };
+    }
+
     let staffs = await Staff.findAll({
         attributes: fieldList,
         limit: parseInt(results),
         offset: (page - 1) * results,
+        ...options
     });
     let count = await Staff.count();
     return {
@@ -130,7 +140,7 @@ export async function createStaff(request, h) {
         if (await staff.save()) {
             return {created_id: staff.id};
         }
-        return ResponseBuilder.inputError(h, 'Lỗi không xác định.', 'unknown_errror');
+        return ResponseBuilder.error(h, ResponseBuilder.INTERNAL_ERROR, 'Lỗi không xác định.', 'unknown_errror');
     } catch (err) {
         return ResponseBuilder.error(h, ResponseBuilder.INTERNAL_ERROR, 'Lỗi khi tạo nhân viên.', 'error_on_create', err);
     }
@@ -141,6 +151,10 @@ export async function updateStaff(request, h) {
     let payload = request.payload;
 
     let fieldList = Object.keys(payload);
+
+    if (fieldList.length < 1 || !payload.name) {
+        return ResponseBuilder.inputError(h, 'Payload trống.', 'empty_payload');
+    }
 
     let staff = await Staff.findByPk(id);
     if (!staff) {
@@ -165,7 +179,7 @@ export async function updateStaff(request, h) {
     }
     try {
         if (await staff.save()) {
-            return {debug: staff};
+            return {id: staff.id};
         }
     } catch (err) {
         return ResponseBuilder.error(h, ResponseBuilder.INTERNAL_ERROR, 'Lỗi khi cập nhật nhân viên.', 'error_on_update', err);
