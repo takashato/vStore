@@ -41,7 +41,9 @@ export async function getAllCategories(request, h) {
         offset: (page - 1) * results,
         ...options
     });
-    let count = await ProductCategory.count();
+    let count = await ProductCategory.count({
+        ...options
+    });
     return {
         rows: categories,
         total: count,
