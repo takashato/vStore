@@ -28,6 +28,10 @@ module.exports = function(sequelize, DataTypes) {
 			type: "DOUBLE",
 			allowNull: true
 		},
+		inventory_quantity: {
+			type: "DOUBLE",
+			allowNull: false
+		},
 		added_by: {
 			type: DataTypes.INTEGER(11),
 			allowNull: true

@@ -11,7 +11,7 @@
  Target Server Version : 100406
  File Encoding         : 65001
 
- Date: 10/12/2019 12:46:45
+ Date: 12/12/2019 19:19:51
 */
 
 SET NAMES utf8mb4;
@@ -28,6 +28,7 @@ CREATE TABLE `product`  (
   `category_id` int(11) NOT NULL,
   `price` double NULL DEFAULT NULL,
   `original_price` double NULL DEFAULT NULL,
+  `inventory_quantity` double NOT NULL,
   `added_by` int(11) NULL DEFAULT NULL,
   `is_deleted` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` datetime(0) NULL DEFAULT NULL,
