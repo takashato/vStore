@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, Form, Input, message, Modal, PageHeader, Table, Tooltip} from "antd";
 import axios from "../../libs/axios";
 import momentTz from "../../libs/moment";
+import {connect} from "react-redux";
 
 class CategoryPage extends React.Component {
     state = {
@@ -124,7 +125,9 @@ class CategoryPage extends React.Component {
     };
 
     componentDidMount() {
-        this.getData();
+        if (this.props.staff.token) {
+            this.getData();
+        }
     }
 
     render() {
@@ -183,4 +186,10 @@ const AddCategoryModal = Form.create({name: 'category_modal'})(
     }
 );
 
-export default CategoryPage;
+const mapStateToProps = (state) => {
+    return {
+        staff: state.staff,
+    }
+};
+
+export default connect(mapStateToProps)(CategoryPage);
