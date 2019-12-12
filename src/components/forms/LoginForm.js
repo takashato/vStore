@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Icon, Input, Button, message} from 'antd';
+import {Form, Icon, Input, Button, message, Checkbox} from 'antd';
 
 import './LoginForm.css';
 import axios from "../../libs/axios";
@@ -18,9 +18,12 @@ class NormalLoginForm extends React.Component {
                     let res = await axios.post('/staff/auth', {username: values.username, password: values.password});
                     await message.success('Đăng nhập thành công!', 0.5);
                     this.props.setToken(res.data.token);
-                    sessionStorage.setItem('session_token', res.data.token);
+                    if (values.save_password) {
+                        localStorage.setItem('session_token', res.data.token);
+                    } else {
+                        sessionStorage.setItem('session_token', res.data.token);
+                    }
                 } catch (err) {
-                    console.log(err);
                     message.error(err.response.data.userMessage ? err.response.data.userMessage : 'Đăng nhập thất bại!');
                 } finally {
                     loadingMsg();
@@ -53,6 +56,9 @@ class NormalLoginForm extends React.Component {
                             placeholder="Mật khẩu"
                         />,
                     )}
+                </Form.Item>
+                <Form.Item>
+                    {getFieldDecorator('save_password')(<Checkbox>Lưu tài khoản</Checkbox>)}
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" className="login-form-button">
