@@ -1,4 +1,4 @@
-import {getAllCustomers} from "../handlers/customer";
+import {createCustomer, getAllCustomers} from "../handlers/customer";
 
 function applyRoute(server) {
     server.route({
@@ -11,6 +11,18 @@ function applyRoute(server) {
                 allowedGroups: [1, 2, 3]
             }
         }
+    });
+
+    server.route({
+       method: "POST",
+       path: "/customer",
+       handler: createCustomer,
+       options: {
+           auth: "jwt",
+           app: {
+               allowedGroups: [1, 2, 3]
+           }
+       }
     });
 
 }
