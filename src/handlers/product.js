@@ -28,9 +28,18 @@ export async function getAllProducts(request, h) {
     let options = {};
     if (search) {
         options.where = {
-            name: {
-                [Op.like]: '%' + search + '%',
-            }
+            [Op.or]: [
+                {
+                    name: {
+                        [Op.like]: '%' + search + '%',
+                    }
+                }, {
+                    bar_code: {
+                        [Op.like]: '%' + search + '%',
+                    }
+                }
+            ]
+
         };
     }
 
