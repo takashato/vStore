@@ -1,11 +1,12 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Button, Form, Input, InputNumber, message, Modal, PageHeader, Select, Table, Tag, Tooltip} from "antd";
+import {Button, Form, Input, InputNumber, message, Modal, PageHeader, Select, Switch, Table, Tag, Tooltip} from "antd";
 import axios from "../../libs/axios";
 import momentTz from "../../libs/moment";
 import {number_format} from "../../libs/number_formater";
 import CategorySelector from "../forms/CategorySelector";
 import InputFormatedNumnber from "../forms/InputFormatedNumber";
+import {Checkbox} from "antd/es";
 
 class ProductPage extends React.Component {
 
@@ -16,6 +17,8 @@ class ProductPage extends React.Component {
         search: undefined,
         modalVisible: false,
         modalData: {},
+        categoryFilter: undefined,
+        inventoryFilter: false,
     };
 
     constructor(props) {
@@ -65,6 +68,8 @@ class ProductPage extends React.Component {
     async getData(params = {}) {
         if (params.search === '') params.search = undefined;
         this.setState({loading: true, search: params.search});
+        if (this.state.categoryFilter) params.category_id = this.state.categoryFilter.key;
+        if (this.state.inventoryFilter) params.inventory = this.state.inventoryFilter;
         try {
             let res = await axios.get('/product', {
                 params: {
@@ -165,6 +170,16 @@ class ProductPage extends React.Component {
         });
     };
 
+    handleCategoryChange = async value => {
+        await this.setState({categoryFilter: value});
+        await this.getData();
+    };
+
+    handleInventoryChange = async e => {
+        await this.setState({inventoryFilter: e.target.checked});
+        await this.getData();
+    };
+
     componentDidMount() {
         if (this.props.staff.token) {
             this.getData();
@@ -191,7 +206,15 @@ class ProductPage extends React.Component {
                                        <Button icon="plus" onClick={this.handleAddButton}>Thêm sản phẩm</Button>
                                    </Form.Item>
                                    <Form.Item>
-                                       <Input.Search placeholder="Tìm kiếm sản phẩm..." onSearch={this.handleSearch}/>
+                                       <Input.Search placeholder="Tìm kiếm sản phẩm..." allowClear
+                                                     onSearch={this.handleSearch}/>
+                                   </Form.Item>
+                                   <Form.Item>
+                                       <CategorySelector allowClear onChange={this.handleCategoryChange}
+                                                         value={this.state.categoryFilter} style={{width: 200}}/>
+                                   </Form.Item>
+                                   <Form.Item>
+                                       <Checkbox onChange={this.handleInventoryChange} defaultChecked={this.state.inventoryFilter}>Chỉ sản phẩm hết hàng</Checkbox>
                                    </Form.Item>
                                </Form>
                            )}/>

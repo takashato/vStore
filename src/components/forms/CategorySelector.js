@@ -39,10 +39,9 @@ class CategorySelector extends React.Component {
     handleChange = value => {
         this.setState({
             value,
-            data: [],
             fetching: false,
         });
-        this.props.onChange(value);
+        if (this.props.onChange) this.props.onChange(value);
     };
 
     componentDidMount() {
@@ -52,6 +51,7 @@ class CategorySelector extends React.Component {
     render() {
         return (
             <Select
+                {...this.props}
                 value={this.props.value}
                 labelInValue
                 notFoundContent={this.state.fetching ? <Spin size="small"/> : null}
@@ -59,7 +59,7 @@ class CategorySelector extends React.Component {
                 onSearch={this.fetchData}
                 onChange={this.handleChange}
                 filterOption={false}
-                placeholder="Gõ để tìm kiếm danh mục..."
+                placeholder="Tìm kiếm danh mục..."
             >
                 {this.state.data.map(d => (
                     <Select.Option key={d.id}>{d.name}</Select.Option>
