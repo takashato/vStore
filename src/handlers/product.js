@@ -27,6 +27,8 @@ export async function getAllProducts(request, h) {
     let fieldList = fields.split(',');
     let search = query.search;
 
+    let category_id = query.category_id;
+    let inventory = query.inventory;
 
     for (let i = 0; i < fieldList.length; ++i) {
         if (!casualProductExportFields.includes(fieldList[i])) {
@@ -55,7 +57,12 @@ export async function getAllProducts(request, h) {
 
         };
     }
-
+    if (category_id) {
+        options.where = {...options.where, category_id: category_id};
+    }
+    if (inventory) {
+        options.where = {...options.where, inventory_quantity: {[Op.lte]: 0}};
+    }
     if (fieldList.includes('category')) {
         options.include = [{
             model: ProductCategory,
