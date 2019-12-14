@@ -6,6 +6,7 @@ import secureConfig from './config/secure';
 
 import applyStaffRoute from "./routes/staff";
 import applyCategoryRoute from "./routes/category";
+import applyProductRoute from "./routes/product";
 import validate from "./helpers/token_validator";
 
 export const server = new Hapi.Server(serverConfig);
@@ -39,4 +40,5 @@ export async function init() {
 
     applyStaffRoute(server);
     applyCategoryRoute(server);
+    applyProductRoute(server);
 }
