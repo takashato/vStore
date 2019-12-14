@@ -1,8 +1,9 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Button, Form, Input, message, Modal, PageHeader, Table, Tooltip} from "antd";
+import {Button, Form, Input, message, Modal, PageHeader, Table, Tag, Tooltip} from "antd";
 import axios from "../../libs/axios";
 import momentTz from "../../libs/moment";
+import {number_format} from "../../libs/number_formater";
 
 class ProductPage extends React.Component {
 
@@ -23,14 +24,23 @@ class ProductPage extends React.Component {
                 title: 'ID',
                 dataIndex: 'id',
             }, {
+                title: 'Bar code',
+                dataIndex: 'bar_code',
+            }, {
                 title: 'Tên sản phẩm',
                 dataIndex: 'name',
             }, {
+                title: 'Danh mục',
+                dataIndex: 'category',
+                render: (data) => data.name,
+            }, {
                 title: 'Giá',
                 dataIndex: 'price',
+                render: (data) => number_format(data),
             }, {
                 title: 'Hàng tồn kho',
                 dataIndex: 'inventory_quantity',
+                render: (data) => (data > 0 ? data : <Tag color="red">Hết hàng</Tag>)
             }, {
                 title: 'Ngày tạo',
                 dataIndex: 'created_at',
