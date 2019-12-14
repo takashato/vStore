@@ -12,7 +12,7 @@ export async function getAllCategories(request, h) {
     let results = query.results;
     let page = query.page || 1;
     let fields = query.fields;
-    let fieldList = fields.split(',');
+    let fieldList = fields ? fields.split(',') : ['id', 'name'];
     let search = query.search;
 
 
@@ -34,11 +34,13 @@ export async function getAllCategories(request, h) {
             }
         };
     }
+    if (results) {
+        options.limit = parseInt(results);
+        options.offset = (page - 1) * results;
+    }
 
     let categories = await ProductCategory.findAll({
         attributes: fieldList,
-        limit: parseInt(results),
-        offset: (page - 1) * results,
         ...options
     });
     let count = await ProductCategory.count({
