@@ -12,7 +12,7 @@ import {
     Form,
     Input,
     Select,
-    Divider
+    Divider, Checkbox
 } from 'antd';
 import axios from "../../libs/axios";
 import {connect} from "react-redux";
@@ -75,6 +75,12 @@ class StaffPage extends React.Component {
                         return (<Tag color={group.color}>{group.text}</Tag>);
                     }
                     return null;
+                }
+            }, {
+                title: 'Trạng thái',
+                dataIndex: 'active',
+                render: value => {
+                    return (value === 1 ? <Tag color="green">Hoạt động</Tag> : <Tag color="red">Ngưng hoạt động</Tag>);
                 }
             }
         ];
@@ -155,6 +161,7 @@ class StaffPage extends React.Component {
                 full_name: res.data.full_name,
                 email: res.data.email,
                 group_id: res.data.group_id,
+                active: res.data.active === 1,
             }
         });
     };
@@ -278,6 +285,13 @@ const StaffModal = Form.create({name: 'staff_modal'})(
                                 {userGroupIDMap.map((ele) => (
                                     <Select.Option value={ele.value} key={ele.value}>{ele.text}</Select.Option>))}
                             </Select>)}
+                        </Form.Item>
+                        <Form.Item>
+                            {getFieldDecorator('active', {
+                                rules: [{type: "boolean", message: 'Giá trị không hợp lệ.'}],
+                                initialValue: this.props.data.active,
+                                valuePropName: 'checked',
+                            })(<Checkbox>Kích hoạt tài khoản</Checkbox>)}
                         </Form.Item>
                     </Form>
                 </Modal>
