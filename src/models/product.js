@@ -18,7 +18,11 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		category_id: {
 			type: DataTypes.INTEGER(11),
-			allowNull: false
+			allowNull: false,
+			references: {
+				model: 'product_category',
+				key: 'id'
+			}
 		},
 		price: {
 			type: "DOUBLE",
