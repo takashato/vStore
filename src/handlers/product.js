@@ -1,8 +1,9 @@
 import ResponseBuilder from "../helpers/response_builder";
 import Product from "../models/product_imported";
-import {Op} from "sequelize";
+import Sequelize, {Op} from "sequelize";
+import ProductCategory from "../models/product_category_imported";
 
-const casualCategoryExportFields = ['id', 'name', 'price', 'inventory_quantity', 'created_at', 'updated_at'];
+const casualProductExportFields = ['id', 'bar_code', 'name', 'category_id', 'category', 'added_by', 'price', 'inventory_quantity', 'created_at', 'updated_at'];
 
 export async function getAllProducts(request, h) {
     const query = request.query;
@@ -15,7 +16,7 @@ export async function getAllProducts(request, h) {
 
 
     for (let i = 0; i < fieldList.length; ++i) {
-        if (!casualCategoryExportFields.includes(fieldList[i])) {
+        if (!casualProductExportFields.includes(fieldList[i])) {
             return ResponseBuilder.inputError(h, 'Field list không hợp lệ.', 'invalid_field_list', 'field:' + fieldList[i]);
         }
     }
@@ -33,17 +34,31 @@ export async function getAllProducts(request, h) {
         };
     }
 
-    let products = await Product.findAll({
-        attributes: fieldList,
-        limit: parseInt(results),
-        offset: (page - 1) * results,
-        ...options
-    });
-    let count = await Product.count({
-        ...options
-    });
-    return {
-        rows: products,
-        total: count,
-    };
+    if (fieldList.includes('category')) {
+        options.include = [{
+            model: ProductCategory,
+            as: 'category',
+            attributes: ['id', 'name'],
+        }];
+        fieldList.splice(fieldList.indexOf('category'), 1);
+    }
+
+    try {
+        let products = await Product.findAll({
+            attributes: fieldList,
+            limit: parseInt(results),
+            offset: (page - 1) * results,
+            ...options
+        });
+        let count = await Product.count({
+            ...options
+        });
+        return {
+            rows: products,
+            total: count,
+        };
+    } catch (err) {
+        console.log(err);
+        return h.code(500);
+    }
 }
