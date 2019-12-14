@@ -143,6 +143,7 @@ class CategoryPage extends React.Component {
                 <div className="container">
                     <Table columns={this.columns} rowKey="id" dataSource={this.state.data} loading={this.state.loading}
                            onChange={this.handleTableChange} pagination={this.state.pagination} size="small"
+                           scroll={{x: true}}
                            title={() => (
                                <Form layout="inline">
                                    <Form.Item>

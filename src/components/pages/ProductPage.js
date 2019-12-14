@@ -91,6 +91,10 @@ class ProductPage extends React.Component {
         });
     };
 
+    handleSearch = (value) => {
+        this.getData({search: value});
+    };
+
     componentDidMount() {
         if (this.props.staff.token) {
             this.getData();
@@ -110,6 +114,7 @@ class ProductPage extends React.Component {
                 <div className="container">
                     <Table columns={this.columns} rowKey="id" dataSource={this.state.data} loading={this.state.loading}
                            onChange={this.handleTableChange} pagination={this.state.pagination} size="small"
+                           scroll={{x: true}}
                            title={() => (
                                <Form layout="inline">
                                    <Form.Item>
