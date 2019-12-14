@@ -38,8 +38,8 @@ export async function authenticate(request, h) {
     };
 }
 
-const casualStaffExportFields = ['id', 'username', 'full_name', 'email', 'group_id', 'created_at', 'updated_at'];
-const editableStaffFields = ['full_name', 'email', 'group_id', 'password'];
+const casualStaffExportFields = ['id', 'username', 'full_name', 'email', 'group_id', 'created_at', 'updated_at', 'active'];
+const editableStaffFields = ['full_name', 'email', 'group_id', 'password', 'active'];
 
 export async function getAllStaff(request, h) {
     let params = request.query;
@@ -152,7 +152,7 @@ export async function updateStaff(request, h) {
 
     let fieldList = Object.keys(payload);
 
-    if (fieldList.length < 1 || !payload.name) {
+    if (fieldList.length < 1) {
         return ResponseBuilder.inputError(h, 'Payload trống.', 'empty_payload');
     }
 
