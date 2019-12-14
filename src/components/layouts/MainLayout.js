@@ -8,6 +8,7 @@ import StaffPage from "../pages/StaffPage";
 import FooterLayout from "./FooterLayout";
 import CategoryPage from "../pages/CategoryPage";
 import ProductPage from "../pages/ProductPage";
+import CustomerPage from "../pages/CustomerPage";
 
 const {Content} = Layout;
 
@@ -28,6 +29,9 @@ class MainLayout extends React.Component {
                             </Route>
                             <Route path='/product'>
                                 <ProductPage/>
+                            </Route>
+                            <Route path='/customer'>
+                                <CustomerPage/>
                             </Route>
                         </Switch>
                     </Content>

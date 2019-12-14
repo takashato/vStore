@@ -49,6 +49,12 @@ class SideBar extends React.Component {
                             </Link>
                         </Menu.Item>
                     </Menu.SubMenu>
+                    <Menu.Item key="/customer">
+                        <Link to='/customer'>
+                            <Icon type="team" />
+                            <span>Khách hàng</span>
+                        </Link>
+                    </Menu.Item>
                 </Menu>
             </Sider>
         );
