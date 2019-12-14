@@ -1,9 +1,9 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Button, Form, Input, message, Modal, PageHeader, Table, Tag, Tooltip} from "antd";
+import {Button, Form, Input, message, Modal, PageHeader, Select, Table, Tag, Tooltip, DatePicker} from "antd";
 import axios from "../../libs/axios";
 import momentTz from "../../libs/moment";
-import {number_format} from "../../libs/number_formater";
+import moment from 'moment';
 
 class CustomerPage extends React.Component {
 
@@ -32,7 +32,7 @@ class CustomerPage extends React.Component {
             }, {
                 title: 'Ngày sinh',
                 dataIndex: 'birthday',
-                render: (data) => momentTz(data).format('DD/MM/YYYY'),
+                render: (data) => moment(data).format('DD/MM/YYYY'),
             }, {
                 title: 'Ngày tạo',
                 dataIndex: 'created_at',
@@ -83,6 +83,58 @@ class CustomerPage extends React.Component {
         });
     };
 
+    handleAddCustomerButton = (e) => {
+        this.setState({
+            modalVisible: true, isCreateModal: true, modalData: {
+                full_name: '',
+                phone_number: '',
+                birthday: moment('01/01/2001', 'DD/MM/YYYY'),
+            }
+        });
+        this.formRef.props.form.resetFields();
+    };
+
+    setFormRef = formRef => this.formRef = formRef;
+
+    cancelModal = () => {
+        this.setState({modalVisible: false});
+    };
+
+    handleSubmit = () => {
+        const {form} = this.formRef.props;
+        form.validateFields((err, values) => {
+            if (err) {
+                return;
+            }
+
+            if (!this.state.modalData.id) { // Add new
+                axios.post("/customer", values)
+                    .then((response) => {
+                        message.success("Tạo khách hàng thành công.");
+                        this.setState({modalVisible: false});
+                        form.resetFields();
+                        this.getData();
+                    })
+                    .catch((err) => {
+                        message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi tạo khách hàng mới.");
+                    });
+            }
+            // else {
+            //     axios.put("/staff/" + this.state.modalData.id, values)
+            //         .then((response) => {
+            //             message.success("Cập nhật thông tin nhân viên thành công.");
+            //             this.setState({modalVisible: false});
+            //             form.resetFields();
+            //             this.getData();
+            //         })
+            //         .catch((err) => {
+            //             message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi cập nhật thông tin nhân viên.");
+            //         });
+            // }
+        });
+    };
+
+
     componentDidMount() {
         if (this.props.staff.token) {
             this.getData();
@@ -105,7 +157,7 @@ class CustomerPage extends React.Component {
                            title={() => (
                                <Form layout="inline">
                                    <Form.Item>
-                                       <Button icon="plus" onClick={this.handleAddButton}>Thêm khách hàng</Button>
+                                       <Button icon="plus" onClick={this.handleAddCustomerButton}>Thêm khách hàng</Button>
                                    </Form.Item>
                                    <Form.Item>
                                        <Input.Search placeholder="Tìm kiếm khách hàng..." onSearch={this.handleSearch}/>
@@ -113,10 +165,53 @@ class CustomerPage extends React.Component {
                                </Form>
                            )}/>
                 </div>
+                <CustomerModal wrappedComponentRef={this.setFormRef}
+                            isCreate={this.state.isCreateModal}
+                            props={{
+                                visible: this.state.modalVisible,
+                                title: "Khách hàng",
+                                onCancel: this.cancelModal,
+                                onOk: this.handleSubmit,
+                            }}
+                            data={this.state.modalData}
+                />
             </div>
         );
     }
 }
+
+
+const CustomerModal = Form.create({name: 'customer_modal'})(
+    class extends React.Component {
+        render() {
+            const {getFieldDecorator} = this.props.form;
+            return (
+                <Modal {...this.props.props}>
+                    <Form>
+                        <Form.Item label="Họ tên">
+                            {getFieldDecorator('full_name', {
+                                rules: [{required: true, message: 'Vui lòng nhập họ tên.'}],
+                                initialValue: this.props.data.full_name,
+                            })(<Input/>)}
+                        </Form.Item>
+                        <Form.Item label="Số điện thoại">
+                            {getFieldDecorator('phone_number', {
+                                rules: [{required: true, message: 'Vui lòng nhập số điện thoại.'}],
+                                initialValue: this.props.data.phone_number,
+                            })(<Input/>)}
+                        </Form.Item>
+                        <Form.Item label="Ngày sinh">
+                            {getFieldDecorator('birthday', {
+                                initialValue: this.props.data.birthday,
+                            })(<DatePicker format="DD/MM/YYYY"/>)}
+                        </Form.Item>
+                    </Form>
+                </Modal>
+            );
+        }
+    }
+);
+
 
 const mapStateToProps = state => {
     return {
