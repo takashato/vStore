@@ -27,6 +27,9 @@ export async function authenticate(request, h) {
     if (!(await Bcrypt.compare(password, staff.password))) {
         return ResponseBuilder.inputError(h, "Mật khẩu không đúng", 'incorrect_password');
     }
+    if (staff.active !== 1) {
+        return ResponseBuilder.inputError(h, "Tài khoản hiện đang bị khóa", 'account_locked');
+    }
 
     let token = JWT.sign({
         id: staff.id,
