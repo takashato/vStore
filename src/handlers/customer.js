@@ -30,9 +30,17 @@ export async function getAllCustomers(request, h) {
     let options = {};
     if (search) {
         options.where = {
-            username: {
-                [Op.like]: '%' + search + '%',
-            }
+            [Op.or]: [
+                {
+                    full_name: {
+                        [Op.like]: '%' + search + '%',
+                    }
+                }, {
+                    phone_number: {
+                        [Op.like]: '%' + search + '%',
+                    }
+                }
+            ]
         };
     }
 
