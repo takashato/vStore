@@ -1,7 +1,7 @@
 import * as React from "react";
-import {Switch, Route, withRouter} from "react-router-dom";
+import {Switch, Route, withRouter, Link} from "react-router-dom";
 import ReceiptDetailPage from "./ReceiptDetailPage";
-import {Button, Collapse, Form, Input, InputNumber, message, Modal, PageHeader, Table, Tag} from "antd";
+import {Button, Collapse, Form, Input, InputNumber, message, Modal, PageHeader, Table, Tag, Tooltip} from "antd";
 import axios from "../../libs/axios";
 import {connect} from "react-redux";
 import {number_format} from "../../libs/number_formater";
@@ -49,7 +49,8 @@ const ReceiptManager = connect(mapStateToProps)(
                 }, {
                     title: 'Loại phiếu',
                     dataIndex: 'type',
-                    render: (data) => (data === 1 ? <Tag color="blue">Phiếu nhập</Tag> : <Tag color="green">Phiếu xuất</Tag>)
+                    render: (data) => (data === 1 ? <Tag color="blue">Phiếu nhập</Tag> :
+                        <Tag color="green">Phiếu xuất</Tag>)
                 }, {
                     title: 'Ngày thực hiện',
                     dataIndex: 'created_at',
@@ -74,6 +75,15 @@ const ReceiptManager = connect(mapStateToProps)(
                 }
             ];
             this.fields = this.columns.map(col => col.dataIndex);
+            this.columns.push({
+                title: 'Hành động',
+                fixed: 'right',
+                render: (text, record) => (<Tooltip title="Xem chi tiết">
+                    <Link to={"/receipt/" + record.id}>
+                        <Button icon="eye"/>
+                    </Link>
+                </Tooltip>)
+            });
         }
 
         getData = (params = {}) => {
@@ -152,6 +162,7 @@ const ReceiptManager = connect(mapStateToProps)(
                     <div className="container">
                         <Table loading={this.state.loading} columns={this.columns} dataSource={this.state.data}
                                pagination={this.state.pagination} size="small" rowKey="id"
+                               scroll={{x: true}}
                                title={() => (
                                    <Form layout="inline">
                                        <Form.Item>
