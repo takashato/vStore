@@ -8,6 +8,10 @@ module.exports = function(sequelize, DataTypes) {
 			primaryKey: true,
 			autoIncrement: true
 		},
+		invoice_id: {
+			type: DataTypes.INTEGER(11),
+			allowNull: false
+		},
 		product_id: {
 			type: DataTypes.INTEGER(11),
 			allowNull: false
@@ -30,6 +34,14 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		total_final_value: {
 			type: "DOUBLE",
+			allowNull: true
+		},
+		created_at: {
+			type: DataTypes.DATE,
+			allowNull: true
+		},
+		updated_at: {
+			type: DataTypes.DATE,
 			allowNull: true
 		}
 	}, {
