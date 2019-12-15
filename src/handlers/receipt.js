@@ -20,6 +20,7 @@ const casualReceiptExportFields = [
     'total_amount',
     'created_at',
     'updated_at',
+    'details', // Joined fields
 ];
 
 export async function getAllReceipts(request, h) {
@@ -41,23 +42,32 @@ export async function getAllReceipts(request, h) {
         return ResponseBuilder.inputError(h, 'Số kết quả / số trang không hợp lệ.', 'invalid_results_page_number');
     }
 
-    let options = {};
+    let options = {
+        include: []
+    };
 
     if (fieldList.includes('staff')) {
-        options.include = [{
+        options.include.push({
             model: Staff,
             as: 'staff',
             attributes: ['id', 'username', 'full_name'],
-        }];
+        });
         fieldList.splice(fieldList.indexOf('staff'), 1);
     }
     if (fieldList.includes('customer')) {
-        options.include = [{
+        options.include.push({
             model: Customer,
             as: 'customer',
             attributes: ['id', 'full_name', 'phone_number'],
-        }];
+        });
         fieldList.splice(fieldList.indexOf('customer'), 1);
+    }
+    if (fieldList.includes('details')) {
+        options.include.push({
+            model: ReceiptDetail,
+            as: 'details',
+        });
+        fieldList.splice(fieldList.indexOf('details'), 1);
     }
 
     try {
@@ -164,4 +174,65 @@ export async function createReceipt(request, h) {
         if (transaction) await transaction.rollback();
         return ResponseBuilder.error(h, ResponseBuilder.INTERNAL_ERROR, "Lỗi khi tạo phiếu nhập.", 'error_on_create')
     }
+}
+
+export async function getReceipt(request, h) {
+    let id = request.params.id;
+
+    let fields = request.query.fields;
+    let fieldList = fields ? fields.split(',') : ['id', 'name'];
+
+    if (!id) {
+        return ResponseBuilder.inputError(h, 'Yêu cầu ID.', 'missing_id');
+    }
+
+    for (let i = 0; i < fieldList.length; ++i) {
+        if (!casualReceiptExportFields.includes(fieldList[i])) {
+            return ResponseBuilder.inputError(h, 'Field list không hợp lệ.', 'invalid_field_list', 'field:' + fieldList[i]);
+        }
+    }
+
+    let options = {
+        include: []
+    };
+
+    if (fieldList.includes('staff')) {
+        options.include.push({
+            model: Staff,
+            as: 'staff',
+            attributes: ['id', 'username', 'full_name'],
+        });
+        fieldList.splice(fieldList.indexOf('staff'), 1);
+    }
+    if (fieldList.includes('customer')) {
+        options.include.push({
+            model: Customer,
+            as: 'customer',
+            attributes: ['id', 'full_name', 'phone_number'],
+        });
+        fieldList.splice(fieldList.indexOf('customer'), 1);
+    }
+    if (fieldList.includes('details')) {
+        options.include.push({
+            model: ReceiptDetail,
+            as: 'details',
+            include: [{
+                model: Product,
+                as: 'product',
+                attributes: ['id', 'bar_code', 'name'],
+            }]
+        });
+        fieldList.splice(fieldList.indexOf('details'), 1);
+    }
+
+    let receipt;
+    try {
+        receipt = await Receipt.findByPk(id, {attributes: fieldList, ...options});
+    } catch (err) {
+        console.log(err);
+    }
+    if (!receipt) {
+        return ResponseBuilder.error(h, ResponseBuilder.NOT_FOUND, 'Phiếu không tồn tại.', 'receipt_not_found');
+    }
+    return receipt;
 }

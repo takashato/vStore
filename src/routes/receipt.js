@@ -1,4 +1,4 @@
-import {createReceipt, getAllReceipts} from "../handlers/receipt";
+import {createReceipt, getAllReceipts, getReceipt} from "../handlers/receipt";
 
 function applyRoute(server) {
     server.route({
@@ -23,7 +23,19 @@ function applyRoute(server) {
                 allowedGroups: [1, 2],
             }
         }
-    })
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/receipt/{id}',
+        handler: getReceipt,
+        options: {
+            auth: 'jwt',
+            app: {
+                allowedGroups: [1, 2, 3],
+            }
+        }
+    });
 }
 
 export default applyRoute;
