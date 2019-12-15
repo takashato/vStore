@@ -18,6 +18,7 @@ import axios from "../../libs/axios";
 import {number_format} from "../../libs/number_formater";
 import CustomerSelector from "../forms/CustomerSelector";
 import InputFormatedNumnber from "../forms/InputFormatedNumber";
+import {Link, withRouter} from "react-router-dom";
 
 class SalePage extends React.Component {
     state = {
@@ -137,11 +138,24 @@ class SalePage extends React.Component {
                 pay_method: this.state.pay_method,
                 details: this.state.details.map(e => ({id: e.id, amount: e.amount})),
             });
-            notification.success({message: 'Tạo đơn hàng thành công!', description: res.data.id});
+            notification.success({
+                message: 'Đã tạo đơn hàng # ' + res.data.id + '!',
+                description: <Button onClick={() => this.goToInvoice(res.data.id)}>Xem đơn hàng</Button>
+            });
+            this.setState({
+                details: [],
+                customer: undefined,
+                prepaid: 0,
+                pay_method: "0",
+            });
         } catch (err) {
             console.error(err);
             message.error(err.response && err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi tạo đơn hàng.');
         }
+    };
+
+    goToInvoice = (id) => {
+        this.props.history.push('/invoice/' + id);
     };
 
     render() {
@@ -160,7 +174,8 @@ class SalePage extends React.Component {
                     <Col lg={6}>
                         <Form>
                             <Form.Item label="Khách hàng">
-                                <CustomerSelector onChange={this.handleCustomer} value={this.state.customer} allowClear/>
+                                <CustomerSelector onChange={this.handleCustomer} value={this.state.customer}
+                                                  allowClear/>
                             </Form.Item>
                             <Form.Item label="Phương thức thanh toán">
                                 <Select value={this.state.pay_method} onChange={this.handlePayMethod}>
@@ -176,13 +191,15 @@ class SalePage extends React.Component {
                                 <Typography.Title level={4}>{number_format(total_money)}</Typography.Title>
                             </Form.Item>
                             <Form.Item label="Giảm giá">
-                                <Typography.Title level={4}>{number_format(total_orignal_money - total_money)}</Typography.Title>
+                                <Typography.Title
+                                    level={4}>{number_format(total_orignal_money - total_money)}</Typography.Title>
                             </Form.Item>
                             <Form.Item label="Tiền thối">
                                 <Typography.Title level={4}>{number_format(total_charge_money)}</Typography.Title>
                             </Form.Item>
                             <Form.Item>
-                                <Button size="large" style={{width: '100%'}} type="primary" onClick={this.handleComplete}>Hoàn tất đơn hàng</Button>
+                                <Button size="large" style={{width: '100%'}} type="primary"
+                                        onClick={this.handleComplete}>Hoàn tất đơn hàng</Button>
                             </Form.Item>
                         </Form>
                     </Col>
@@ -192,4 +209,4 @@ class SalePage extends React.Component {
     }
 }
 
-export default SalePage;
+export default withRouter(SalePage);
