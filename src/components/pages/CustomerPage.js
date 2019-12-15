@@ -84,6 +84,10 @@ class CustomerPage extends React.Component {
         });
     };
 
+    handleSearch = (value) => {
+        this.getData({search: value});
+    };
+
     handleAddCustomerButton = (e) => {
         this.setState({
             modalVisible: true, isCreateModal: true, modalData: {
