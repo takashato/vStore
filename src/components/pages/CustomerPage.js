@@ -14,6 +14,7 @@ class CustomerPage extends React.Component {
         search: undefined,
         modalVisible: false,
         modalData: {},
+        isCreateModal: false,
     };
 
     constructor(props) {
@@ -94,6 +95,24 @@ class CustomerPage extends React.Component {
         this.formRef.props.form.resetFields();
     };
 
+    handleEditButton = async (id) => {
+        let res;
+        try {
+            res = await axios.get('/customer/' + id, {params: {fields: this.fields.join(',')}});
+        } catch (err) {
+            message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi lấy thông tin khách hàng.");
+            return;
+        }
+        this.setState({
+            modalVisible: true, isCreateModal: false, modalData: {
+                id: id,
+                full_name: res.data.full_name,
+                phone_number: res.data.phone_number,
+                birthday: res.data.birthday,
+            }
+        });
+    };
+
     setFormRef = formRef => this.formRef = formRef;
 
     cancelModal = () => {
@@ -119,18 +138,18 @@ class CustomerPage extends React.Component {
                         message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi tạo khách hàng mới.");
                     });
             }
-            // else {
-            //     axios.put("/staff/" + this.state.modalData.id, values)
-            //         .then((response) => {
-            //             message.success("Cập nhật thông tin nhân viên thành công.");
-            //             this.setState({modalVisible: false});
-            //             form.resetFields();
-            //             this.getData();
-            //         })
-            //         .catch((err) => {
-            //             message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi cập nhật thông tin nhân viên.");
-            //         });
-            // }
+            else {
+                axios.put("/customer/" + this.state.modalData.id, values)
+                    .then((response) => {
+                        message.success("Cập nhật thông tin khách hàng thành công.");
+                        this.setState({modalVisible: false});
+                        form.resetFields();
+                        this.getData();
+                    })
+                    .catch((err) => {
+                        message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi cập nhật thông tin khách hàng.");
+                    });
+            }
         });
     };
 
