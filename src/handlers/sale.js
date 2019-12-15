@@ -12,7 +12,7 @@ export async function sale(request, h) {
 
     const {customer_id, pay_method, prepaid_value, details} = payload;
 
-    if (!pay_method || !prepaid_value || !details || details.length <= 0) {
+    if (!prepaid_value || !details || details.length <= 0) {
         return ResponseBuilder.inputError(h, 'Vui lòng điền đẩy đủ thông tin.', 'missing_required_fields');
     }
 

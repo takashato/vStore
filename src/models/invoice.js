@@ -10,7 +10,7 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		customer_id: {
 			type: DataTypes.INTEGER(11),
-			allowNull: false
+			allowNull: true
 		},
 		staff_id: {
 			type: DataTypes.INTEGER(11),
