@@ -132,13 +132,14 @@ class SalePage extends React.Component {
         }
         try {
             const res = await axios.post('/sale', {
-                customer_id: this.state.customer.key,
+                customer_id: this.state.customer ? this.state.customer.key : null,
                 prepaid_value: this.state.prepaid,
                 pay_method: this.state.pay_method,
                 details: this.state.details.map(e => ({id: e.id, amount: e.amount})),
             });
             notification.success({message: 'Tạo đơn hàng thành công!', description: res.data.id});
         } catch (err) {
+            console.error(err);
             message.error(err.response && err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi tạo đơn hàng.');
         }
     };
