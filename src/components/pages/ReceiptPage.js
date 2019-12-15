@@ -137,7 +137,6 @@ const ReceiptManager = connect(mapStateToProps)(
                     this.formRef.formRef.props.form.resetFields();
                     this.getData();
                 } catch (err) {
-                    console.error(err);
                     message.error(err.response && err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi tạo phiếu nhập.');
                 }
             });

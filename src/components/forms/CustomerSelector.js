@@ -1,9 +1,9 @@
 import React from 'react';
-import {Select, Spin} from "antd";
 import debounce from "lodash.debounce";
 import axios from "../../libs/axios";
+import {Select, Spin} from "antd";
 
-class ProductSelector extends React.Component {
+class CustomerSelector extends React.Component {
     state = {
         data: [],
         value: [],
@@ -20,10 +20,10 @@ class ProductSelector extends React.Component {
         this.lastFetchId += 1;
         const fetchId = this.lastFetchId;
         this.setState({data: [], fetching: true});
-        axios.get('/product', {
+        axios.get('/customer', {
             params: {
                 results: 10,
-                fields: this.props.fields ? this.props.fields.join(',') : 'id,bar_code,name',
+                fields: this.props.fields ? this.props.fields.join(',') : 'id,full_name,phone_number',
                 search: value,
             }
         })
@@ -59,14 +59,14 @@ class ProductSelector extends React.Component {
                 onSearch={this.fetchData}
                 onChange={this.handleChange}
                 filterOption={false}
-                placeholder="Tìm kiếm sản phẩm..."
+                placeholder="Tìm khách hàng..."
             >
                 {this.state.data.map(d => (
-                    <Select.Option key={d.id}>{d.bar_code + ' - ' + d.name}</Select.Option>
+                    <Select.Option key={d.id}>{d.full_name + ' - ' + d.phone_number}</Select.Option>
                 ))}
             </Select>
         );
     }
 }
 
-export default ProductSelector;
+export default CustomerSelector;

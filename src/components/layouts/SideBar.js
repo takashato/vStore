@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, Menu, Layout} from "antd";
+import {Icon, Menu, Layout, Typography} from "antd";
 import {Link, withRouter} from "react-router-dom";
 
 const {Sider} = Layout;
@@ -49,15 +49,21 @@ class SideBar extends React.Component {
                             </Link>
                         </Menu.Item>
                     </Menu.SubMenu>
+                    <Menu.Item key="/sale">
+                        <Link to="/sale">
+                            <Icon type="shopping-cart"/>
+                            <span><b>Bán hàng</b></span>
+                        </Link>
+                    </Menu.Item>
                     <Menu.Item key="/receipt">
                         <Link to="/receipt">
-                            <Icon type="snippets" />
+                            <Icon type="snippets"/>
                             <span>Nhập / xuất kho</span>
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="/customer">
                         <Link to='/customer'>
-                            <Icon type="team" />
+                            <Icon type="team"/>
                             <span>Khách hàng</span>
                         </Link>
                     </Menu.Item>
