@@ -9,6 +9,7 @@ import FooterLayout from "./FooterLayout";
 import CategoryPage from "../pages/CategoryPage";
 import ProductPage from "../pages/ProductPage";
 import CustomerPage from "../pages/CustomerPage";
+import ReceiptPage from "../pages/ReceiptPage";
 
 const {Content} = Layout;
 
@@ -32,6 +33,9 @@ class MainLayout extends React.Component {
                             </Route>
                             <Route path='/customer'>
                                 <CustomerPage/>
+                            </Route>
+                            <Route path='/receipt'>
+                                <ReceiptPage/>
                             </Route>
                         </Switch>
                     </Content>
