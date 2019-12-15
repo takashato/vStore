@@ -122,7 +122,7 @@ const ReceiptManager = connect(mapStateToProps)(
 
                     message.success("Tạo phiếu nhập thành công");
                     this.setState({modalVisible: false});
-                    this.formRef.setState({data: []});
+                    //this.formRef.setState({data: []});
                     this.formRef.props.form.resetFields();
                     this.formRef.formRef.props.form.resetFields();
                     this.getData();
