@@ -1,11 +1,28 @@
 import React from 'react';
-import {Card, Col, Icon, Row, Statistic, Typography} from "antd";
+import {Card, Col, Icon, message, Row, Statistic, Typography} from "antd";
 import {Link} from "react-router-dom";
+import axios from "../../libs/axios";
 
 class DashboardPage extends React.Component {
     state = {
         data: {},
     };
+
+    getData = () => {
+        axios.get('/stat/info', {
+            params: {
+                attributes: 'total_product,total_out_of_stock_product,total_staff,total_customer'
+            }
+        }).then(res => {
+            this.setState({data: res.data});
+        }).catch(err => {
+            message.error('Không thể lấy thông tin thống kê');
+        });
+    };
+
+    componentDidMount() {
+        this.getData();
+    }
 
     render() {
         const {data} = this.state;
