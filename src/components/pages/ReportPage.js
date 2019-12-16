@@ -1,11 +1,14 @@
 import React from 'react';
 import {connect} from "react-redux";
 import axios from "../../libs/axios";
-import {Button, Form, Input, message, PageHeader, Table} from "antd";
+import {Button, Form, Input, message, PageHeader, Table, Typography} from "antd";
 import CategorySelector from "../forms/CategorySelector";
 import {Checkbox} from "antd/es";
+import momentTz from "../../libs/moment";
+import moment from "moment";
+import ReactToPrint from "react-to-print";
 
-class ReportPage extends React.Component{
+class ReportPage extends React.Component {
 
     state = {
         data: [],
@@ -48,7 +51,7 @@ class ReportPage extends React.Component{
         try {
             let res = await axios.get('/report', {
                 params: {
-                    results: 10,
+                    results: 2147483647,
                     fields: this.fields.join(','),
                     ...params
                 }
@@ -104,26 +107,35 @@ class ReportPage extends React.Component{
                     subTitle="Báo cáo và kiểm kho"
                 />
                 <div className="container">
+                    <div>
+                        <Form layout="inline">
+                            <Form.Item>
+                                <Input.Search placeholder="Tìm kiếm sản phẩm..." allowClear
+                                              onSearch={this.handleSearch}/>
+                            </Form.Item>
+                            <Form.Item>
+                                <CategorySelector allowClear onChange={this.handleCategoryChange}
+                                                  value={this.state.categoryFilter} style={{width: 200}}/>
+                            </Form.Item>
+                            <Form.Item>
+                                <Checkbox onChange={this.handleInventoryChange}
+                                          defaultChecked={this.state.inventoryFilter}>Chỉ sản phẩm hết hàng</Checkbox>
+                            </Form.Item>
+                            <Form.Item style={{float: "right"}}>
+                                <ReactToPrint trigger={() => (<Button icon="printer">In Báo Cáo</Button>)}
+                                              content={() => this.tableRef}
+                                              pageStyle="padding: 20px;"/>
+                            </Form.Item>
+                        </Form>
+                    </div>
                     <Table columns={this.columns} rowKey="id" dataSource={this.state.data} loading={this.state.loading}
-                           onChange={this.handleTableChange} pagination={this.state.pagination} size="small"
-                           scroll={{x: true}}
+                           onChange={this.handleTableChange} pagination={false} size="small"
+                           ref={(ref) => this.tableRef = ref}
                            title={() => (
-                               <Form layout="inline">
-                                   <Form.Item>
-                                       <Input.Search placeholder="Tìm kiếm sản phẩm..." allowClear
-                                                     onSearch={this.handleSearch}/>
-                                   </Form.Item>
-                                   <Form.Item>
-                                       <CategorySelector allowClear onChange={this.handleCategoryChange}
-                                                         value={this.state.categoryFilter} style={{width: 200}}/>
-                                   </Form.Item>
-                                   <Form.Item>
-                                       <Checkbox onChange={this.handleInventoryChange} defaultChecked={this.state.inventoryFilter}>Chỉ sản phẩm hết hàng</Checkbox>
-                                   </Form.Item>
-                                   <Form.Item style={{ float: "right" }}>
-                                       <Button icon="printer" onClick={this.handleAddButton}>In Báo Cáo</Button>
-                                   </Form.Item>
-                               </Form>
+                               <div>
+                                   <Typography.Title level={4}>Kiểm kho</Typography.Title>
+                                   <span>Thời gian: {moment().format('HH:mm:ss DD/MM/YYYY')}</span>
+                               </div>
                            )}/>
                 </div>
             </div>
