@@ -134,7 +134,8 @@ class ReportPage extends React.Component {
                            title={() => (
                                <div>
                                    <Typography.Title level={4}>Kiểm kho</Typography.Title>
-                                   <span>Thời gian: {moment().format('HH:mm:ss DD/MM/YYYY')}</span>
+                                   <div>Thời gian: {moment().format('HH:mm:ss DD/MM/YYYY')}</div>
+                                   <div>Có tất cả {this.state.pagination.total} sản phẩm.</div>
                                </div>
                            )}/>
                 </div>
