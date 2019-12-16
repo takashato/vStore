@@ -1,4 +1,4 @@
-import {getStatInfo} from "../handlers/stat";
+import {getRevenue, getStatInfo} from "../handlers/stat";
 
 function applyRoute(server) {
     server.route({
@@ -9,6 +9,18 @@ function applyRoute(server) {
             auth: "jwt",
             app: {
                 allowedGroups: [1, 2, 3],
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/stat/revenue',
+        handler: getRevenue,
+        options: {
+            auth: "jwt",
+            app: {
+                allowedGroups: [1, 2, 3]
             }
         }
     })
