@@ -11,7 +11,7 @@ import ProductPage from "../pages/ProductPage";
 import CustomerPage from "../pages/CustomerPage";
 import ReceiptPage from "../pages/ReceiptPage";
 import SalePage from "../pages/SalePage";
-import StatisticalPage from "../pages/StatisticalPage";
+import ReportPage from "../pages/ReportPage";
 
 const {Content} = Layout;
 
@@ -42,8 +42,8 @@ class MainLayout extends React.Component {
                             <Route path='/receipt'>
                                 <ReceiptPage/>
                             </Route>
-                            <Route path='/statistical'>
-                                <StatisticalPage/>
+                            <Route path='/report'>
+                                <ReportPage/>
                             </Route>
                         </Switch>
                     </Content>

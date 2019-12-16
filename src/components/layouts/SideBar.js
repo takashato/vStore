@@ -67,10 +67,10 @@ class SideBar extends React.Component {
                             <span>Khách hàng</span>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="/statistical">
-                        <Link to='/statistical'>
-                            <Icon type="line-chart" />
-                            <span>Thống kê</span>
+                    <Menu.Item key="/report">
+                        <Link to='/report'>
+                            <Icon type="form" />
+                            <span>Báo cáo</span>
                         </Link>
                     </Menu.Item>
                 </Menu>
