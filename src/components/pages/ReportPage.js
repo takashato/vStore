@@ -103,8 +103,8 @@ class ReportPage extends React.Component {
                     style={{
                         border: '1px solid rgb(235, 237, 240)',
                     }}
-                    title="Báo cáo"
-                    subTitle="Báo cáo và kiểm kho"
+                    title="Báo cáo kiểm kho"
+                    subTitle="Báo cáo tình trạng sản phẩm trong kho hàng"
                 />
                 <div className="container">
                     <div>
@@ -133,8 +133,8 @@ class ReportPage extends React.Component {
                            ref={(ref) => this.tableRef = ref}
                            title={() => (
                                <div>
-                                   <Typography.Title level={4}>Kiểm kho</Typography.Title>
-                                   <div>Thời gian: {moment().format('HH:mm:ss DD/MM/YYYY')}</div>
+                                   <Typography.Title level={4}>Báo cáo kiểm kho</Typography.Title>
+                                   <div>Thời gian tạo: {moment().format('HH:mm:ss DD/MM/YYYY')}</div>
                                    <div>Có tất cả {this.state.pagination.total} sản phẩm.</div>
                                </div>
                            )}/>

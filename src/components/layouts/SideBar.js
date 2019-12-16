@@ -79,7 +79,13 @@ class SideBar extends React.Component {
                         <Menu.Item key="/report/inventory">
                             <Link to='/report/inventory'>
                                 <Icon type="database"/>
-                                <span>Báo cáo kiểm kho</span>
+                                <span>Kiểm kho</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="/report/revenue">
+                            <Link to='/report/revenue'>
+                                <Icon type="stock"/>
+                                <span>Doanh thu</span>
                             </Link>
                         </Menu.Item>
                     </Menu.SubMenu>
