@@ -120,7 +120,7 @@ export async function sale(request, h) {
         }
 
         // Commit changes
-        await transaction.rollback();
+        await transaction.commit();
 
         return {id: invoice.id};
     } catch (err) {

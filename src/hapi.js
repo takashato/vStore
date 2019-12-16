@@ -10,6 +10,7 @@ import applyProductRoute from "./routes/product";
 import applyCustomerRoute from "./routes/customer";
 import applyReceiptRoute from "./routes/receipt";
 import applySaleRoute from "./routes/sale";
+import applyStatRoute from "./routes/stat";
 import validate from "./helpers/token_validator";
 
 export const server = new Hapi.Server(serverConfig);
@@ -47,4 +48,5 @@ export async function init() {
     applyCustomerRoute(server);
     applyReceiptRoute(server);
     applySaleRoute(server);
+    applyStatRoute(server);
 }
