@@ -3,7 +3,7 @@ import {Layout, Menu, Icon, PageHeader} from 'antd';
 import './MainLayout.css';
 import SideBar from './SideBar';
 import TopBar from "./TopBar";
-import {Switch, Route} from "react-router-dom";
+import {Switch, Route, Redirect} from "react-router-dom";
 import StaffPage from "../pages/StaffPage";
 import FooterLayout from "./FooterLayout";
 import CategoryPage from "../pages/CategoryPage";
@@ -12,6 +12,7 @@ import CustomerPage from "../pages/CustomerPage";
 import ReceiptPage from "../pages/ReceiptPage";
 import SalePage from "../pages/SalePage";
 import ReportPage from "../pages/ReportPage";
+import DashboardPage from "../pages/DashboardPage";
 
 const {Content} = Layout;
 
@@ -24,6 +25,12 @@ class MainLayout extends React.Component {
                     <TopBar/>
                     <Content style={{margin: '24px 16px 0'}}>
                         <Switch>
+                            <Route exact path="/">
+                                <Redirect to="/dashboard"/>
+                            </Route>
+                            <Route path="/dashboard">
+                                <DashboardPage/>
+                            </Route>
                             <Route path='/staff'>
                                 <StaffPage/>
                             </Route>

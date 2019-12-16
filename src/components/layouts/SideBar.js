@@ -10,6 +10,9 @@ class SideBar extends React.Component {
         if (this.props.location.pathname === "/category" || this.props.location.pathname === "/product") {
             defaultOpenKeys = ['k_product'];
         }
+        if (this.props.location.pathname === "/report/inventory" || this.props.location.pathname === "/report/revenue") {
+            defaultOpenKeys = ['k_report'];
+        }
         return (
             <Sider
                 breakpoint="lg"
@@ -67,12 +70,19 @@ class SideBar extends React.Component {
                             <span>Khách hàng</span>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="/report">
-                        <Link to='/report'>
-                            <Icon type="form" />
+                    <Menu.SubMenu key="k_report" title={
+                        <span>
+                            <Icon type="form"/>
                             <span>Báo cáo</span>
-                        </Link>
-                    </Menu.Item>
+                        </span>
+                    }>
+                        <Menu.Item key="/report/inventory">
+                            <Link to='/report/inventory'>
+                                <Icon type="database"/>
+                                <span>Báo cáo kiểm kho</span>
+                            </Link>
+                        </Menu.Item>
+                    </Menu.SubMenu>
                 </Menu>
             </Sider>
         );
