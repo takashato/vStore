@@ -1,7 +1,6 @@
 import ResponseBuilder from "../helpers/response_builder";
 import Sequelize, {Op} from "sequelize";
 import Customer from "../models/customer_imported";
-import Staff from "../models/staff_imported";
 
 const casualCustomerExportFields = ['id', 'full_name', 'phone_number', 'birthday', 'created_at', 'updated_at'];
 const editableCustomerFields = ['full_name', 'phone_number', 'birthday'];
@@ -100,7 +99,7 @@ export async function createCustomer(request, h) {
     if (phone_number.length !== 10 || !regEx.test(phone_number)) {
         return ResponseBuilder.inputError(h, 'Số điện thoại không hợp lệ.', 'phone_number_is_invalid');
     }
-    if (birthday && (currentYear - year < 18)) {
+    if (birthday && (currentYear - year < 14)) {
         return ResponseBuilder.inputError(h, 'Khách hàng không đủ tuổi.', 'customer_is_too_young');
     }
 
@@ -142,7 +141,7 @@ export async function updateCustomer(request, h) {
             }
             if (field === 'birthday') {
                 let year = new Date(payload.birthday).getFullYear();
-                if (payload.birthday && (currentYear - year < 18)) {
+                if (payload.birthday && (currentYear - year < 14)) {
                     return ResponseBuilder.inputError(h, 'Khách hàng không đủ tuổi.', 'customer_is_too_young');
                 }
             }
