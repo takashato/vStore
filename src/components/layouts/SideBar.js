@@ -58,6 +58,12 @@ class SideBar extends React.Component {
                             <span><b>Bán hàng</b></span>
                         </Link>
                     </Menu.Item>
+                    <Menu.Item key="/invoice">
+                        <Link to="/invoice">
+                            <Icon type="file-text" />
+                            <span>Hóa đơn</span>
+                        </Link>
+                    </Menu.Item>
                     <Menu.Item key="/receipt">
                         <Link to="/receipt">
                             <Icon type="snippets"/>
