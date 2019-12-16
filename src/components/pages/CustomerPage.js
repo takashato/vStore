@@ -107,12 +107,13 @@ class CustomerPage extends React.Component {
             message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi lấy thông tin khách hàng.");
             return;
         }
+        let dob = moment(res.data.birthday).format('DD/MM/YYYY');
         this.setState({
             modalVisible: true, isCreateModal: false, modalData: {
                 id: id,
                 full_name: res.data.full_name,
                 phone_number: res.data.phone_number,
-                birthday: res.data.birthday,
+                birthday: moment(dob, 'DD/MM/YYYY'),
             }
         });
     };
@@ -176,7 +177,7 @@ class CustomerPage extends React.Component {
                 />
                 <div className="container">
                     <Table columns={this.columns} rowKey="id" dataSource={this.state.data} loading={this.state.loading}
-                           onChange={this.handleTableChange} pagination={this.state.pagination} size="small"
+                           onChange={this.handleTableChange} pagination={this.state.pagination} size="small" scroll={{x: true}}
                            title={() => (
                                <Form layout="inline">
                                    <Form.Item>
