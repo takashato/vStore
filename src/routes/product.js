@@ -14,6 +14,18 @@ function applyRoute(server) {
     });
 
     server.route({
+        method: "GET",
+        path: "/report",
+        handler: getAllProducts,
+        options: {
+            auth: "jwt",
+            app: {
+                allowedGroups: [1, 2, 3]
+            }
+        }
+    });
+
+    server.route({
         method: "POST",
         path: "/product",
         handler: addProduct,
@@ -28,6 +40,18 @@ function applyRoute(server) {
     server.route({
         method: "GET",
         path: '/product/{id}',
+        handler: getProduct,
+        options: {
+            auth: "jwt",
+            app: {
+                allowedGroups: [1, 2, 3],
+            }
+        }
+    });
+
+    server.route({
+        method: "GET",
+        path: '/report/{id}',
         handler: getProduct,
         options: {
             auth: "jwt",
