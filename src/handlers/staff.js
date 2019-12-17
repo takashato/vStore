@@ -6,6 +6,8 @@ import secureConfig from "../config/secure";
 import Staff from "../models/staff_imported";
 import ResponseBuilder from "../helpers/response_builder";
 
+import permissionConfig from "../config/permission";
+
 export async function authenticate(request, h) {
     let payload = request.payload;
 
@@ -83,6 +85,13 @@ export async function getAllStaff(request, h) {
         rows: staffs,
         total: count,
     };
+}
+
+export async function getSelf(request, h) {
+    const staff = await Staff.findByPk(request.staff.id, {
+        attributes: casualStaffExportFields,
+    });
+    return {staff, permissions: permissionConfig[staff.group_id]};
 }
 
 export async function getStaff(request, h) {
