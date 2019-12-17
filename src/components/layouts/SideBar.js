@@ -2,6 +2,8 @@ import React from 'react';
 import {Icon, Menu, Layout, Typography} from "antd";
 import {Link, withRouter} from "react-router-dom";
 
+import './SideBar.css';
+
 const {Sider} = Layout;
 
 class SideBar extends React.Component {
@@ -18,7 +20,9 @@ class SideBar extends React.Component {
                 breakpoint="lg"
                 collapsedWidth="0"
             >
-                <div className="logo"/>
+                <div className="logo">
+                    <img src={process.env.PUBLIC_URL + "/logo.png"} width="100%" height="auto"/>
+                </div>
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={this.props.location.pathname}
                       defaultOpenKeys={defaultOpenKeys}>
                     <Menu.Item key="/dashboard">

@@ -58,7 +58,9 @@ class NormalLoginForm extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item>
-                    {getFieldDecorator('save_password')(<Checkbox>Lưu tài khoản</Checkbox>)}
+                    {getFieldDecorator('save_password', {
+                        valuePropName: 'checked',
+                    })(<Checkbox>Lưu tài khoản</Checkbox>)}
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" className="login-form-button">

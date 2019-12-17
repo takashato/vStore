@@ -9,6 +9,9 @@ class LoginLayout extends React.Component {
         return (
             <div className="login-area">
                 <div className="login-wrapper">
+                    <div className="login-logo">
+                        <img src={process.env.PUBLIC_URL + "/login-logo.png"} width="100%" height="auto"/>
+                    </div>
                     <Divider orientation="left">ĐĂNG NHẬP</Divider>
                     <LoginForm/>
                 </div>

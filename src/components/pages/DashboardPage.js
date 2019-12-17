@@ -2,6 +2,7 @@ import React from 'react';
 import {Card, Col, Icon, message, Row, Statistic, Typography} from "antd";
 import {Link} from "react-router-dom";
 import axios from "../../libs/axios";
+import {connect} from "react-redux";
 
 class DashboardPage extends React.Component {
     state = {
@@ -21,7 +22,9 @@ class DashboardPage extends React.Component {
     };
 
     componentDidMount() {
-        this.getData();
+        if (this.props.staff.token) {
+            this.getData();
+        }
     }
 
     render() {
@@ -69,4 +72,10 @@ class DashboardPage extends React.Component {
     }
 }
 
-export default DashboardPage;
+const mapStateToProps = state => {
+    return {
+        staff: state.staff,
+    };
+};
+
+export default connect(mapStateToProps)(DashboardPage);
