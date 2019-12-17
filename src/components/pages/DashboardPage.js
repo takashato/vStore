@@ -51,7 +51,7 @@ class DashboardPage extends React.Component {
                         </Link>
                     </Col>
                     <Col lg={6} span={12}>
-                        <Link to="customer">
+                        <Link to="/staff">
                             <Card>
                                 <Statistic title="Nhân viên" value={data.total_staff}
                                            prefix={<Icon type="user"/>}/>
