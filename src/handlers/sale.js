@@ -77,6 +77,7 @@ export async function sale(request, h) {
                 quantity: detail.amount,
                 total_value: product_total_value,
                 discount_value: product_discount_value,
+                total_final_value: product_total_final_value,
             });
             if (!await invoiceDetail.save({transaction})) {
                 await transaction.rollback();
