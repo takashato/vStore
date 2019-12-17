@@ -5,6 +5,7 @@ import {doLogout} from "../redux/actions/staff";
 import {message,} from "antd";
 
 const axios = Axios.create({
+    baseURL: config.baseURL,
 });
 
 axios.interceptors.response.use((reponsse) => {
