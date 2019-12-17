@@ -26,20 +26,15 @@ class App extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('App updatd');
         if (this.props.staff.token == null && !prevState.redirectToLogin) {
-            console.log('Redirect to login', this.props.location);
             this.setState({redirectToLogin: true, lastLocation: this.props.location.pathname});
         }
         if (this.props.staff.token != null && prevState.redirectToLogin) {
-            console.log('Redirect to home');
             this.setState({redirectToLogin: false});
         }
     }
 
     render() {
-        console.log(this.state.lastLocation);
-
         if (!this.state.initialized) {
             return (
                 <Spin tip="Đang tải...">

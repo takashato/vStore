@@ -13,29 +13,35 @@ class TopBar extends React.Component {
         this.props.doLogout();
     }
 
-    userDropdown = (
-        <Menu>
-            <Menu.Item key="0" disabled>
+    componentDidUpdate(prevProps, prevState, snapshot) {
+    }
+
+    render() {
+        if (!this.props.staff.staff) return null;
+        console.log(this.props.staff.staff);
+
+        const userDropdown = (
+            <Menu>
+                <Menu.Item key="0" disabled>
                     <span>
                         <Icon type="user"/>
-                        <span>{this.props.staff.staff ? this.props.staff.staff.full_name : ""}</span>
+                        <span>{this.props.staff.staff.staff.full_name}</span>
                     </span>
-            </Menu.Item>
-            <Menu.Item key="1" onClick={this.doLogout.bind(this)}>
+                </Menu.Item>
+                <Menu.Item key="1" onClick={this.doLogout.bind(this)}>
                     <span>
                         <Icon type="logout"/>
                         <span>Đăng xuất</span>
                     </span>
-            </Menu.Item>
-        </Menu>
-    );
+                </Menu.Item>
+            </Menu>
+        );
 
-    render() {
         return (
             <Header style={{background: '#fff', padding: 0}}>
                 <div className='user-dropdown'>
-                    <Dropdown overlay={this.userDropdown}>
-                        <span>{this.props.staff.staff ? this.props.staff.staff.username : ""} <Icon type="down" /></span>
+                    <Dropdown overlay={userDropdown}>
+                        <span>{this.props.staff.staff.staff.username} <Icon type="down"/></span>
                     </Dropdown>
                 </div>
             </Header>

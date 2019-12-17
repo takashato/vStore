@@ -74,7 +74,7 @@ class MainLayout extends React.Component {
                                     <InvoicePage/>
                                 </Route> : null}
                             <Route>
-                                
+
                             </Route>
                         </Switch>
                     </Content>
