@@ -35,9 +35,10 @@ class CategoryPage extends React.Component {
             title: 'Hành động',
             fixed: 'right',
             render: (text, record) => (
-                <Tooltip title="Sửa" placement="bottom">
-                    <Button icon="edit" onClick={() => this.handleEditButton(record.id)}/>
-                </Tooltip>
+                this.props.staff.staff.permissions && this.props.staff.staff.permissions.product.write ?
+                    <Tooltip title="Sửa" placement="bottom">
+                        <Button icon="edit" onClick={() => this.handleEditButton(record.id)}/>
+                    </Tooltip> : null
             )
         });
     }
@@ -131,6 +132,9 @@ class CategoryPage extends React.Component {
     }
 
     render() {
+        if (!this.props.staff.staff) return null;
+        const {permissions} = this.props.staff.staff;
+        if (!permissions) return null;
         return (
             <div>
                 <PageHeader
@@ -146,9 +150,10 @@ class CategoryPage extends React.Component {
                            scroll={{x: true}}
                            title={() => (
                                <Form layout="inline">
-                                   <Form.Item>
-                                       <Button icon="plus" onClick={this.handleAddButton}>Thêm danh mục</Button>
-                                   </Form.Item>
+                                   {permissions.product.write ?
+                                       <Form.Item>
+                                           <Button icon="plus" onClick={this.handleAddButton}>Thêm danh mục</Button>
+                                       </Form.Item> : null}
                                    <Form.Item>
                                        <Input.Search placeholder="Tìm kiếm danh mục..." onSearch={this.handleSearch}/>
                                    </Form.Item>

@@ -15,11 +15,15 @@ import ReportPage from "../pages/ReportPage";
 import DashboardPage from "../pages/DashboardPage";
 import ReportRevenuePage from "../pages/ReportRevenuePage";
 import InvoicePage from "../pages/InvoicePage";
+import {connect} from "react-redux";
 
 const {Content} = Layout;
 
 class MainLayout extends React.Component {
     render() {
+        if (!this.props.staff.staff) return null;
+        const {permissions} = this.props.staff.staff;
+        if (!permissions) return null;
         return (
             <Layout className='main-layout'>
                 <SideBar/>
@@ -33,32 +37,44 @@ class MainLayout extends React.Component {
                             <Route path="/dashboard">
                                 <DashboardPage/>
                             </Route>
-                            <Route path='/staff'>
-                                <StaffPage/>
-                            </Route>
-                            <Route path='/category'>
-                                <CategoryPage/>
-                            </Route>
-                            <Route path='/product'>
-                                <ProductPage/>
-                            </Route>
-                            <Route path='/sale'>
-                                <SalePage/>
-                            </Route>
-                            <Route path='/customer'>
-                                <CustomerPage/>
-                            </Route>
-                            <Route path='/receipt'>
-                                <ReceiptPage/>
-                            </Route>
-                            <Route path='/report/inventory'>
-                                <ReportPage/>
-                            </Route>
-                            <Route path='/report/revenue'>
-                                <ReportRevenuePage/>
-                            </Route>
-                            <Route path='/invoice'>
-                                <InvoicePage/>
+                            {permissions.staff ?
+                                <Route path='/staff'>
+                                    <StaffPage/>
+                                </Route> : null}
+                            {permissions.product.read ?
+                                <Route path='/category'>
+                                    <CategoryPage/>
+                                </Route> : null}
+                            {permissions.product.read ?
+                                <Route path='/product'>
+                                    <ProductPage/>
+                                </Route> : null}
+                            {permissions.sale ?
+                                <Route path='/sale'>
+                                    <SalePage/>
+                                </Route> : null}
+                            {permissions.customer.read ?
+                                <Route path='/customer'>
+                                    <CustomerPage/>
+                                </Route> : null}
+                            {permissions.receipt.read ?
+                                <Route path='/receipt'>
+                                    <ReceiptPage/>
+                                </Route> : null}
+                            {permissions.report ?
+                                <Route path='/report/inventory'>
+                                    <ReportPage/>
+                                </Route> : null}
+                            {permissions.report ?
+                                <Route path='/report/revenue'>
+                                    <ReportRevenuePage/>
+                                </Route> : null}
+                            {permissions.invoice ?
+                                <Route path='/invoice'>
+                                    <InvoicePage/>
+                                </Route> : null}
+                            <Route>
+                                
                             </Route>
                         </Switch>
                     </Content>
@@ -69,4 +85,10 @@ class MainLayout extends React.Component {
     }
 }
 
-export default MainLayout;
+const mapStateToProps = state => {
+    return {
+        staff: state.staff
+    };
+};
+
+export default connect(mapStateToProps)(MainLayout);
