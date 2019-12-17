@@ -5,6 +5,7 @@ import {Alert, Badge, Divider, Icon, PageHeader, Spin, Table, Tag, Typography, F
 import momentTz from "../../libs/moment";
 import {number_format} from "../../libs/number_formater";
 import InvoicePage from "./InvoicePage";
+import ReactToPrint from "react-to-print";
 
 class InvoiceDetailPage extends React.Component {
     state = {
@@ -59,7 +60,8 @@ class InvoiceDetailPage extends React.Component {
     render() {
         if (this.state.error) return (<Alert message="Hóa đơn không tồn tại." type="error"/>);
 
-        if (!this.state.data) return (<div style={{padding: 'auto', textAlign: 'center'}}><Spin tip="Đang lấy dữ liệu..." size="large"/></div>);
+        if (!this.state.data) return (
+            <div style={{padding: 'auto', textAlign: 'center'}}><Spin tip="Đang lấy dữ liệu..." size="large"/></div>);
 
         const {data} = this.state;
         return (
@@ -70,15 +72,23 @@ class InvoiceDetailPage extends React.Component {
                     }}
                     title="Hóa đơn bán hàng"
                     subTitle={'#' + this.id}
-                    backIcon={<Link to="/invoice"><Icon type="arrow-left" /></Link>}
+                    backIcon={<Link to="/invoice"><Icon type="arrow-left"/></Link>}
                     onBack={() => null}
                 />
-                <div className="container">
+                <Form>
+                    <Form.Item>
+                        <ReactToPrint trigger={() => (<Button icon="printer">In hóa đơn</Button>)}
+                                      content={() => this.printRef}
+                                      pageStyle="padding: 20px;"/>
+                    </Form.Item>
+                </Form>
+                <div ref={(ref) => this.printRef = ref} className="container">
                     <Table columns={[
                         {
                             title: 'Sản phẩm',
                             dataIndex: 'product',
-                            render: (product) => (<Typography.Text strong>{product.bar_code + ' - ' + product.name}</Typography.Text>)
+                            render: (product) => (
+                                <Typography.Text strong>{product.bar_code + ' - ' + product.name}</Typography.Text>)
                         }, {
                             title: 'Số lượng',
                             dataIndex: 'amount',
