@@ -5,12 +5,19 @@ export const TOKEN_UPDATED = 'TOKEN_UPDATED';
 export const LOGOUT = 'LOGOUT';
 
 export function setToken(token) {
-    console.log('Token updated');
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-    return {
-        type: TOKEN_UPDATED,
-        token: token,
-    }
+    return async (dispatch, getState) => {
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        try {
+            const res = await axios.get('/staff/self');
+            dispatch({
+                type: TOKEN_UPDATED,
+                token: token,
+                staff: res.data,
+            });
+            console.log('Token updated', res.data);
+        } catch (err) {
+        }
+    };
 }
 
 export function doLogout(msg = 'Đăng xuất thành công.', type = message.success) {

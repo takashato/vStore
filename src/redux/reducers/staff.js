@@ -7,7 +7,7 @@ const initialState = {
 
 export default function staff(state = initialState, action) {
     if (action.type === TOKEN_UPDATED) {
-        return {...state, token: action.token};
+        return {...state, token: action.token, staff: action.staff};
     }
     if (action.type === LOGOUT) {
         return {...state, token: null};
