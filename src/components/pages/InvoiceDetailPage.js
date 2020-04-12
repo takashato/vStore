@@ -129,7 +129,7 @@ class InvoiceDetailPage extends React.Component {
                             {number_format(data.prepaid_value)}
                         </Descriptions.Item>
                         <Descriptions.Item label="Tiền thối">
-                            {number_format(data.total_final_value - data.prepaid_value)}
+                            {number_format(data.prepaid_value - data.total_final_value)}
                         </Descriptions.Item>
                     </Descriptions>
                 </div>
