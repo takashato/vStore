@@ -1,9 +1,11 @@
 import React from 'react';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
 import {
     Button,
     Col,
     Divider,
-    Form,
     Input,
     InputNumber,
     message,
@@ -11,7 +13,7 @@ import {
     Row,
     Select,
     Table,
-    Typography
+    Typography,
 } from "antd";
 import ProductSelector from "../forms/ProductSelector";
 import axios from "../../libs/axios";
@@ -61,7 +63,7 @@ class SalePage extends React.Component {
                 </>)
             }, {
                 title: '',
-                render: (data, record) => (<><Button type="danger" icon="delete"
+                render: (data, record) => (<><Button type="danger" icon={<DeleteOutlined />}
                                                      onClick={() => this.handleDelete(record.id)}/></>)
             }
         ];

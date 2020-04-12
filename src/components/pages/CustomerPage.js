@@ -1,6 +1,20 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Button, Form, Input, message, Modal, PageHeader, Select, Table, Tag, Tooltip, DatePicker} from "antd";
+import { EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Button,
+    Input,
+    message,
+    Modal,
+    PageHeader,
+    Select,
+    Table,
+    Tag,
+    Tooltip,
+    DatePicker,
+} from "antd";
 import axios from "../../libs/axios";
 import momentTz from "../../libs/moment";
 import moment from 'moment';
@@ -47,7 +61,7 @@ class CustomerPage extends React.Component {
             fixed: 'right',
             render: (text, record) => (
                 <Tooltip title="Sửa" placement="bottom">
-                    <Button icon="edit" onClick={() => this.handleEditButton(record.id)}/>
+                    <Button icon={<EditOutlined />} onClick={() => this.handleEditButton(record.id)}/>
                 </Tooltip>
             )
         });
@@ -181,7 +195,7 @@ class CustomerPage extends React.Component {
                            title={() => (
                                <Form layout="inline">
                                    <Form.Item>
-                                       <Button icon="plus" onClick={this.handleAddCustomerButton}>Thêm khách hàng</Button>
+                                       <Button icon={<PlusOutlined />} onClick={this.handleAddCustomerButton}>Thêm khách hàng</Button>
                                    </Form.Item>
                                    <Form.Item>
                                        <Input.Search placeholder="Tìm kiếm khách hàng..." onSearch={this.handleSearch}/>

@@ -1,5 +1,20 @@
 import React from 'react';
-import {Icon, Menu, Layout, Typography} from "antd";
+
+import {
+    DashboardOutlined,
+    DatabaseOutlined,
+    FileTextOutlined,
+    FormOutlined,
+    ShoppingCartOutlined,
+    SnippetsOutlined,
+    StockOutlined,
+    TagsOutlined,
+    TeamOutlined,
+    UnorderedListOutlined,
+    UserOutlined,
+} from '@ant-design/icons';
+
+import { Menu, Layout, Typography } from "antd";
 import {Link, withRouter} from "react-router-dom";
 
 import './SideBar.css';
@@ -31,33 +46,33 @@ class SideBar extends React.Component {
                       defaultOpenKeys={defaultOpenKeys}>
                     <Menu.Item key="/dashboard">
                         <Link to="/dashboard">
-                            <Icon type="dashboard"/>
+                            <DashboardOutlined />
                             <span>Trang chính</span>
                         </Link>
                     </Menu.Item>
                     {permissions.staff ?
                         <Menu.Item key="/staff">
                             <Link to='/staff'>
-                                <Icon type="user"/>
+                                <UserOutlined />
                                 <span>Nhân viên</span>
                             </Link>
                         </Menu.Item> : null}
                     {permissions.product.read ?
                         <Menu.SubMenu key="k_product" title={
                             <span>
-                            <Icon type="database"/>
+                            <DatabaseOutlined />
                             <span>Sản phẩm</span>
                         </span>
                         }>
                             <Menu.Item key="/product">
                                 <Link to="/product">
-                                    <Icon type="tags"/>
+                                    <TagsOutlined />
                                     <span>Sản phẩm</span>
                                 </Link>
                             </Menu.Item>
                             <Menu.Item key="/category">
                                 <Link to="/category">
-                                    <Icon type="unordered-list"/>
+                                    <UnorderedListOutlined />
                                     <span>Danh mục</span>
                                 </Link>
                             </Menu.Item>
@@ -65,47 +80,47 @@ class SideBar extends React.Component {
                     {permissions.sale ?
                         <Menu.Item key="/sale">
                             <Link to="/sale">
-                                <Icon type="shopping-cart"/>
+                                <ShoppingCartOutlined />
                                 <span><b>Bán hàng</b></span>
                             </Link>
                         </Menu.Item> : null}
                     {permissions.invoice ?
                         <Menu.Item key="/invoice">
                             <Link to="/invoice">
-                                <Icon type="file-text"/>
+                                <FileTextOutlined />
                                 <span>Hóa đơn</span>
                             </Link>
                         </Menu.Item> : null}
                     {permissions.receipt.read ?
                         <Menu.Item key="/receipt">
                             <Link to="/receipt">
-                                <Icon type="snippets"/>
+                                <SnippetsOutlined />
                                 <span>Nhập / xuất kho</span>
                             </Link>
                         </Menu.Item> : null}
                     {permissions.customer ?
                         <Menu.Item key="/customer">
                             <Link to='/customer'>
-                                <Icon type="team"/>
+                                <TeamOutlined />
                                 <span>Khách hàng</span>
                             </Link>
                         </Menu.Item> : null}
                     {permissions.report ?
                         <Menu.SubMenu key="k_report" title={
                             <span>
-                            <Icon type="form"/>
+                            <FormOutlined />
                             <span>Báo cáo</span>
                         </span>
                         }>
                             <Menu.Item key="/report/inventory">
                                 <Link to='/report/inventory'>
-                                    <Icon type="database"/>
+                                    <DatabaseOutlined />
                                     <span>Kiểm kho</span>
                                 </Link>
                             </Menu.Item>
                             <Menu.Item key="/report/revenue">
                                 <Link to='/report/revenue'>
-                                    <Icon type="stock"/>
+                                    <StockOutlined />
                                     <span>Doanh thu</span>
                                 </Link>
                             </Menu.Item>

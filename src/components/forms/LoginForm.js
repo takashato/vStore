@@ -1,5 +1,8 @@
 import React from 'react';
-import {Form, Icon, Input, Button, message, Checkbox} from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Button, message, Checkbox } from 'antd';
 
 import './LoginForm.css';
 import axios from "../../libs/axios";
@@ -41,7 +44,7 @@ class NormalLoginForm extends React.Component {
                         rules: [{required: true, message: 'Vui lòng nhập tên tài khoản!'}],
                     })(
                         <Input
-                            prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                            prefix={<UserOutlined style={{color: 'rgba(0,0,0,.25)'}} />}
                             placeholder="Tên tài khoản"
                         />,
                     )}
@@ -51,7 +54,7 @@ class NormalLoginForm extends React.Component {
                         rules: [{required: true, message: 'Vui lòng nhập mật khẩu!'}],
                     })(
                         <Input.Password
-                            prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                            prefix={<LockOutlined style={{color: 'rgba(0,0,0,.25)'}} />}
                             type="password"
                             placeholder="Mật khẩu"
                         />,

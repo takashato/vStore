@@ -1,4 +1,7 @@
 import React from 'react';
+import { EditOutlined, UserAddOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
 import {
     Table,
     message,
@@ -7,12 +10,11 @@ import {
     Modal,
     Button,
     Popconfirm,
-    Icon,
     Tooltip,
-    Form,
     Input,
     Select,
-    Divider, Checkbox
+    Divider,
+    Checkbox,
 } from 'antd';
 import axios from "../../libs/axios";
 import {connect} from "react-redux";
@@ -95,7 +97,7 @@ class StaffPage extends React.Component {
                 this.state.data.length >= 1 ? (
                     <>
                         <Tooltip title="Sửa" placement="bottom">
-                            <Button icon="edit" onClick={() => this.handleEdit(record.id)}/>
+                            <Button icon={<EditOutlined />} onClick={() => this.handleEdit(record.id)}/>
                         </Tooltip>
                     </>
                 ) : null,
@@ -227,7 +229,7 @@ class StaffPage extends React.Component {
                            pagination={this.state.pagination}
                            scroll={{x: true}} size="small"
                            title={() => (
-                               <Button onClick={this.handleAddStaffButton} icon="user-add">Thêm nhân viên</Button>
+                               <Button onClick={this.handleAddStaffButton} icon={<UserAddOutlined />}>Thêm nhân viên</Button>
                            )}
                     />
                 </div>

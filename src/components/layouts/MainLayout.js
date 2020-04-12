@@ -1,5 +1,5 @@
 import React from 'react';
-import {Layout, Menu, Icon, PageHeader} from 'antd';
+import { Layout, Menu, PageHeader } from 'antd';
 import './MainLayout.css';
 import SideBar from './SideBar';
 import TopBar from "./TopBar";

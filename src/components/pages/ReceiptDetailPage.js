@@ -1,7 +1,8 @@
 import React from 'react';
 import {Link, withRouter} from "react-router-dom";
 import axios from "../../libs/axios";
-import {Alert, Badge, Descriptions, Icon, PageHeader, Spin, Table, Tag, Typography} from "antd";
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Alert, Badge, Descriptions, PageHeader, Spin, Table, Tag, Typography } from "antd";
 import momentTz from "../../libs/moment";
 import {number_format} from "../../libs/number_formater";
 
@@ -66,7 +67,7 @@ class ReceiptDetailPage extends React.Component {
                     }}
                     title="Phiếu nhập / xuất"
                     subTitle={'#' + this.id}
-                    backIcon={<Link to="/receipt"><Icon type="arrow-left" /></Link>}
+                    backIcon={<Link to="/receipt"><ArrowLeftOutlined /></Link>}
                     onBack={() => null}
                 />
                 <Spin spinning={this.state.loading}>

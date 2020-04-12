@@ -1,5 +1,8 @@
 import React from 'react';
-import {Button, Form, Input, PageHeader, Table, Typography, DatePicker, message} from "antd";
+import { PrinterOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Input, PageHeader, Table, Typography, DatePicker, message } from "antd";
 import CategorySelector from "../forms/CategorySelector";
 import {Checkbox} from "antd/es";
 import ReactToPrint from "react-to-print";
@@ -86,7 +89,7 @@ class ReportRevenuePage extends React.Component {
                                 <DatePicker.RangePicker defaultValue={this.state.range} onChange={this.handleDate} format={dateFormat}/>
                             </Form.Item>
                             <Form.Item style={{float: "right"}}>
-                                <ReactToPrint trigger={() => (<Button icon="printer">In Báo Cáo</Button>)}
+                                <ReactToPrint trigger={() => (<Button icon={<PrinterOutlined />}>In Báo Cáo</Button>)}
                                               content={() => this.tableRef}
                                               pageStyle="padding: 20px;"/>
                             </Form.Item>

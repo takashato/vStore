@@ -1,5 +1,6 @@
 import React from 'react';
-import {Col, Dropdown, Icon, Layout, Menu, Row, message} from 'antd';
+import { DownOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { Col, Dropdown, Layout, Menu, Row, message } from 'antd';
 import {Link} from "react-router-dom";
 
 import './TopBar.css';
@@ -24,13 +25,13 @@ class TopBar extends React.Component {
             <Menu>
                 <Menu.Item key="0" disabled>
                     <span>
-                        <Icon type="user"/>
+                        <UserOutlined />
                         <span>{this.props.staff.staff.staff.full_name}</span>
                     </span>
                 </Menu.Item>
                 <Menu.Item key="1" onClick={this.doLogout.bind(this)}>
                     <span>
-                        <Icon type="logout"/>
+                        <LogoutOutlined />
                         <span>Đăng xuất</span>
                     </span>
                 </Menu.Item>
@@ -41,7 +42,7 @@ class TopBar extends React.Component {
             <Header style={{background: '#fff', padding: 0}}>
                 <div className='user-dropdown'>
                     <Dropdown overlay={userDropdown}>
-                        <span>{this.props.staff.staff.staff.username} <Icon type="down"/></span>
+                        <span>{this.props.staff.staff.staff.username} <DownOutlined /></span>
                     </Dropdown>
                 </div>
             </Header>

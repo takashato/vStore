@@ -1,5 +1,6 @@
 import React from 'react';
-import {Card, Col, Icon, message, Row, Statistic, Typography} from "antd";
+import { DatabaseOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
+import { Card, Col, message, Row, Statistic, Typography } from "antd";
 import {Link} from "react-router-dom";
 import axios from "../../libs/axios";
 import {connect} from "react-redux";
@@ -36,7 +37,7 @@ class DashboardPage extends React.Component {
                         <Link to="/product">
                             <Card>
                                 <Statistic title="Tổng số sản phẩm" value={data.total_product}
-                                           prefix={<Icon type="database"/>}/>
+                                           prefix={<DatabaseOutlined />}/>
                             </Card>
                         </Link>
                     </Col>
@@ -45,7 +46,7 @@ class DashboardPage extends React.Component {
                             <Card>
                                 <Statistic title="Sản phẩm hết hàng" value={data.total_out_of_stock_product}
                                            valueStyle={{color: 'red'}}
-                                           prefix={<Icon type="database"/>}
+                                           prefix={<DatabaseOutlined />}
                                            suffix={'/ ' + data.total_product}/>
                             </Card>
                         </Link>
@@ -54,7 +55,7 @@ class DashboardPage extends React.Component {
                         <Link to="/staff">
                             <Card>
                                 <Statistic title="Nhân viên" value={data.total_staff}
-                                           prefix={<Icon type="user"/>}/>
+                                           prefix={<UserOutlined />}/>
                             </Card>
                         </Link>
                     </Col>
@@ -62,7 +63,7 @@ class DashboardPage extends React.Component {
                         <Link to="/customer">
                             <Card>
                                 <Statistic title="Khách hàng" value={data.total_customer}
-                                           prefix={<Icon type="team"/>}/>
+                                           prefix={<TeamOutlined />}/>
                             </Card>
                         </Link>
                     </Col>

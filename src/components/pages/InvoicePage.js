@@ -6,7 +6,10 @@ import {number_format} from "../../libs/number_formater";
 import InputFormatedNumnber from "../forms/InputFormatedNumber";
 import momentTz from "../../libs/moment";
 import InvoiceDetailPage from "./InvoiceDetailPage";
-import {Button, Form, message, PageHeader, Table, Tooltip} from "antd";
+import { EyeOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, message, PageHeader, Table, Tooltip } from "antd";
 
 class InvoicePage extends React.Component {
     render() {
@@ -77,7 +80,7 @@ const InvoiceManager = connect(mapStateToProps) (
                 fixed: 'right',
                 render: (text, record) => (<Tooltip title="Xem chi tiết">
                     <Link to={"/invoice/" + record.id}>
-                        <Button icon="eye"/>
+                        <Button icon={<EyeOutlined />}/>
                     </Link>
                 </Tooltip>)
             });

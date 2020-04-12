@@ -1,7 +1,21 @@
 import * as React from "react";
 import {Switch, Route, withRouter, Link} from "react-router-dom";
 import ReceiptDetailPage from "./ReceiptDetailPage";
-import {Button, Collapse, Form, Input, InputNumber, message, Modal, PageHeader, Table, Tag, Tooltip} from "antd";
+import { DeleteOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Button,
+    Collapse,
+    Input,
+    InputNumber,
+    message,
+    Modal,
+    PageHeader,
+    Table,
+    Tag,
+    Tooltip,
+} from "antd";
 import axios from "../../libs/axios";
 import {connect} from "react-redux";
 import {number_format} from "../../libs/number_formater";
@@ -80,7 +94,7 @@ const ReceiptManager = connect(mapStateToProps)(
                 fixed: 'right',
                 render: (text, record) => (<Tooltip title="Xem chi tiết">
                     <Link to={"/receipt/" + record.id}>
-                        <Button icon="eye"/>
+                        <Button icon={<EyeOutlined />}/>
                     </Link>
                 </Tooltip>)
             });
@@ -165,7 +179,7 @@ const ReceiptManager = connect(mapStateToProps)(
                                title={() => (
                                    <Form layout="inline">
                                        <Form.Item>
-                                           <Button icon="plus" onClick={this.handleImportButton}>Nhập hàng</Button>
+                                           <Button icon={<PlusOutlined />} onClick={this.handleImportButton}>Nhập hàng</Button>
                                        </Form.Item>
                                    </Form>
                                )}/>
@@ -212,7 +226,7 @@ const CreateReceiptForm = Form.create({name: 'receipt_modal'})(
                 }, {
                     title: '',
                     render: (text, record) => (
-                        <Button icon="delete" type="danger" onClick={() => this.handleRemoveEle(record.order)}/>
+                        <Button icon={<DeleteOutlined />} type="danger" onClick={() => this.handleRemoveEle(record.order)}/>
                     )
                 }
             ];
@@ -283,34 +297,32 @@ const AddReceiptRowForm = Form.create({name: 'add_receipt_row_form'})(
     class extends React.Component {
         render() {
             const {getFieldDecorator} = this.props.form;
-            return (
-                <>
-                    <Form>
-                        <Form.Item>
-                            {getFieldDecorator('product', {
-                                rules: [{required: true, message: "Vui lòng chọn sản phẩm."}]
-                            })(<ProductSelector style={{width: '100%'}} allowClear/>)}
-                        </Form.Item>
-                    </Form>
-                    <Form layout="inline">
-                        <Form.Item label="Số lượng">
-                            {getFieldDecorator('amount', {
-                                rules: [{required: true, message: "Vui lòng nhập số lượng"}],
-                                initialValue: 1,
-                            })(<InputNumber/>)}
-                        </Form.Item>
-                        <Form.Item label="Đơn giá">
-                            {getFieldDecorator('price', {
-                                rules: [{required: true, message: "Vui lòng nhập đơn giá"}],
-                                initialValue: 0,
-                            })(<InputFormatedNumnber/>)}
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" icon="plus" onClick={this.props.onSubmit}>Thêm</Button>
-                        </Form.Item>
-                    </Form>
-                </>
-            );
+            return <>
+                <Form>
+                    <Form.Item>
+                        {getFieldDecorator('product', {
+                            rules: [{required: true, message: "Vui lòng chọn sản phẩm."}]
+                        })(<ProductSelector style={{width: '100%'}} allowClear/>)}
+                    </Form.Item>
+                </Form>
+                <Form layout="inline">
+                    <Form.Item label="Số lượng">
+                        {getFieldDecorator('amount', {
+                            rules: [{required: true, message: "Vui lòng nhập số lượng"}],
+                            initialValue: 1,
+                        })(<InputNumber/>)}
+                    </Form.Item>
+                    <Form.Item label="Đơn giá">
+                        {getFieldDecorator('price', {
+                            rules: [{required: true, message: "Vui lòng nhập đơn giá"}],
+                            initialValue: 0,
+                        })(<InputFormatedNumnber/>)}
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" icon={<PlusOutlined />} onClick={this.props.onSubmit}>Thêm</Button>
+                    </Form.Item>
+                </Form>
+            </>;
         };
     }
 );

@@ -1,6 +1,21 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Button, Form, Input, InputNumber, message, Modal, PageHeader, Select, Switch, Table, Tag, Tooltip} from "antd";
+import { EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Button,
+    Input,
+    InputNumber,
+    message,
+    Modal,
+    PageHeader,
+    Select,
+    Switch,
+    Table,
+    Tag,
+    Tooltip,
+} from "antd";
 import axios from "../../libs/axios";
 import momentTz from "../../libs/moment";
 import {number_format} from "../../libs/number_formater";
@@ -60,7 +75,7 @@ class ProductPage extends React.Component {
             render: (text, record) => (
                 this.props.staff.staff.permissions && this.props.staff.staff.permissions.product.write ?
                     <Tooltip title="Sửa" placement="bottom">
-                        <Button icon="edit" onClick={() => this.handleEditButton(record.id)}/>
+                        <Button icon={<EditOutlined />} onClick={() => this.handleEditButton(record.id)}/>
                     </Tooltip> : null)
         });
     }
@@ -207,7 +222,7 @@ class ProductPage extends React.Component {
                                <Form layout="inline">
                                    {permissions.product.write ?
                                        <Form.Item>
-                                           <Button icon="plus" onClick={this.handleAddButton}>Thêm sản phẩm</Button>
+                                           <Button icon={<PlusOutlined />} onClick={this.handleAddButton}>Thêm sản phẩm</Button>
                                        </Form.Item> : null}
                                    <Form.Item>
                                        <Input.Search placeholder="Tìm kiếm sản phẩm..." allowClear
