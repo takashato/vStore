@@ -16,6 +16,7 @@ import DashboardPage from "../pages/DashboardPage";
 import ReportRevenuePage from "../pages/ReportRevenuePage";
 import InvoicePage from "../pages/InvoicePage";
 import {connect} from "react-redux";
+import SettingPage from "../pages/SettingPage";
 
 const {Content} = Layout;
 
@@ -73,8 +74,8 @@ class MainLayout extends React.Component {
                                 <Route path='/invoice'>
                                     <InvoicePage/>
                                 </Route> : null}
-                            <Route>
-
+                            <Route path="/setting">
+                                <SettingPage/>
                             </Route>
                         </Switch>
                     </Content>

@@ -12,6 +12,7 @@ import {
     TeamOutlined,
     UnorderedListOutlined,
     UserOutlined,
+    SettingOutlined
 } from '@ant-design/icons';
 
 import { Menu, Layout, Typography } from "antd";
@@ -125,6 +126,12 @@ class SideBar extends React.Component {
                                 </Link>
                             </Menu.Item>
                         </Menu.SubMenu> : null}
+                    <Menu.Item key="/setting">
+                        <Link to="/setting">
+                            <SettingOutlined />
+                            <span>Cài đặt</span>
+                        </Link>
+                    </Menu.Item>
                 </Menu>
             </Sider>
         );
