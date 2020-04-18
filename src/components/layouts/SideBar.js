@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {
     DashboardOutlined,
@@ -15,17 +15,38 @@ import {
     SettingOutlined
 } from '@ant-design/icons';
 
-import { Menu, Layout, Typography } from "antd";
+import {Menu, Layout, Typography, message} from "antd";
 import {Link, withRouter} from "react-router-dom";
 
 import './SideBar.css';
 import {connect} from "react-redux";
+import axios from "../../libs/axios";
 
 const {Sider} = Layout;
 
 class SideBar extends React.Component {
+    state = {
+        groups: [],
+    };
+
+    getSettingGroups = () => {
+        axios.get('/setting').then(res => {
+            this.setState({groups: res.data.settingGroups});
+        }).catch(err => {
+            message.error('Không thể lấy thông tin cài đặt');
+        });
+    };
+
+    componentDidMount() {
+        if (this.props.staff.token) {
+            this.getSettingGroups();
+        }
+    }
+
     render() {
+        const {groups} = this.state;
         let defaultOpenKeys = [];
+
         if (this.props.location.pathname === "/category" || this.props.location.pathname === "/product") {
             defaultOpenKeys = ['k_product'];
         }
@@ -126,12 +147,17 @@ class SideBar extends React.Component {
                                 </Link>
                             </Menu.Item>
                         </Menu.SubMenu> : null}
-                    <Menu.Item key="/setting">
-                        <Link to="/setting">
+                    <Menu.SubMenu key="k_setting" title={
+                        <span>
                             <SettingOutlined />
-                            <span>Cài đặt</span>
-                        </Link>
-                    </Menu.Item>
+                            <span>Cài đặt chung</span>
+                        </span>
+                    }>
+                        {groups.map((group) =>
+                            <Menu.Item>
+                                <span>{group.name}</span>
+                            </Menu.Item>)}
+                    </Menu.SubMenu>
                 </Menu>
             </Sider>
         );
