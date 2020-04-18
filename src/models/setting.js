@@ -27,6 +27,10 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.TEXT,
 			allowNull: true
 		},
+		group_id: {
+			type: DataTypes.INTEGER(11),
+			allowNull: false,
+		},
 		created_at: {
 			type: DataTypes.DATE,
 			allowNull: true
