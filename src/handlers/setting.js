@@ -21,7 +21,7 @@ import Product from "../models/product_imported";
 export async function getAllSettingGroups(request, h) {
     try {
         let settingGroups = await SettingGroup.findAll({
-            attributes: ['id', 'name', 'description', 'index'],
+            attributes: ['id', 'name', 'varname', 'description', 'index'],
             where: {
                 active: 1
             },
@@ -30,6 +30,41 @@ export async function getAllSettingGroups(request, h) {
         return {
             settingGroups: settingGroups,
         };
+    } catch (err) {
+        console.log(err);
+        return h.code(500);
+    }
+}
+
+export async function getAllSettings(request, h) {
+    let varname = request.params.varname;
+
+    const query = request.query;
+
+    let groupId = query.groupId;
+
+    try {
+        let groups = await SettingGroup.findAll({
+            where: {
+                varname: varname
+            }
+        });
+
+        if(groups && groups.length > 0) {
+            let settings = await Setting.findAll({
+                attributes: ['varname', 'value', 'default_value', 'name', 'description', 'formatter'],
+                where: {
+                    group_id: groupId
+                }
+            });
+            return {
+                settings: settings,
+            };
+        }
+        else {
+            return ResponseBuilder.inputError(h, 'Không tồn tại varname.', 'require_varname_field');
+        }
+
     } catch (err) {
         console.log(err);
         return h.code(500);

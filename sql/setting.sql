@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 19, 2020 lúc 04:04 PM
+-- Thời gian đã tạo: Th4 19, 2020 lúc 07:03 PM
 -- Phiên bản máy phục vụ: 10.1.38-MariaDB
 -- Phiên bản PHP: 7.3.3
 
@@ -39,6 +39,15 @@ CREATE TABLE `setting` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+--
+-- Đang đổ dữ liệu cho bảng `setting`
+--
+
+INSERT INTO `setting` (`varname`, `value`, `default_value`, `name`, `description`, `formatter`, `group_id`, `created_at`, `updated_at`) VALUES
+('address', NULL, 'https://vstore.zenmaple.com', 'Địa chỉ trang chủ', 'Địa chỉ (link) trang chủ của website', 'Input', 1, NULL, NULL),
+('login', NULL, 'Đăng nhập bằng sđt', 'Quản lý đăng nhập', 'Phương thức đăng nhập vào CMS', 'Input', 2, NULL, NULL),
+('webName', NULL, 'Quản lý bán hàng vStore', 'Tên website', 'Tên hiển thị (title) trên tab tìm kiếm', 'Input', 1, NULL, NULL);
 
 --
 -- Chỉ mục cho các bảng đã đổ
