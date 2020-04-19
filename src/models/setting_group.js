@@ -12,6 +12,10 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING(255),
 			allowNull: false
 		},
+		varname: {
+			type: DataTypes.STRING(255),
+			allowNull: false,
+		},
 		description: {
 			type: DataTypes.TEXT,
 			allowNull: true
