@@ -154,8 +154,10 @@ class SideBar extends React.Component {
                         </span>
                     }>
                         {groups.map((group) =>
-                            <Menu.Item>
-                                <span>{group.name}</span>
+                            <Menu.Item key={"/setting/" + group.varname}>
+                                <Link to={"/setting/" + group.varname}>
+                                    <span>{group.name}</span>
+                                </Link>
                             </Menu.Item>)}
                     </Menu.SubMenu>
                 </Menu>
