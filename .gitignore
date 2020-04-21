@@ -16,7 +16,7 @@
 /client/.env.test.local
 /client/.env.production.local
 
-/client/src/config_sample
+/server/src/config
 
 /client/src/config.json
 
