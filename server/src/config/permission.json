@@ -1,0 +1,59 @@
+{
+  "1": {
+    "description": "Admin",
+    "staff": true,
+    "product": {
+      "read": true,
+      "write": true
+    },
+    "sale": true,
+    "invoice": true,
+    "receipt": {
+      "read": true,
+      "write": true
+    },
+    "customer": {
+      "read": true,
+      "write": false
+    },
+    "report": true
+  },
+  "2": {
+    "description": "Manager",
+    "staff": false,
+    "product": {
+      "read": true,
+      "write": true
+    },
+    "sale": true,
+    "invoice": true,
+    "receipt": {
+      "read": true,
+      "write": true
+    },
+    "customer": {
+      "read": true,
+      "write": true
+    },
+    "report": true
+  },
+  "3": {
+    "description": "Staff",
+    "staff": false,
+    "product": {
+      "read": true,
+      "write": false
+    },
+    "sale": true,
+    "invoice": true,
+    "receipt": {
+      "read": false,
+      "write": false
+    },
+    "customer": {
+      "read": true,
+      "write": true
+    },
+    "report": true
+  }
+}
