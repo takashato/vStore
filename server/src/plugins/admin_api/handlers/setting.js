@@ -1,8 +1,8 @@
-import ResponseBuilder from "../helpers/response_builder";
+import ResponseBuilder from "../../../helpers/response_builder";
 import Sequelize, {Op} from "sequelize";
-import Setting from "../models/setting_imported";
-import SettingGroup from "../models/setting_group_imported";
-import Product from "../models/product_imported";
+import Setting from "../../../models/setting_imported";
+import SettingGroup from "../../../models/setting_group_imported";
+import Product from "../../../models/product_imported";
 
 // const casualSettingExportFields = [
 //     'varname',

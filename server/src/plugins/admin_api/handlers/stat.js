@@ -1,8 +1,8 @@
-import Product from "../models/product_imported";
-import sequelize from "../db";
-import Staff from "../models/staff_imported";
+import Product from "../../../models/product_imported";
+import sequelize from "../../../db";
+import Staff from "../../../models/staff_imported";
 import moment from "moment";
-import ResponseBuilder from "../helpers/response_builder";
+import ResponseBuilder from "../../../helpers/response_builder";
 
 const {Op} = sequelize;
 

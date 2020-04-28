@@ -2,11 +2,11 @@ import Bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";
 import {Op} from "sequelize";
 
-import secureConfig from "../config/secure";
-import Staff from "../models/staff_imported";
-import ResponseBuilder from "../helpers/response_builder";
+import secureConfig from "../../../config/secure.json";
+import Staff from "../../../models/staff_imported";
+import ResponseBuilder from "../../../helpers/response_builder";
 
-import permissionConfig from "../config/permission";
+import permissionConfig from "../../../config/permission.json";
 
 export async function authenticate(request, h) {
     let payload = request.payload;

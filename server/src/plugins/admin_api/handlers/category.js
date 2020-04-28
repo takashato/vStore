@@ -1,7 +1,7 @@
-import ResponseBuilder from "../helpers/response_builder";
-import ProductCategory from "../models/product_category_imported";
+import ResponseBuilder from "../../../helpers/response_builder";
+import ProductCategory from "../../../models/product_category_imported";
 import {Op} from "sequelize";
-import Staff from "../models/staff_imported";
+import Staff from "../../../models/staff_imported";
 import Bcrypt from "bcrypt";
 
 const casualCategoryExportFields = ['id', 'name', 'created_at', 'updated_at'];

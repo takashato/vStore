@@ -1,11 +1,11 @@
-import ResponseBuilder from "../helpers/response_builder";
-import Customer from "../models/customer_imported";
-import Product from "../models/product_imported";
-import sequelize from "../db";
-import Invoice from "../models/invoice_exported";
-import InvoiceDetail from "../models/invoice_detail_exported";
-import Receipt from "../models/receipt_imported";
-import ReceiptDetail from "../models/receipt_detail_imported";
+import ResponseBuilder from "../../../helpers/response_builder";
+import Customer from "../../../models/customer_imported";
+import Product from "../../../models/product_imported";
+import sequelize from "../../../db";
+import Invoice from "../../../models/invoice_exported";
+import InvoiceDetail from "../../../models/invoice_detail_exported";
+import Receipt from "../../../models/receipt_imported";
+import ReceiptDetail from "../../../models/receipt_detail_imported";
 
 export async function sale(request, h) {
     const {payload} = request;
