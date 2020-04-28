@@ -5,8 +5,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
+    "start-build": "node ./build/server.js",
     "start-dev": "nodemon index.js",
-    "sequelize-auto": "cd src && node sequelize-auto.js"
+    "sequelize-auto": "cd src && node sequelize-auto.js",
+    "build": "babel src -d build"
   },
   "keywords": [],
   "author": "",

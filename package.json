@@ -1,0 +1,33 @@
+{
+  "name": "vstore",
+  "version": "1.0.0",
+  "description": "vStore system",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run --prefix ./server start-build",
+    "build": "npm run build-frontend && npm run build-backend && npm run post-build",
+
+    "build-frontend": "npm run --prefix ./client build",
+
+    "build-backend": "run-script-os",
+    "build-backend:windows": "rmdir server\\build /s /q && npm run --prefix ./server build && echo d | xcopy /e server\\src\\config server\\build\\config",
+    "build-backend:nix": "rm -rf ./server/build && npm run --prefix ./server build && cp -r ./server/src/config ./server/build",
+
+    "post-build": "run-script-os",
+    "post-build:windows": "echo d | xcopy /e client\\build\\* server\\build\\public\\admin",
+    "post-build:nix": "mkdir -p server/build/public/admin && cp -r ./client/build/* server/build/public/admin"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/takashato/vStore.git"
+  },
+  "author": "takashato, PTChinh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/takashato/vStore/issues"
+  },
+  "homepage": "https://github.com/takashato/vStore#readme",
+  "devDependencies": {
+    "run-script-os": "^1.1.1"
+  }
+}
