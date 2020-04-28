@@ -43,6 +43,9 @@ export async function init() {
             directory: {
                 path: "./public/admin",
             }
+        },
+        options: {
+            auth: false,
         }
     });
 
