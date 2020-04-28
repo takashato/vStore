@@ -1,3 +1,5 @@
+import Path from 'path';
+
 import Hapi from '@hapi/hapi';
 import HapiAuthJWT2 from 'hapi-auth-jwt2';
 import Inert from '@hapi/inert';
@@ -8,6 +10,9 @@ import secureConfig from './config/secure';
 import validate from "./helpers/token_validator";
 import AdminApiPlugin from "./plugins/admin_api";
 
+serverConfig.routes.files = {
+    relativeTo: Path.join(__dirname, 'public')
+};
 export const server = new Hapi.Server(serverConfig);
 
 export async function init() {
@@ -38,10 +43,12 @@ export async function init() {
     // Admin Static
     server.route({
         method: '*',
-        path: '/admin/{param*}',
+        path: '/admin/{path*}',
         handler: {
             directory: {
-                path: "./public/admin",
+                path: './admin',
+                listing: false,
+                index: true,
             }
         },
         options: {
