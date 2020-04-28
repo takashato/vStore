@@ -18,5 +18,6 @@ export async function init() {
         console.log('>>> Connected to database.');
     } catch (e) {
         console.error('Can\'t connect to database: ', e);
+        process.exit();
     }
 }
