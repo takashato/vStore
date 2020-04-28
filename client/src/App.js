@@ -5,9 +5,7 @@ import {BrowserRouter, Redirect, Route, Switch, withRouter} from "react-router-d
 import LoginLayout from "./components/layouts/LoginLayout";
 import MainLayout from "./components/layouts/MainLayout";
 import {connect, Provider} from "react-redux";
-import reducers from "./redux/reducers/combined";
-import {applyMiddleware, createStore} from "redux";
-import thunk from "redux-thunk";
+import config from "./config.json";
 import {setToken} from "./redux/actions/staff";
 import {ConfigProvider, Spin} from "antd";
 import viVN from "antd/es/locale/vi_VN";
@@ -84,7 +82,7 @@ const VisibleApp = withRouter(connect(mapStateToProps, mapDispatchToProps)(App))
 class AppContainer extends React.Component {
     render() {
         return (
-            <BrowserRouter>
+            <BrowserRouter basename={config.routerBaseName}>
                 <VisibleApp/>
             </BrowserRouter>
         );
