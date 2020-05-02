@@ -4,7 +4,7 @@ import axios from "../../libs/axios";
 
 const SettingPage = ({description, groupId}) => {
 
-    const path = window.location.pathname;
+    const path = window.location.pathname.replace('admin/', '');
     const [settings, setSettings] = useState([]);
 
     useEffect(() => {
@@ -17,7 +17,8 @@ const SettingPage = ({description, groupId}) => {
                 });
                 setSettings(res.data.settings);
             } catch (err) {
-                message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi lấy dữ liệu.');
+                message.error('lỗi từ path ' + path);
+                //message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi lấy dữ liệu.');
             }
         }
         getSettings();
