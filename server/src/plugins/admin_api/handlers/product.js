@@ -170,7 +170,7 @@ export async function getProduct(request, h) {
         console.log(err);
     }
     if (!product) {
-        return ResponseBuilder.error(h, ResponseBuilder.NOT_FOUND, 'Sản phẩm tồn tại.', 'product_not_found');
+        return ResponseBuilder.error(h, ResponseBuilder.NOT_FOUND, 'Sản phẩm không tồn tại.', 'product_not_found');
     }
     return product;
 }

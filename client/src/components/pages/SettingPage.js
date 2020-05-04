@@ -17,8 +17,7 @@ const SettingPage = ({description, groupId}) => {
                 });
                 setSettings(res.data.settings);
             } catch (err) {
-                message.error('lỗi từ path ' + path);
-                //message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi lấy dữ liệu.');
+                message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi lấy dữ liệu.');
             }
         }
         getSettings();
