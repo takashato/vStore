@@ -161,6 +161,8 @@ class SalePage extends React.Component {
     };
 
     render() {
+        const details = [...this.state.details];
+
         const total_money = this.state.details.reduce((acc, current) => acc + current.amount * current.price, 0);
         const total_orignal_money = this.state.details.reduce((acc, current) => acc + current.amount * (current.original_price || current.price), 0);
         const total_charge_money = this.state.prepaid - total_money;
@@ -170,7 +172,7 @@ class SalePage extends React.Component {
                     <Col lg={18}>
                         <ProductSelector style={{width: '100%'}} onChange={this.handleSubmit}/>
                         <Divider/>
-                        <Table columns={this.columns} dataSource={this.state.details} pagination={false} rowKey="id"/>
+                        <Table columns={this.columns} dataSource={details} pagination={false} rowKey="id"/>
                         <Divider/>
                     </Col>
                     <Col lg={6}>
