@@ -262,6 +262,7 @@ const CreateReceiptForm = Form.create({name: 'receipt_modal'})(
         };
 
         render() {
+            const data = [...this.state.data];
             const {getFieldDecorator} = this.props.form;
             return (
                 <Modal {...this.props.props} width={700}>
@@ -277,7 +278,7 @@ const CreateReceiptForm = Form.create({name: 'receipt_modal'})(
                         </Form.Item>
                     </Form>
                     <Table columns={this.columns}
-                           dataSource={this.state.data}
+                           dataSource={data}
                            rowKey="order"
                            title={() => (
                                <Collapse defaultActiveKey="default">
@@ -326,6 +327,5 @@ const AddReceiptRowForm = Form.create({name: 'add_receipt_row_form'})(
         };
     }
 );
-
 
 export default withRouter(ReceiptPage);
