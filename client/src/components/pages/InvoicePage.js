@@ -50,7 +50,7 @@ const InvoiceManager = connect(mapStateToProps) (
                 }, {
                     title: 'Tên khách hàng',
                     dataIndex: 'customer',
-                    render: (customer) => customer.full_name,
+                    render: (customer) => customer ? customer.full_name : 'Khách vãng lai',
                 }, {
                     title: 'Nhân viên',
                     dataIndex: 'staff',
@@ -99,6 +99,7 @@ const InvoiceManager = connect(mapStateToProps) (
                 pagination.total = res.data.total || 0;
                 this.setState({data: res.data.rows, pagination});
             }).catch(err => {
+                console.log(err);
                 message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi lấy dữ liệu.');
             }).finally(() => {
                 this.setState({loading: false});

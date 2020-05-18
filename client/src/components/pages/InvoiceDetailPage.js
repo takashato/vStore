@@ -124,7 +124,7 @@ class InvoiceDetailPage extends React.Component {
                                 Nhân viên: {data.staff.username + " - " + data.staff.full_name}
                             </h4>
                             <h4>
-                                Khách hàng: {data.customer.full_name}
+                                Khách hàng: {data.customer ? data.customer.full_name : 'Khách vãng lai'}
                             </h4>
                         </div>
                     )}/>
