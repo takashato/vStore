@@ -105,7 +105,7 @@ class InvoiceDetailPage extends React.Component {
                                 <Typography.Text strong>{product.bar_code + ' - ' + product.name}</Typography.Text>)
                         }, {
                             title: 'Số lượng',
-                            dataIndex: 'amount',
+                            dataIndex: 'quantity',
                         }, {
                             title: 'Đơn giá',
                             dataIndex: 'price',
