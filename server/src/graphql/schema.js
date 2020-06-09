@@ -2,7 +2,7 @@ import path from 'path';
 import {makeExecutableSchema} from "graphql-tools";
 import {loadFilesSync} from "@graphql-tools/load-files";
 import {mergeTypeDefs} from "@graphql-tools/merge";
-import QueryResolver from "./resolvers/queryResolver";
+import Query from "./resolvers/query";
 import ProductResolver from "./resolvers/product";
 
 
@@ -10,7 +10,7 @@ const typesArray = loadFilesSync(path.join(__dirname, './types'), { recursive: t
 
 export const typeDefs = mergeTypeDefs(typesArray);
 export const resolvers = {
-    Query: QueryResolver,
+    Query: Query,
     Product: ProductResolver
 };
 

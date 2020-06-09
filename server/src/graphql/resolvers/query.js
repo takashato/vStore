@@ -5,11 +5,11 @@ import Product from "../../models/product_imported";
 const productCategoryResolver = resolver(ProductCategory);
 const productResolver = resolver(Product);
 
-const QueryResolver = {
+const Query = {
     category: productCategoryResolver,
     categories: productCategoryResolver,
     product: productResolver,
     products: productResolver,
 };
 
-export default QueryResolver;
+export default Query;
