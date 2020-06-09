@@ -1,8 +1,8 @@
 type Query{
     node(id: ID!): Node
 
-    category(id: Int): Category
-    categories(limit: Int, offset: Int, order: String): [Category]
+    category(id: ID!): Category
+    categories(after: String, before: String, first: Int, last: Int): CategoryConnection
 
     product(id: Int): Product
     products(limit: Int, offset: Int, order: String): [Product]

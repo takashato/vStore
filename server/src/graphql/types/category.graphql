@@ -8,3 +8,14 @@ type Category {
     created_at: String
     updated_at: String
 }
+
+type CategoryConnection {
+    pageInfo: PageInfo!
+    edges: [CategoryEdge]
+    fullCount: Int
+}
+
+type CategoryEdge {
+    node: Category
+    cursor: String!
+}

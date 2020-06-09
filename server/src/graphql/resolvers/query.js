@@ -14,7 +14,9 @@ const Query = {
     node: nodeField.resolve,
 
     category: productCategoryResolver,
-    categories: productCategoryResolver,
+    categories: createConnectionResolver({
+        target: ProductCategory,
+    }).resolveConnection,
 
     product: productResolver,
     products: productResolver,
