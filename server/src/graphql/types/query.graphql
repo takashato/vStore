@@ -1,7 +1,19 @@
-type Query {
+type Query{
+    node(id: ID!): Node
+
     category(id: Int): Category
     categories(limit: Int, offset: Int, order: String): [Category]
 
     product(id: Int): Product
     products(limit: Int, offset: Int, order: String): [Product]
+
+    customer(id: ID!): Customer
+    customers(after: String, before: String, first: Int, last: Int): CustomerConnection
+}
+
+type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+    endCursor: String
 }

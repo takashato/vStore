@@ -1,4 +1,7 @@
 type Category {
+    """
+    Category data type
+    """
     id: ID!
     name: String
     products: [Product],

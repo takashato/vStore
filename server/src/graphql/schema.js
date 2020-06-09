@@ -11,7 +11,7 @@ const typesArray = loadFilesSync(path.join(__dirname, './types'), { recursive: t
 export const typeDefs = mergeTypeDefs(typesArray);
 export const resolvers = {
     Query: Query,
-    Product: ProductResolver
+    Product: ProductResolver,
 };
 
 const executableSchema = makeExecutableSchema({
