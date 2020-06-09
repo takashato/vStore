@@ -9,7 +9,8 @@ function applyRoute(server) {
             auth: "jwt",
             app: {
                 allowedGroups: [1, 2, 3]
-            }
+            },
+            tags: ['api'],
         }
     });
 
@@ -21,7 +22,8 @@ function applyRoute(server) {
             auth: "jwt",
             app: {
                 allowedGroups: [1, 2, 3]
-            }
+            },
+            tags: ['api'],
         }
     });
 
@@ -33,7 +35,8 @@ function applyRoute(server) {
             auth: "jwt",
             app: {
                 allowedGroups: [1, 2]
-            }
+            },
+            tags: ['api'],
         }
     });
 
@@ -45,7 +48,8 @@ function applyRoute(server) {
             auth: "jwt",
             app: {
                 allowedGroups: [1, 2]
-            }
+            },
+            tags: ['api'],
         }
     });
 }
