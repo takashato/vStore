@@ -4,40 +4,46 @@ import Hapi from '@hapi/hapi';
 import HapiAuthJWT2 from 'hapi-auth-jwt2';
 import Inert from '@hapi/inert';
 import Vision from '@hapi/vision';
-import HapiSwagger from 'hapi-swagger';
+import {ApolloServer} from 'apollo-server-hapi';
 
 import serverConfig from './config/server';
 import secureConfig from './config/secure';
-import swaggerOptions from './config/swagger_options.json';
+import graphqlConfig from './config/graphql.json';
 
 import validate from "./helpers/token_validator";
 import AdminApiPlugin from "./plugins/admin_api";
 import ServerApiPlugin from "./plugins/server_api";
 
+import graphqlSchema from './graphql/schema';
+
 serverConfig.routes.files = {
     relativeTo: Path.join(__dirname, 'public')
 };
 export const server = new Hapi.Server(serverConfig);
+export const apolloServer = new ApolloServer({
+    schema: graphqlSchema,
+});
 
 export async function init() {
     try {
         // Register modules
-        await server.register(HapiAuthJWT2);
         await server.register([
             Inert,
             Vision,
-            {
-                plugin: HapiSwagger,
-                options: swaggerOptions,
-            }
+            HapiAuthJWT2,
         ]);
+        // GraphQL
+        await apolloServer.applyMiddleware({
+            ...graphqlConfig,
+            app: server,
+        });
         // Setup Authentication
-        server.auth.strategy('jwt', 'jwt',
-            {
-                key: secureConfig.jwtSecret,
-                validate
-            });
-        server.auth.default('jwt');
+        // server.auth.strategy('jwt', 'jwt',
+        //     {
+        //         key: secureConfig.jwtSecret,
+        //         validate
+        //     });
+        // server.auth.default('jwt');
         // Start server
         await server.start();
         console.log('>>> Server running on %s', server.info.uri);
@@ -49,17 +55,17 @@ export async function init() {
 
     // Register plugins for modularization
     // Admin API
-    await server.register(AdminApiPlugin, {
-        routes: {
-            prefix: '/admin/api'
-        }
-    });
+    // await server.register(AdminApiPlugin, {
+    //     routes: {
+    //         prefix: '/admin/api'
+    //     }
+    // });
     // ServerAPI
-    await server.register(ServerApiPlugin, {
-        routes: {
-            prefix: '/api'
-        }
-    });
+    // await server.register(ServerApiPlugin, {
+    //     routes: {
+    //         prefix: '/api'
+    //     }
+    // });
     // Admin Static
     server.route({
         method: '*',

@@ -1,0 +1,7 @@
+type Category {
+    id: ID!
+    name: String
+    products: [Product],
+    created_at: String
+    updated_at: String
+}

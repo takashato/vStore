@@ -1,0 +1,7 @@
+type Query {
+    category(id: Int): Category
+    categories(limit: Int, offset: Int, order: String): [Category]
+
+    product(id: Int): Product
+    products(limit: Int, offset: Int, order: String): [Product]
+}
