@@ -22,5 +22,5 @@ type ProductConnection {
 
 type ProductEdge {
     node: Product,
-    cursor: String,
+    cursor: String!,
 }

@@ -12,6 +12,11 @@ type Query{
 
     staff(id: ID!): Staff
     staffs(after: String, before: String, first: Int, last: Int): StaffConnection
+
+    receipt(id: ID!): Receipt
+    receipts(after: String, before: String, first: Int, last: Int): ReceiptConnection
+
+    receiptDetails(receipt_id: Int!, after: String, before: String, first: Int, last: Int): ReceiptDetailConnection
 }
 
 type PageInfo {
