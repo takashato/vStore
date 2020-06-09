@@ -5,10 +5,13 @@ type Query{
     categories(after: String, before: String, first: Int, last: Int): CategoryConnection
 
     product(id: Int): Product
-    products(limit: Int, offset: Int, order: String): [Product]
+    products(after: String, before: String, first: Int, last: Int): ProductConnection
 
     customer(id: ID!): Customer
     customers(after: String, before: String, first: Int, last: Int): CustomerConnection
+
+    staff(id: ID!): Staff
+    staffs(after: String, before: String, first: Int, last: Int): StaffConnection
 }
 
 type PageInfo {

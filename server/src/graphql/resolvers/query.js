@@ -3,27 +3,31 @@ import {createConnectionResolver, createNodeInterface, resolver} from "graphql-s
 import Product from "../../models/product_imported";
 import Customer from "../../models/customer_imported";
 import sequelize from "../../db";
+import Staff from "../../models/staff_imported";
 
 const { nodeField, nodeTypeMapper } = createNodeInterface(sequelize);
-
-const productCategoryResolver = resolver(ProductCategory);
-const productResolver = resolver(Product);
-const customerResolver = resolver(Customer);
 
 const Query = {
     node: nodeField.resolve,
 
-    category: productCategoryResolver,
+    category: resolver(ProductCategory),
     categories: createConnectionResolver({
         target: ProductCategory,
     }).resolveConnection,
 
-    product: productResolver,
-    products: productResolver,
+    product: resolver(Product),
+    products: createConnectionResolver({
+        target: Product,
+    }).resolveConnection,
 
-    customer: customerResolver,
+    customer: resolver(Customer),
     customers: createConnectionResolver({
         target: Customer,
+    }).resolveConnection,
+
+    staff: resolver(Staff),
+    staffs: createConnectionResolver({
+        target: Staff,
     }).resolveConnection,
 };
 
