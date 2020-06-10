@@ -6,11 +6,14 @@ import sequelize from "../../db";
 import Staff from "../../models/staff_imported";
 import Receipt from "../../models/receipt_imported";
 import ReceiptDetail from "../../models/receipt_detail_imported";
+import {authenticate} from "./auth";
 
 const {nodeField} = createNodeInterface(sequelize);
 
 const Query = {
     node: nodeField.resolve,
+
+    authenticate: authenticate,
 
     category: resolver(ProductCategory),
     categories: createConnectionResolver({

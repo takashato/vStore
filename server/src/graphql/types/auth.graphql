@@ -1,0 +1,9 @@
+input AuthInput {
+    username: String!
+    password: String!
+}
+
+type AuthResult {
+    id: Int!
+    token: String!
+}

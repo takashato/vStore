@@ -1,6 +1,8 @@
 type Query{
     node(id: ID!): Node
 
+    authenticate(auth: AuthInput!): AuthResult
+
     category(id: ID!): Category
     categories(after: String, before: String, first: Int, last: Int): CategoryConnection
 
