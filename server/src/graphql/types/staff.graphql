@@ -1,7 +1,6 @@
 type Staff {
     id: ID!
     username: String
-    password: String
     full_name: String
     email: String
     group_id: Int
