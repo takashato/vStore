@@ -19,7 +19,6 @@ class TopBar extends React.Component {
 
     render() {
         if (!this.props.staff.staff) return null;
-        console.log(this.props.staff.staff);
 
         const userDropdown = (
             <Menu>

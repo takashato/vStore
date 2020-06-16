@@ -1,97 +1,85 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import './App.css';
-import {BrowserRouter, Redirect, Route, Switch, withRouter} from "react-router-dom";
 import LoginLayout from "./components/layouts/LoginLayout";
 import MainLayout from "./components/layouts/MainLayout";
-import {connect, Provider} from "react-redux";
+import {Provider, useDispatch, useSelector} from "react-redux";
 import {ApolloProvider} from "@apollo/react-hooks";
 import config from "./config.json";
-import {setToken} from "./redux/actions/staff";
 import {ConfigProvider, Spin} from "antd";
 import viVN from "antd/es/locale/vi_VN";
 import store from "./store";
 import client from "./graphql/client";
+import {BrowserRouter, Route, Switch, useHistory} from "react-router-dom";
+import {setToken} from "./redux/actions/staff";
 
-class App extends React.Component {
-    state = {
-        initialized: false,
-        redirectToLogin: false,
-        lastLocation: this.props.location.pathname === '/login' ? '/' : this.props.location.pathname,
-    };
+const App = (props) => {
+    const history = useHistory();
+    const dispatch = useDispatch();
 
-    componentDidMount() {
-        this.props.getTokenFromStorage();
-        this.setState({initialized: true});
-    }
+    const staff = useSelector(state => state.staff);
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.staff.token == null && !prevState.redirectToLogin) {
-            this.setState({redirectToLogin: true, lastLocation: this.props.location.pathname});
-        }
-        if (this.props.staff.token != null && prevState.redirectToLogin) {
-            this.setState({redirectToLogin: false});
-        }
-    }
+    const [fetched, setFetched] = useState(false);
+    const [initialized, setInitialized] = useState(false);
+    const [refPath, setRefPath] = useState(history.location.pathname === '/login' ? '/' : history.location.pathname);
 
-    render() {
-        if (!this.state.initialized) {
-            return (
-                <Spin tip="Đang tải...">
-                    <div className='loading-screen'/>
-                </Spin>
-            );
-        }
+    useEffect(() => {
+        (async () => {
+            const token = localStorage.getItem('session_token') || sessionStorage.getItem('session_token');
+            if (token) {
+                await dispatch(setToken(token));
+            }
+            setFetched(true);
+        })();
+    }, []);
 
-        return (
-            <>
-                {
-                    this.state.redirectToLogin
-                        ? <Redirect from='*' to='/login'/>
-                        : <Redirect from='/login' to={this.state.lastLocation}/>
+    useEffect(() => {
+        console.log('path app', history.location.pathname);
+        console.log('ref path', refPath);
+        if (fetched) {
+            setInitialized(true);
+            if (history.location.pathname !== '/login' && !staff.token) {
+                setRefPath(history.location.pathname);
+                history.push('/login');
+            } else if (staff.token) {
+                if (refPath === '/login') {
+                    history.push('/');
                 }
-                <Switch>
-                    <Route path='/login'>
-                        <LoginLayout/>
-                    </Route>
-                    <Route>
-                        <MainLayout/>
-                    </Route>
-                </Switch>
-            </>
-        );
-    }
-}
-
-
-const mapStateToProps = state => {
-    return {
-        staff: state.staff
-    };
-};
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        getTokenFromStorage: () => {
-            let token = localStorage.getItem('session_token') || sessionStorage.getItem('session_token');
-            dispatch(setToken(token));
+                history.push(refPath);
+            }
         }
-    };
-};
+    }, [fetched, staff.token]);
 
-const VisibleApp = withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
-
-class AppContainer extends React.Component {
-    render() {
+    if (!fetched || !initialized) {
         return (
-            <BrowserRouter basename={config.routerBaseName}>
-                <VisibleApp/>
-            </BrowserRouter>
+            <Spin tip="Đang tải...">
+                <div className='loading-screen'/>
+            </Spin>
         );
     }
-}
+    return (
+        <>
+            <Switch>
+                <Route path='/login'>
+                    <LoginLayout/>
+                </Route>
+                <Route>
+                    <MainLayout/>
+                </Route>
+            </Switch>
+        </>
+    );
+};
 
-function ProvidedApp() {
+const AppContainer = () => {
+    return (
+        <BrowserRouter basename={config.routerBaseName}>
+            <App/>
+        </BrowserRouter>
+    );
+};
+
+const ProvidedApp = () =>  {
     return (
         <Provider store={store}>
             <ApolloProvider client={client}>
@@ -101,6 +89,6 @@ function ProvidedApp() {
             </ApolloProvider>
         </Provider>
     );
-}
+};
 
 export default ProvidedApp;
