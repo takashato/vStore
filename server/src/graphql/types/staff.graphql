@@ -1,0 +1,21 @@
+type Staff {
+    id: ID!
+    username: String
+    full_name: String
+    email: String
+    group_id: Int
+    active: Int
+    created_at: String
+    updated_at: String
+}
+
+type StaffConnection {
+    pageInfo: PageInfo!
+    edges: [StaffEdge]
+    fullCount: Int
+}
+
+type StaffEdge {
+    node: Staff
+    cursor: String!
+}

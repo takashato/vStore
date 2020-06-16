@@ -1,0 +1,21 @@
+type Category {
+    """
+    Category data type
+    """
+    id: ID!
+    name: String
+    products: [Product],
+    created_at: String
+    updated_at: String
+}
+
+type CategoryConnection {
+    pageInfo: PageInfo!
+    edges: [CategoryEdge]
+    fullCount: Int
+}
+
+type CategoryEdge {
+    node: Category
+    cursor: String!
+}

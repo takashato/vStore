@@ -1,0 +1,28 @@
+type Receipt {
+    id: ID!
+    description: String
+    type: Int
+    source: String
+    staff_id: Int
+    staff: Staff
+    customer_id: Int
+    customer: Customer
+    total: Int
+    total_money: Float
+    total_amount: Float
+    details_with_pagination: ReceiptDetailConnection
+    details: [ReceiptDetail]
+    created_at: String
+    updated_at: String
+}
+
+type ReceiptConnection {
+    pageInfo: PageInfo!
+    edges: [ReceiptEdge]
+    fullCount: Int
+}
+
+type ReceiptEdge {
+    node: Receipt
+    cursor: String!
+}

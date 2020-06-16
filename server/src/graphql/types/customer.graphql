@@ -1,0 +1,19 @@
+type Customer {
+    id: ID!
+    full_name: String
+    phone_number: String
+    birthday: String
+    created_at: String
+    updated_at: String
+}
+
+type CustomerConnection {
+    pageInfo: PageInfo!
+    edges: [CustomerEdge]
+    fullCount: Int
+}
+
+type CustomerEdge {
+    node: Customer
+    cursor: String!
+}

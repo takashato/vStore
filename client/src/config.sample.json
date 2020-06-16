@@ -1,4 +1,7 @@
 {
   "baseURL": "http://localhost:3001/admin/api",
+  "graphql": {
+    "url": "http://localhost:3001/graphql"
+  },
   "routerBaseName": "/admin"
 }

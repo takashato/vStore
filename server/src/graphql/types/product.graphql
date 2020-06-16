@@ -1,0 +1,26 @@
+type Product {
+    id: ID!
+    bar_code: String
+    name: String
+    category_id: Int
+    category(id: Int): Category
+    price: Float
+    original_price: Float
+    inventory_quantity: Float
+    added_by: Int
+    staff: Staff
+    is_deleted: Boolean
+    created_at: String
+    updated_at: String
+}
+
+type ProductConnection {
+    pageInfo: PageInfo!
+    edges: [ProductEdge]
+    fullCount: Int
+}
+
+type ProductEdge {
+    node: Product,
+    cursor: String!,
+}

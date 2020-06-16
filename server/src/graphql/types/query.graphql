@@ -1,0 +1,29 @@
+type Query{
+    node(id: ID!): Node
+
+    authenticate(auth: AuthInput!): AuthResult
+
+    category(id: ID!): Category
+    categories(after: String, before: String, first: Int, last: Int): CategoryConnection
+
+    product(id: Int): Product
+    products(after: String, before: String, first: Int, last: Int): ProductConnection
+
+    customer(id: ID!): Customer
+    customers(after: String, before: String, first: Int, last: Int): CustomerConnection
+
+    staff(id: ID!): Staff
+    staffs(after: String, before: String, first: Int, last: Int): StaffConnection
+
+    receipt(id: ID!): Receipt
+    receipts(after: String, before: String, first: Int, last: Int): ReceiptConnection
+
+    receiptDetails(receipt_id: Int!, after: String, before: String, first: Int, last: Int): ReceiptDetailConnection
+}
+
+type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+    endCursor: String
+}

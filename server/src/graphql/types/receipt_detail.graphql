@@ -1,0 +1,22 @@
+type ReceiptDetail {
+    id: ID!
+    receipt_id: Int
+    product_id: Int
+    product: Product
+    price: Float
+    amount: Float
+    total_money: Float
+    created_at: String
+    updated_at: String
+}
+
+type ReceiptDetailConnection {
+    pageInfo: PageInfo!
+    edges: [ReceiptDetailEdge]
+    fullCount: Int
+}
+
+type ReceiptDetailEdge {
+    node: ReceiptDetail
+    cursor: String!
+}
