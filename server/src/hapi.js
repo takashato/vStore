@@ -38,11 +38,11 @@ export async function init() {
             app: server,
         });
         // Setup Authentication
-        // server.auth.strategy('jwt', 'jwt',
-        //     {
-        //         key: secureConfig.jwtSecret,
-        //         validate
-        //     });
+        server.auth.strategy('jwt', 'jwt',
+            {
+                key: secureConfig.jwtSecret,
+                validate
+            });
         // server.auth.default('jwt');
         // Start server
         await server.start();
@@ -55,11 +55,11 @@ export async function init() {
 
     // Register plugins for modularization
     // Admin API
-    // await server.register(AdminApiPlugin, {
-    //     routes: {
-    //         prefix: '/admin/api'
-    //     }
-    // });
+    await server.register(AdminApiPlugin, {
+        routes: {
+            prefix: '/admin/api'
+        }
+    });
     // ServerAPI
     // await server.register(ServerApiPlugin, {
     //     routes: {
