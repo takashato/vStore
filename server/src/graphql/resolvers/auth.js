@@ -10,17 +10,17 @@ export const authenticate = async (obj, args, context, info) => {
 
     let staff = await Staff.findOne({where: {username: username}});
     if (!staff) {
-        throw new UserInputError("Tài khoản không tồn tại", {code: 'staff_not_found'});
+        throw new UserInputError("Tài khoản không tồn tại", {field: 'username', error: 'staff_not_found'});
     }
     if (staff.password.length < 50) {
         staff.password = await Bcrypt.hash(staff.password, await Bcrypt.genSalt());
         staff.save();
     }
     if (!(await Bcrypt.compare(password, staff.password))) {
-        throw new UserInputError("Mật khẩu không đúng", {code: 'incorrect_password'})
+        throw new UserInputError("Mật khẩu không đúng", {field: 'password', error: 'incorrect_password'})
     }
     if (staff.active !== 1) {
-        throw new UserInputError("Tài khoản hiện đang bị khóa", {code: 'account_locked'});
+        throw new UserInputError("Tài khoản hiện đang bị khóa", {field: 'username', error: 'account_locked'});
     }
 
     let token = JWT.sign({

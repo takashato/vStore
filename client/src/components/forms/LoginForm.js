@@ -1,88 +1,93 @@
-import React from 'react';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import React, {useState} from 'react';
+import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import '@ant-design/compatible/assets/index.css';
-import { Input, Button, message, Checkbox } from 'antd';
+import {Button, Checkbox, Form, Input} from 'antd';
+
+import {useDispatch} from "react-redux";
+import {useApolloClient} from "@apollo/react-hooks";
+import {LOGIN_QUERY} from "../../graphql/query";
+
+import {setToken} from "../../redux/actions/staff";
 
 import './LoginForm.css';
-import axios from "../../libs/axios";
-import {setToken} from "../../redux/actions/staff";
-import {connect} from "react-redux";
 
-class NormalLoginForm extends React.Component {
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.form.validateFields(async (err, values) => {
-            if (!err) {
-                message.destroy();
-                let loadingMsg = message.loading('Đang đăng nhập...');
-                console.log(values);
-                try {
-                    let res = await axios.post('/staff/auth', {username: values.username, password: values.password});
-                    await message.success('Đăng nhập thành công!', 0.5);
-                    this.props.setToken(res.data.token);
-                    if (values.save_password) {
-                        localStorage.setItem('session_token', res.data.token);
-                    } else {
-                        sessionStorage.setItem('session_token', res.data.token);
+const LoginForm = (props) => {
+    const dispatch = useDispatch();
+    const [form] = Form.useForm();
+    const client = useApolloClient();
+
+    const [isLoading, setLoading] = useState(false);
+
+    const onFinish = async (values) => {
+        setLoading(true);
+        try {
+            const {data} = await client.query({
+                query: LOGIN_QUERY,
+                variables: {
+                    auth: {
+                        username: values.username,
+                        password: values.password,
                     }
-                } catch (err) {
-                    message.error(err.response.data.userMessage ? err.response.data.userMessage : 'Đăng nhập thất bại!');
-                } finally {
-                    loadingMsg();
                 }
+            });
+            dispatch(setToken(data.authenticate.token));
+            if (values.save_password) {
+                localStorage.setItem('session_token', data.authenticate.token);
+            } else {
+                sessionStorage.setItem('session_token', data.authenticate.token);
             }
-        });
+        } catch (err) {
+            err.graphQLErrors.forEach(e => {
+                console.log(e);
+                form.setFields([
+                    {
+                        name: e.extensions.field,
+                        errors: [e.message],
+                    }
+                ]);
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
-    render() {
-        const {getFieldDecorator} = this.props.form;
-        return (
-            <Form onSubmit={this.handleSubmit} className="login-form">
-                <Form.Item>
-                    {getFieldDecorator('username', {
-                        rules: [{required: true, message: 'Vui lòng nhập tên tài khoản!'}],
-                    })(
-                        <Input
-                            prefix={<UserOutlined style={{color: 'rgba(0,0,0,.25)'}} />}
-                            placeholder="Tên tài khoản"
-                        />,
-                    )}
-                </Form.Item>
-                <Form.Item>
-                    {getFieldDecorator('password', {
-                        rules: [{required: true, message: 'Vui lòng nhập mật khẩu!'}],
-                    })(
-                        <Input.Password
-                            prefix={<LockOutlined style={{color: 'rgba(0,0,0,.25)'}} />}
-                            type="password"
-                            placeholder="Mật khẩu"
-                        />,
-                    )}
-                </Form.Item>
-                <Form.Item>
-                    {getFieldDecorator('save_password', {
-                        valuePropName: 'checked',
-                    })(<Checkbox>Lưu tài khoản</Checkbox>)}
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button">
-                        Đăng nhập
-                    </Button>
-                </Form.Item>
-            </Form>
-        );
-    }
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        setToken: (token) => dispatch(setToken(token))
+    const onFinishFailed = (err) => {
     };
+
+    return (
+        <Form form={form} onFinish={onFinish} onFinishFailed={onFinishFailed} className="login-form">
+            <Form.Item
+                name="username"
+                rules={[{required: true, message: 'Vui lòng nhập tên tài khoản!'}]}
+            >
+                <Input
+                    prefix={<UserOutlined style={{color: 'rgba(0,0,0,.25)'}}/>}
+                    placeholder="Tên tài khoản"
+                />
+            </Form.Item>
+            <Form.Item
+                name="password"
+                rules={[{required: true, message: 'Vui lòng nhập mật khẩu!'}]}
+            >
+                <Input.Password
+                    prefix={<LockOutlined style={{color: 'rgba(0,0,0,.25)'}}/>}
+                    type="password"
+                    placeholder="Mật khẩu"
+                />
+            </Form.Item>
+            <Form.Item
+                name="save_password"
+                valuePropName="checked"
+            >
+                <Checkbox>Lưu tài khoản</Checkbox>
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit" className="login-form-button" loading={isLoading}>
+                    Đăng nhập
+                </Button>
+            </Form.Item>
+        </Form>
+    );
 };
 
-const WrappedNormalLoginForm = Form.create({name: 'normal_login'})(NormalLoginForm);
-
-const VisibleLoginForm = connect(null, mapDispatchToProps)(WrappedNormalLoginForm);
-
-export default VisibleLoginForm;
+export default LoginForm;

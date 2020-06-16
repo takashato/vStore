@@ -5,11 +5,13 @@ import {BrowserRouter, Redirect, Route, Switch, withRouter} from "react-router-d
 import LoginLayout from "./components/layouts/LoginLayout";
 import MainLayout from "./components/layouts/MainLayout";
 import {connect, Provider} from "react-redux";
+import {ApolloProvider} from "@apollo/react-hooks";
 import config from "./config.json";
 import {setToken} from "./redux/actions/staff";
 import {ConfigProvider, Spin} from "antd";
 import viVN from "antd/es/locale/vi_VN";
 import store from "./store";
+import client from "./graphql/client";
 
 class App extends React.Component {
     state = {
@@ -92,9 +94,11 @@ class AppContainer extends React.Component {
 function ProvidedApp() {
     return (
         <Provider store={store}>
-            <ConfigProvider locale={viVN}>
-                <AppContainer/>
-            </ConfigProvider>
+            <ApolloProvider client={client}>
+                <ConfigProvider locale={viVN}>
+                    <AppContainer/>
+                </ConfigProvider>
+            </ApolloProvider>
         </Provider>
     );
 }

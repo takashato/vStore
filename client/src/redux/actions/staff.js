@@ -14,7 +14,6 @@ export function setToken(token) {
                 token: token,
                 staff: res.data,
             });
-            console.log('Token updated', res.data);
         } catch (err) {
         }
     };
