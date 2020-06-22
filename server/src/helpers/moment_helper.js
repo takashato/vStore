@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const _moment = moment.tz('Asia/Ho_chi_minh');
+const _moment = moment;
 
 /**
  * @var _moment Moment

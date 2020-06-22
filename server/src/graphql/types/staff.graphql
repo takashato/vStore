@@ -5,8 +5,8 @@ type Staff {
     email: String
     group_id: Int
     active: Int
-    created_at: String
-    updated_at: String
+    created_at: GraphQLDateTime
+    updated_at: GraphQLDateTime
 }
 
 type StaffConnection {

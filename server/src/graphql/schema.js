@@ -2,12 +2,16 @@ import path from 'path';
 import {makeExecutableSchema} from "graphql-tools";
 import {loadFilesSync} from "@graphql-tools/load-files";
 import {mergeTypeDefs} from "@graphql-tools/merge";
+import {
+    GraphQLDate,
+    GraphQLTime,
+    GraphQLDateTime
+} from 'graphql-iso-date';
 import Query from "./resolvers/query";
 import ProductResolver from "./resolvers/product";
 import ReceiptResolver from "./resolvers/receipt";
 import ReceiptDetailResolver from "./resolvers/receipt_detail";
 import Mutation from "./resolvers/mutation";
-
 
 const typesArray = loadFilesSync(path.join(__dirname, './types'), { recursive: true });
 
@@ -18,6 +22,10 @@ export const resolvers = {
     Product: ProductResolver,
     Receipt: ReceiptResolver,
     ReceiptDetail: ReceiptDetailResolver,
+    // GraphQL ISO DateTime
+    GraphQLDate,
+    GraphQLTime,
+    GraphQLDateTime,
 };
 
 const executableSchema = makeExecutableSchema({
