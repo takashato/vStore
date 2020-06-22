@@ -19,3 +19,8 @@ type StaffEdge {
     node: Staff
     cursor: String!
 }
+
+type StaffList {
+    rows: [Staff]!
+    count: Int
+}

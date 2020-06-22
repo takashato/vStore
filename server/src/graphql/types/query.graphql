@@ -14,6 +14,7 @@ type Query{
 
     staff(id: ID!): Staff
     staffs(after: String, before: String, first: Int, last: Int): StaffConnection
+    staffs_offset(limit: Int, offset: Int): StaffList
 
     receipt(id: ID!): Receipt
     receipts(after: String, before: String, first: Int, last: Int): ReceiptConnection

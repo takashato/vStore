@@ -7,6 +7,7 @@ import Staff from "../../models/staff_imported";
 import Receipt from "../../models/receipt_imported";
 import ReceiptDetail from "../../models/receipt_detail_imported";
 import {authenticate} from "./auth";
+import resolverForOffsetPagination from "../../helpers/graphql_offset_pagination";
 
 const {nodeField} = createNodeInterface(sequelize);
 
@@ -34,6 +35,7 @@ const Query = {
     staffs: createConnectionResolver({
         target: Staff,
     }).resolveConnection,
+    staffs_offset: resolverForOffsetPagination(Staff),
 
     receipt: resolver(Receipt),
     receipts: createConnectionResolver({
