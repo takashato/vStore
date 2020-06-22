@@ -1,8 +1,8 @@
 import React from 'react';
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import {EditOutlined, PlusOutlined} from '@ant-design/icons';
+import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Button, Input, message, Modal, PageHeader, Table, Tooltip } from "antd";
+import {Button, Input, message, Modal, PageHeader, Table, Tooltip} from "antd";
 import axios from "../../libs/axios";
 import momentTz from "../../libs/moment";
 import {connect} from "react-redux";
@@ -40,7 +40,7 @@ class CategoryPage extends React.Component {
             render: (text, record) => (
                 this.props.staff.staff.permissions && this.props.staff.staff.permissions.product.write ?
                     <Tooltip title="Sửa" placement="bottom">
-                        <Button icon={<EditOutlined />} onClick={() => this.handleEditButton(record.id)}/>
+                        <Button icon={<EditOutlined/>} onClick={() => this.handleEditButton(record.id)}/>
                     </Tooltip> : null
             )
         });
@@ -155,7 +155,8 @@ class CategoryPage extends React.Component {
                                <Form layout="inline">
                                    {permissions.product.write ?
                                        <Form.Item>
-                                           <Button icon={<PlusOutlined />} onClick={this.handleAddButton}>Thêm danh mục</Button>
+                                           <Button icon={<PlusOutlined/>} onClick={this.handleAddButton}>Thêm danh
+                                               mục</Button>
                                        </Form.Item> : null}
                                    <Form.Item>
                                        <Input.Search placeholder="Tìm kiếm danh mục..." onSearch={this.handleSearch}/>

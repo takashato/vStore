@@ -1,11 +1,10 @@
 import React from 'react';
-import { DownOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Col, Dropdown, Layout, Menu, Row, message } from 'antd';
-import {Link} from "react-router-dom";
+import {DownOutlined, LogoutOutlined, UserOutlined} from '@ant-design/icons';
+import {Dropdown, Layout, Menu} from 'antd';
 
 import './TopBar.css';
 import {connect} from "react-redux";
-import {doLogout, setToken} from "../../redux/actions/staff";
+import {doLogout} from "../../redux/actions/staff";
 
 const {Header} = Layout;
 
@@ -24,13 +23,13 @@ class TopBar extends React.Component {
             <Menu>
                 <Menu.Item key="0" disabled>
                     <span>
-                        <UserOutlined />
+                        <UserOutlined/>
                         <span>{this.props.staff.staff.staff.full_name}</span>
                     </span>
                 </Menu.Item>
                 <Menu.Item key="1" onClick={this.doLogout.bind(this)}>
                     <span>
-                        <LogoutOutlined />
+                        <LogoutOutlined/>
                         <span>Đăng xuất</span>
                     </span>
                 </Menu.Item>
@@ -41,7 +40,7 @@ class TopBar extends React.Component {
             <Header style={{background: '#fff', padding: 0}}>
                 <div className='user-dropdown'>
                     <Dropdown overlay={userDropdown}>
-                        <span>{this.props.staff.staff.staff.username} <DownOutlined /></span>
+                        <span>{this.props.staff.staff.staff.username} <DownOutlined/></span>
                     </Dropdown>
                 </div>
             </Header>

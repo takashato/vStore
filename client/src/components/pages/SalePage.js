@@ -1,26 +1,14 @@
 import React from 'react';
-import { DeleteOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import {DeleteOutlined} from '@ant-design/icons';
+import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import {
-    Button,
-    Col,
-    Divider,
-    Input,
-    InputNumber,
-    message,
-    notification,
-    Row,
-    Select,
-    Table,
-    Typography,
-} from "antd";
+import {Button, Col, Divider, InputNumber, message, notification, Row, Select, Table, Typography,} from "antd";
 import ProductSelector from "../forms/ProductSelector";
 import axios from "../../libs/axios";
 import {number_format} from "../../libs/number_formater";
 import CustomerSelector from "../forms/CustomerSelector";
 import InputFormatedNumnber from "../forms/InputFormatedNumber";
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 
 class SalePage extends React.Component {
     state = {
@@ -63,7 +51,7 @@ class SalePage extends React.Component {
                 </>)
             }, {
                 title: '',
-                render: (data, record) => (<><Button type="danger" icon={<DeleteOutlined />}
+                render: (data, record) => (<><Button type="danger" icon={<DeleteOutlined/>}
                                                      onClick={() => this.handleDelete(record.id)}/></>)
             }
         ];

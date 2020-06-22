@@ -1,8 +1,8 @@
 import React from 'react';
 import {Link, withRouter} from "react-router-dom";
 import axios from "../../libs/axios";
-import { ArrowLeftOutlined } from '@ant-design/icons';
-import { Alert, Badge, Descriptions, PageHeader, Spin, Table, Tag, Typography } from "antd";
+import {ArrowLeftOutlined} from '@ant-design/icons';
+import {Alert, Descriptions, PageHeader, Spin, Table, Tag, Typography} from "antd";
 import momentTz from "../../libs/moment";
 import {number_format} from "../../libs/number_formater";
 
@@ -57,7 +57,8 @@ class ReceiptDetailPage extends React.Component {
 
     render() {
         if (this.state.error) return (<Alert message="Phiếu nhập / xuất không tồn tại." type="error"/>);
-        if (!this.state.data) return (<div style={{padding: 'auto', textAlign: 'center'}}><Spin tip="Đang lấy dữ liệu..." size="large"/></div>);
+        if (!this.state.data) return (
+            <div style={{padding: 'auto', textAlign: 'center'}}><Spin tip="Đang lấy dữ liệu..." size="large"/></div>);
         const {data} = this.state;
         return (
             <div>
@@ -67,7 +68,7 @@ class ReceiptDetailPage extends React.Component {
                     }}
                     title="Phiếu nhập / xuất"
                     subTitle={'#' + this.id}
-                    backIcon={<Link to="/receipt"><ArrowLeftOutlined /></Link>}
+                    backIcon={<Link to="/receipt"><ArrowLeftOutlined/></Link>}
                     onBack={() => null}
                 />
                 <Spin spinning={this.state.loading}>
@@ -92,7 +93,8 @@ class ReceiptDetailPage extends React.Component {
                         {
                             title: 'Sản phẩm',
                             dataIndex: 'product',
-                            render: (product) => (<Typography.Text strong>{product.bar_code + ' - ' + product.name}</Typography.Text>)
+                            render: (product) => (
+                                <Typography.Text strong>{product.bar_code + ' - ' + product.name}</Typography.Text>)
                         }, {
                             title: 'Số lượng',
                             dataIndex: 'amount',

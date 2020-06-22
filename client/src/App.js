@@ -79,7 +79,7 @@ const AppContainer = () => {
     );
 };
 
-const ProvidedApp = () =>  {
+const ProvidedApp = () => {
     return (
         <Provider store={store}>
             <ApolloProvider client={client}>

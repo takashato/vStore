@@ -1,13 +1,12 @@
 import React from 'react';
 import {connect} from "react-redux";
 import axios from "../../libs/axios";
-import { PrinterOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import {PrinterOutlined} from '@ant-design/icons';
+import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Button, Input, message, PageHeader, Table, Typography } from "antd";
+import {Button, Input, message, PageHeader, Table, Typography} from "antd";
 import CategorySelector from "../forms/CategorySelector";
 import {Checkbox} from "antd/es";
-import momentTz from "../../libs/moment";
 import moment from "moment";
 import ReactToPrint from "react-to-print";
 
@@ -125,7 +124,7 @@ class ReportPage extends React.Component {
                                           defaultChecked={this.state.inventoryFilter}>Chỉ sản phẩm hết hàng</Checkbox>
                             </Form.Item>
                             <Form.Item style={{float: "right"}}>
-                                <ReactToPrint trigger={() => (<Button icon={<PrinterOutlined />}>In Báo Cáo</Button>)}
+                                <ReactToPrint trigger={() => (<Button icon={<PrinterOutlined/>}>In Báo Cáo</Button>)}
                                               content={() => this.tableRef}
                                               pageStyle="padding: 20px;"/>
                             </Form.Item>

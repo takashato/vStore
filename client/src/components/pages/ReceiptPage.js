@@ -1,21 +1,10 @@
 import * as React from "react";
-import {Switch, Route, withRouter, Link} from "react-router-dom";
+import {Link, Route, Switch, withRouter} from "react-router-dom";
 import ReceiptDetailPage from "./ReceiptDetailPage";
-import { DeleteOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import {DeleteOutlined, EyeOutlined, PlusOutlined} from '@ant-design/icons';
+import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import {
-    Button,
-    Collapse,
-    Input,
-    InputNumber,
-    message,
-    Modal,
-    PageHeader,
-    Table,
-    Tag,
-    Tooltip,
-} from "antd";
+import {Button, Collapse, Input, InputNumber, message, Modal, PageHeader, Table, Tag, Tooltip,} from "antd";
 import axios from "../../libs/axios";
 import {connect} from "react-redux";
 import {number_format} from "../../libs/number_formater";
@@ -94,7 +83,7 @@ const ReceiptManager = connect(mapStateToProps)(
                 fixed: 'right',
                 render: (text, record) => (<Tooltip title="Xem chi tiết">
                     <Link to={"/receipt/" + record.id}>
-                        <Button icon={<EyeOutlined />}/>
+                        <Button icon={<EyeOutlined/>}/>
                     </Link>
                 </Tooltip>)
             });
@@ -179,7 +168,8 @@ const ReceiptManager = connect(mapStateToProps)(
                                title={() => (
                                    <Form layout="inline">
                                        <Form.Item>
-                                           <Button icon={<PlusOutlined />} onClick={this.handleImportButton}>Nhập hàng</Button>
+                                           <Button icon={<PlusOutlined/>} onClick={this.handleImportButton}>Nhập
+                                               hàng</Button>
                                        </Form.Item>
                                    </Form>
                                )}/>
@@ -226,7 +216,8 @@ const CreateReceiptForm = Form.create({name: 'receipt_modal'})(
                 }, {
                     title: '',
                     render: (text, record) => (
-                        <Button icon={<DeleteOutlined />} type="danger" onClick={() => this.handleRemoveEle(record.order)}/>
+                        <Button icon={<DeleteOutlined/>} type="danger"
+                                onClick={() => this.handleRemoveEle(record.order)}/>
                     )
                 }
             ];
@@ -320,7 +311,7 @@ const AddReceiptRowForm = Form.create({name: 'add_receipt_row_form'})(
                         })(<InputFormatedNumnber/>)}
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" icon={<PlusOutlined />} onClick={this.props.onSubmit}>Thêm</Button>
+                        <Button type="primary" icon={<PlusOutlined/>} onClick={this.props.onSubmit}>Thêm</Button>
                     </Form.Item>
                 </Form>
             </>;

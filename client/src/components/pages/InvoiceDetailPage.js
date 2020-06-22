@@ -1,24 +1,12 @@
 import React from 'react';
 import {Link, withRouter} from "react-router-dom";
 import axios from "../../libs/axios";
-import { ArrowLeftOutlined, PrinterOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import {ArrowLeftOutlined, PrinterOutlined} from '@ant-design/icons';
+import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import {
-    Alert,
-    Badge,
-    Divider,
-    PageHeader,
-    Spin,
-    Table,
-    Tag,
-    Typography,
-    Button,
-    Descriptions,
-} from "antd";
+import {Alert, Button, Descriptions, Divider, PageHeader, Spin, Table, Typography,} from "antd";
 import momentTz from "../../libs/moment";
 import {number_format} from "../../libs/number_formater";
-import InvoicePage from "./InvoicePage";
 import ReactToPrint from "react-to-print";
 
 class InvoiceDetailPage extends React.Component {
@@ -86,12 +74,12 @@ class InvoiceDetailPage extends React.Component {
                     }}
                     title="Hóa đơn bán hàng"
                     subTitle={'#' + this.id}
-                    backIcon={<Link to="/invoice"><ArrowLeftOutlined /></Link>}
+                    backIcon={<Link to="/invoice"><ArrowLeftOutlined/></Link>}
                     onBack={() => null}
                 />
                 <Form>
                     <Form.Item>
-                        <ReactToPrint trigger={() => (<Button icon={<PrinterOutlined />}>In hóa đơn</Button>)}
+                        <ReactToPrint trigger={() => (<Button icon={<PrinterOutlined/>}>In hóa đơn</Button>)}
                                       content={() => this.printRef}
                                       pageStyle="padding: 20px;"/>
                     </Form.Item>

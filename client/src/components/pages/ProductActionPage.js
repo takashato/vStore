@@ -1,25 +1,24 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {PageHeader, message, Form, Input, Button, Checkbox} from "antd";
-import {Link, useParams} from "react-router-dom";
+import {Button, Form, Input, message, PageHeader} from "antd";
+import {Link, useHistory, useParams} from "react-router-dom";
 import axios from "../../libs/axios";
 import CategorySelector from "../forms/CategorySelector";
 import InputFormatedNumnber from "../forms/InputFormatedNumber";
 import {ArrowLeftOutlined} from "@ant-design/icons";
-import {useHistory} from "react-router-dom";
 
 const ProductActionPage = () => {
     const [loading, setLoading] = useState(false);
-    const { id } = useParams();
+    const {id} = useParams();
     const [form] = Form.useForm();
     const history = useHistory();
 
     const layout = {
-        labelCol: { span: 8 },
-        wrapperCol: { span: 8 },
+        labelCol: {span: 8},
+        wrapperCol: {span: 8},
     };
 
     const tailLayout = {
-        wrapperCol: { offset: 8, span: 16 },
+        wrapperCol: {offset: 8, span: 16},
     };
 
     const onFinish = useCallback((values) => {
@@ -51,7 +50,7 @@ const ProductActionPage = () => {
             message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi cập nhật sản phẩm.');
             setLoading(false);
         });
-    },[]);
+    }, []);
 
     useEffect(() => {
         if (id) {
@@ -78,11 +77,12 @@ const ProductActionPage = () => {
                     message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : 'Lỗi khi lấy dữ liệu sản phẩm.');
                 }
             }
+
             getData();
         }
     }, []);
 
-    if(!id) {
+    if (!id) {
         return (
             <div>
                 <PageHeader
@@ -91,7 +91,7 @@ const ProductActionPage = () => {
                     }}
                     title="Thêm sản phẩm"
                     subTitle="Thêm sản phẩm mới"
-                    backIcon={<Link to="/product"><ArrowLeftOutlined /></Link>}
+                    backIcon={<Link to="/product"><ArrowLeftOutlined/></Link>}
                     onBack={() => null}
                 />
                 <div className="container">
@@ -100,16 +100,20 @@ const ProductActionPage = () => {
                         form={form}
                         onFinish={onFinish}
                     >
-                        <Form.Item name="bar_code" label="Bar code" rules={[{required: true, message: "Vui lòng nhập Bar Code."}]}>
+                        <Form.Item name="bar_code" label="Bar code"
+                                   rules={[{required: true, message: "Vui lòng nhập Bar Code."}]}>
                             <Input/>
                         </Form.Item>
-                        <Form.Item name="name" label="Tên sản phẩm" rules={[{required: true, message: "Vui lòng nhập tên sản phẩm."}]}>
+                        <Form.Item name="name" label="Tên sản phẩm"
+                                   rules={[{required: true, message: "Vui lòng nhập tên sản phẩm."}]}>
                             <Input/>
                         </Form.Item>
-                        <Form.Item name="category_id" label="Danh mục" rules={[{required: true, message: "Vui lòng chọn danh mục."}]}>
+                        <Form.Item name="category_id" label="Danh mục"
+                                   rules={[{required: true, message: "Vui lòng chọn danh mục."}]}>
                             <CategorySelector/>
                         </Form.Item>
-                        <Form.Item name="price" label="Giá sản phẩm" rules={[{required: true, message: "Vui lòng nhập giá sản phẩm."}]}>
+                        <Form.Item name="price" label="Giá sản phẩm"
+                                   rules={[{required: true, message: "Vui lòng nhập giá sản phẩm."}]}>
                             <InputFormatedNumnber placeholder="Giá tính thành tiền"/>
                         </Form.Item>
                         <Form.Item name="original_price" label="Giá gốc sản phẩm">
@@ -124,8 +128,7 @@ const ProductActionPage = () => {
                 </div>
             </div>
         );
-    }
-    else {
+    } else {
         return (
             <div>
                 <PageHeader
@@ -134,7 +137,7 @@ const ProductActionPage = () => {
                     }}
                     title="Sửa thông tin sản phẩm"
                     subTitle={"#" + id}
-                    backIcon={<Link to="/product"><ArrowLeftOutlined /></Link>}
+                    backIcon={<Link to="/product"><ArrowLeftOutlined/></Link>}
                     onBack={() => null}
                 />
                 <div className="container">
@@ -143,16 +146,20 @@ const ProductActionPage = () => {
                         form={form}
                         onFinish={onFinish}
                     >
-                        <Form.Item name="bar_code" label="Bar code" rules={[{required: true, message: "Vui lòng nhập Bar Code."}]}>
+                        <Form.Item name="bar_code" label="Bar code"
+                                   rules={[{required: true, message: "Vui lòng nhập Bar Code."}]}>
                             <Input/>
                         </Form.Item>
-                        <Form.Item name="name" label="Tên sản phẩm" rules={[{required: true, message: "Vui lòng nhập tên sản phẩm."}]}>
+                        <Form.Item name="name" label="Tên sản phẩm"
+                                   rules={[{required: true, message: "Vui lòng nhập tên sản phẩm."}]}>
                             <Input/>
                         </Form.Item>
-                        <Form.Item name="category_id" label="Danh mục" rules={[{required: true, message: "Vui lòng chọn danh mục."}]}>
+                        <Form.Item name="category_id" label="Danh mục"
+                                   rules={[{required: true, message: "Vui lòng chọn danh mục."}]}>
                             <CategorySelector/>
                         </Form.Item>
-                        <Form.Item name="price" label="Giá sản phẩm" rules={[{required: true, message: "Vui lòng nhập giá sản phẩm."}]}>
+                        <Form.Item name="price" label="Giá sản phẩm"
+                                   rules={[{required: true, message: "Vui lòng nhập giá sản phẩm."}]}>
                             <InputFormatedNumnber placeholder="Giá tính thành tiền"/>
                         </Form.Item>
                         <Form.Item name="original_price" label="Giá gốc sản phẩm">

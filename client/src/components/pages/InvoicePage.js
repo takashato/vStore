@@ -1,15 +1,12 @@
 import * as React from "react";
-import {Switch, Route, withRouter, Link} from "react-router-dom";
+import {Link, Route, Switch, withRouter} from "react-router-dom";
 import axios from "../../libs/axios";
 import {connect} from "react-redux";
 import {number_format} from "../../libs/number_formater";
-import InputFormatedNumnber from "../forms/InputFormatedNumber";
-import momentTz from "../../libs/moment";
 import InvoiceDetailPage from "./InvoiceDetailPage";
-import { EyeOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import {EyeOutlined} from '@ant-design/icons';
 import '@ant-design/compatible/assets/index.css';
-import { Button, message, PageHeader, Table, Tooltip } from "antd";
+import {Button, message, PageHeader, Table, Tooltip} from "antd";
 
 class InvoicePage extends React.Component {
     render() {
@@ -32,7 +29,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-const InvoiceManager = connect(mapStateToProps) (
+const InvoiceManager = connect(mapStateToProps)(
     class extends React.Component {
         state = {
             data: [],
@@ -80,7 +77,7 @@ const InvoiceManager = connect(mapStateToProps) (
                 fixed: 'right',
                 render: (text, record) => (<Tooltip title="Xem chi tiết">
                     <Link to={"/invoice/" + record.id}>
-                        <Button icon={<EyeOutlined />}/>
+                        <Button icon={<EyeOutlined/>}/>
                     </Link>
                 </Tooltip>)
             });
@@ -126,7 +123,7 @@ const InvoiceManager = connect(mapStateToProps) (
                     <div className="container">
                         <Table loading={this.state.loading} columns={this.columns} dataSource={this.state.data}
                                pagination={this.state.pagination} size="small" rowKey="id"
-                               scroll={{x: true}} />
+                               scroll={{x: true}}/>
                     </div>
                 </div>
             );

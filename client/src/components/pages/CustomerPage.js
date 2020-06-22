@@ -1,20 +1,9 @@
 import React from "react";
 import {connect} from "react-redux";
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import {EditOutlined, PlusOutlined} from '@ant-design/icons';
+import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import {
-    Button,
-    Input,
-    message,
-    Modal,
-    PageHeader,
-    Select,
-    Table,
-    Tag,
-    Tooltip,
-    DatePicker,
-} from "antd";
+import {Button, DatePicker, Input, message, Modal, PageHeader, Table, Tooltip,} from "antd";
 import axios from "../../libs/axios";
 import momentTz from "../../libs/moment";
 import moment from 'moment';
@@ -61,7 +50,7 @@ class CustomerPage extends React.Component {
             fixed: 'right',
             render: (text, record) => (
                 <Tooltip title="Sửa" placement="bottom">
-                    <Button icon={<EditOutlined />} onClick={() => this.handleEditButton(record.id)}/>
+                    <Button icon={<EditOutlined/>} onClick={() => this.handleEditButton(record.id)}/>
                 </Tooltip>
             )
         });
@@ -156,8 +145,7 @@ class CustomerPage extends React.Component {
                     .catch((err) => {
                         message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi tạo khách hàng mới.");
                     });
-            }
-            else {
+            } else {
                 axios.put("/customer/" + this.state.modalData.id, values)
                     .then((response) => {
                         message.success("Cập nhật thông tin khách hàng thành công.");
@@ -191,11 +179,13 @@ class CustomerPage extends React.Component {
                 />
                 <div className="container">
                     <Table columns={this.columns} rowKey="id" dataSource={this.state.data} loading={this.state.loading}
-                           onChange={this.handleTableChange} pagination={this.state.pagination} size="small" scroll={{x: true}}
+                           onChange={this.handleTableChange} pagination={this.state.pagination} size="small"
+                           scroll={{x: true}}
                            title={() => (
                                <Form layout="inline">
                                    <Form.Item>
-                                       <Button icon={<PlusOutlined />} onClick={this.handleAddCustomerButton}>Thêm khách hàng</Button>
+                                       <Button icon={<PlusOutlined/>} onClick={this.handleAddCustomerButton}>Thêm khách
+                                           hàng</Button>
                                    </Form.Item>
                                    <Form.Item>
                                        <Input.Search placeholder="Tìm kiếm khách hàng..." onSearch={this.handleSearch}/>
@@ -204,14 +194,14 @@ class CustomerPage extends React.Component {
                            )}/>
                 </div>
                 <CustomerModal wrappedComponentRef={this.setFormRef}
-                            isCreate={this.state.isCreateModal}
-                            props={{
-                                visible: this.state.modalVisible,
-                                title: "Khách hàng",
-                                onCancel: this.cancelModal,
-                                onOk: this.handleSubmit,
-                            }}
-                            data={this.state.modalData}
+                               isCreate={this.state.isCreateModal}
+                               props={{
+                                   visible: this.state.modalVisible,
+                                   title: "Khách hàng",
+                                   onCancel: this.cancelModal,
+                                   onOk: this.handleSubmit,
+                               }}
+                               data={this.state.modalData}
                 />
             </div>
         );

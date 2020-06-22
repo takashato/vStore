@@ -1,27 +1,15 @@
 import React from "react";
 import {connect} from "react-redux";
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import {EditOutlined, PlusOutlined} from '@ant-design/icons';
+import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import {
-    Button,
-    Input,
-    InputNumber,
-    message,
-    Modal,
-    PageHeader,
-    Select,
-    Table,
-    Tag,
-    Tooltip,
-} from "antd";
+import {Button, Input, message, PageHeader, Table, Tag, Tooltip,} from "antd";
 import axios from "../../libs/axios";
 import momentTz from "../../libs/moment";
 import {number_format} from "../../libs/number_formater";
 import CategorySelector from "../forms/CategorySelector";
-import InputFormatedNumnber from "../forms/InputFormatedNumber";
 import {Checkbox} from "antd/es";
-import {Route, withRouter, Switch, Link} from "react-router-dom";
+import {Link, Route, Switch, withRouter} from "react-router-dom";
 import ProductActionPage from "./ProductActionPage";
 
 class ProductPage extends React.Component {
@@ -46,7 +34,7 @@ const mapStateToProps = (state) => {
     }
 };
 
-const ProductManager = connect(mapStateToProps) (
+const ProductManager = connect(mapStateToProps)(
     class extends React.Component {
         state = {
             data: [],
@@ -99,7 +87,7 @@ const ProductManager = connect(mapStateToProps) (
                     this.props.staff.staff.permissions && this.props.staff.staff.permissions.product.write ?
                         <Tooltip title="Sửa" placement="bottom">
                             <Link to={"/product/update/" + record.id}>
-                                <Button icon={<EditOutlined />}/>
+                                <Button icon={<EditOutlined/>}/>
                             </Link>
                         </Tooltip> : null)
             });
@@ -205,7 +193,8 @@ const ProductManager = connect(mapStateToProps) (
                         subTitle="Quản lý danh sách sản phẩm"
                     />
                     <div className="container">
-                        <Table columns={this.columns} rowKey="id" dataSource={this.state.data} loading={this.state.loading}
+                        <Table columns={this.columns} rowKey="id" dataSource={this.state.data}
+                               loading={this.state.loading}
                                onChange={this.handleTableChange} pagination={this.state.pagination} size="small"
                                scroll={{x: true}}
                                title={() => (
@@ -213,7 +202,7 @@ const ProductManager = connect(mapStateToProps) (
                                        {permissions.product.write ?
                                            <Form.Item>
                                                <Link to={"/product/add"}>
-                                                   <Button icon={<PlusOutlined />}>Thêm sản phẩm</Button>
+                                                   <Button icon={<PlusOutlined/>}>Thêm sản phẩm</Button>
                                                </Link>
                                            </Form.Item> : null}
                                        <Form.Item>

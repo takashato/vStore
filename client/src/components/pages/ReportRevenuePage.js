@@ -1,10 +1,8 @@
 import React from 'react';
-import { PrinterOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import {PrinterOutlined} from '@ant-design/icons';
+import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Button, Input, PageHeader, Table, Typography, DatePicker, message } from "antd";
-import CategorySelector from "../forms/CategorySelector";
-import {Checkbox} from "antd/es";
+import {Button, DatePicker, message, PageHeader, Table, Typography} from "antd";
 import ReactToPrint from "react-to-print";
 import moment from "moment";
 import axios from "../../libs/axios";
@@ -47,7 +45,10 @@ class ReportRevenuePage extends React.Component {
             }
         }).then(res => {
             let data = res.data;
-            let newData = enumerateDaysBetweenDates(this.state.range[0], this.state.range[1]).map((e) => ({date: e, revenue: 0}));
+            let newData = enumerateDaysBetweenDates(this.state.range[0], this.state.range[1]).map((e) => ({
+                date: e,
+                revenue: 0
+            }));
             for (let i = 0; i < newData.length; ++i) {
                 const dateStr = newData[i].date.format('YYYY-MM-DD');
                 const idx = data.findIndex(e => e.date === dateStr);
@@ -86,16 +87,18 @@ class ReportRevenuePage extends React.Component {
                     <div>
                         <Form layout="inline">
                             <Form.Item>
-                                <DatePicker.RangePicker defaultValue={this.state.range} onChange={this.handleDate} format={dateFormat}/>
+                                <DatePicker.RangePicker defaultValue={this.state.range} onChange={this.handleDate}
+                                                        format={dateFormat}/>
                             </Form.Item>
                             <Form.Item style={{float: "right"}}>
-                                <ReactToPrint trigger={() => (<Button icon={<PrinterOutlined />}>In Báo Cáo</Button>)}
+                                <ReactToPrint trigger={() => (<Button icon={<PrinterOutlined/>}>In Báo Cáo</Button>)}
                                               content={() => this.tableRef}
                                               pageStyle="padding: 20px;"/>
                             </Form.Item>
                         </Form>
                     </div>
-                    <Table columns={this.columns} rowKey="date" dataSource={this.state.data} loading={this.state.loading}
+                    <Table columns={this.columns} rowKey="date" dataSource={this.state.data}
+                           loading={this.state.loading}
                            pagination={false} size="small"
                            ref={(ref) => this.tableRef = ref}
                            title={() => (
