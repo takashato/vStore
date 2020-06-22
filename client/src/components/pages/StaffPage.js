@@ -32,7 +32,7 @@ const StaffPageHook = (props) => {
     const [data, setData] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
-        pageSize: 2,
+        pageSize: 10,
     });
     const [modalVisible, setModalVisible] = useState(false);
     const [modalData, setModalData] = useState({});
