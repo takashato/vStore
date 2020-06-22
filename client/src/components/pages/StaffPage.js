@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {EditOutlined, UserAddOutlined} from '@ant-design/icons';
-import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import {Button, Checkbox, Input, message, Modal, PageHeader, Select, Table, Tag, Tooltip,} from 'antd';
+import {Button, Checkbox, Form, Input, message, Modal, PageHeader, Select, Table, Tag, Tooltip,} from 'antd';
+import {Route, useParams, useHistory} from 'react-router-dom';
 import axios from "../../libs/axios";
 import momentTz, {convertDatetimeFormat} from "../../libs/moment";
 import {useApolloClient} from "@apollo/react-hooks";
-import {STAFF_LIST_QUERY} from "../../graphql/query";
-import TableWithCursorPagination from "../customs/TableWithCursorPagination";
-import moment from "moment";
+import {GET_STAFF_QUERY, STAFF_LIST_QUERY} from "../../graphql/query";
 
 const userGroupIDMap = [
     {
@@ -28,10 +26,14 @@ const userGroupIDMap = [
 
 const StaffPageHook = (props) => {
     const client = useApolloClient();
+    const history = useHistory();
 
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
-    const [pagination, setPagination] = useState({});
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 2,
+    });
     const [modalVisible, setModalVisible] = useState(false);
     const [modalData, setModalData] = useState({});
     const [isCreateModal, setCreateModal] = useState(false);
@@ -80,7 +82,7 @@ const StaffPageHook = (props) => {
                 data.length >= 1 ? (
                     <>
                         <Tooltip title="Sửa" placement="bottom">
-                            <Button icon={<EditOutlined/>} onClick={() => this.handleEdit(record.id)}/>
+                            <Button icon={<EditOutlined/>} onClick={() => handleEdit(record.id)}/>
                         </Tooltip>
                     </>
                 ) : null,
@@ -88,14 +90,13 @@ const StaffPageHook = (props) => {
     ];
 
     // Events
-    const getData = async (variables = {limit: 10, offset: 0}) => {
+    const getData = async (variables = {limit: 2, offset: 0}, newPagination = pagination) => {
         setLoading(true);
         try {
             let {data} = await client.query({
                 query: STAFF_LIST_QUERY,
                 variables,
             });
-            let newPagination = {...pagination};
             newPagination.total = data.staffs_offset.count;
             setPagination(newPagination);
             setData(data.staffs_offset.rows);
@@ -106,34 +107,27 @@ const StaffPageHook = (props) => {
         }
     };
 
-    const handleTableChange = (pagination, filters, sorter) => {
-        const pager = {...pagination};
-        pager.current = pagination.current;
-        setPagination(pager);
+    const handleTableChange = (newPagination, filters, sorter) => {
         getData({
-            results: pagination.pageSize,
-            page: pagination.current,
+            limit: newPagination.pageSize,
+            offset: newPagination.pageSize * (newPagination.current - 1),
             ...filters,
-        });
+        }, newPagination);
     };
 
-    const handleAddStaffButton = async (e) => {
-        await Promise.all([
-            setModalVisible(true),
-            setCreateModal(true),
-            setModalData({
-                username: '',
-                password: '',
-                full_name: '',
-                email: '',
-                group_id: undefined,
-            }),
-        ]);
-        this.formRef.props.form.resetFields();
+    const handleAddStaffButton = (e) => {
+        history.push('/staff/new');
+    };
+
+    const handleEdit = (id) => {
+        history.push(`/staff/${id}`);
     };
 
     useEffect(() => {
-        getData();
+        getData({
+            limit: pagination.pageSize,
+            offset: pagination.pageSize * (pagination.current - 1),
+        });
     }, []);
 
     return (
@@ -148,13 +142,16 @@ const StaffPageHook = (props) => {
             <div className="container">
                 <Table columns={columns} rowKey={record => record.id} loading={loading}
                        dataSource={data} onChange={handleTableChange}
-                       pagination={false}
+                       pagination={pagination}
                        scroll={{x: true}} size="small"
                        title={() => (
                            <Button onClick={handleAddStaffButton} icon={<UserAddOutlined/>}>Thêm nhân viên</Button>
                        )}
                 />
             </div>
+            <Route path="/staff/:id">
+                <StaffModalHook/>
+            </Route>
             {/*<StaffModal wrappedComponentRef={this.setFormRef}*/}
             {/*            isCreate={isCreateModal}*/}
             {/*            props={{*/}
@@ -169,276 +166,109 @@ const StaffPageHook = (props) => {
     );
 };
 
-class StaffPage extends React.Component {
-    state = {
-        loading: false,
-        data: [],
-        pagination: {},
-        modalVisible: false,
-        modalData: {},
-        isCreateModal: false,
-    };
+const StaffModalHook = (props) => {
+    const client = useApolloClient();
+    const history = useHistory();
 
-    constructor(props) {
-        super(props);
+    const [form] = Form.useForm();
 
-        this.columns = [
-            {
-                title: 'ID',
-                dataIndex: 'id',
-            }, {
-                title: 'Tên đăng nhập',
-                dataIndex: 'username',
-            }, {
-                title: 'Họ tên',
-                dataIndex: 'full_name',
-            }, {
-                title: 'Email',
-                dataIndex: 'email',
-            }, {
-                title: 'Ngày tạo',
-                dataIndex: 'created_at',
-                render: data => momentTz(data).format('HH:mm:ss DD/MM/YYYY'),
-            }, {
-                title: 'Loại tài khoản',
-                dataIndex: 'group_id',
-                filters: userGroupIDMap,
-                render: value => {
-                    const group = userGroupIDMap.find(ele => ele.value === value);
-                    if (group) {
-                        return (<Tag color={group.color}>{group.text}</Tag>);
-                    }
-                    return null;
-                }
-            }, {
-                title: 'Trạng thái',
-                dataIndex: 'active',
-                render: value => {
-                    return (value === 1 ? <Tag color="green">Hoạt động</Tag> : <Tag color="red">Ngưng hoạt động</Tag>);
-                }
-            }
-        ];
-        this.fields = this.columns.map(value => value.dataIndex);
+    const {id} = useParams();
+    const [isCreate, setCreate] = useState(id === "new");
+    const [isVisible, setVisible] = useState(false);
+    const [title, setTitle] = useState("Thêm nhân viên");
 
-        // Push non-persistent cols
-        this.columns.push({
-            title: 'Hành động',
-            dataIndex: 'actions',
-            fixed: 'right',
-            render: (text, record) =>
-                this.state.data.length >= 1 ? (
-                    <>
-                        <Tooltip title="Sửa" placement="bottom">
-                            <Button icon={<EditOutlined/>} onClick={() => this.handleEdit(record.id)}/>
-                        </Tooltip>
-                    </>
-                ) : null,
-        });
-    }
-
-    async getData(params = {}) {
-        this.setState({loading: true});
+    const getData = async (id) => {
+        message.loading('Đang tải dữ liệu...');
         try {
-            let res = await axios.get('/staff', {
-                params: {
-                    results: 10,
-                    fields: this.fields.join(','),
-                    ...params
+            const {data} = await client.query({
+                query: GET_STAFF_QUERY,
+                variables: {
+                    id: id,
                 }
             });
-            let pagination = {...this.state.pagination};
-            pagination.total = res.data.total;
-            this.setState({data: res.data.rows, loading: false, pagination});
+            console.log(data);
+            // Put to state
+            await form.setFieldsValue(data.staff);
+            await setVisible(true);
+            await setTitle(`Sửa nhân viên ${data.staff.username}`);
+            message.destroy();
         } catch (err) {
-            message.error(err.response ? err.response.data.userMessage : 'Lỗi lấy dữ liệu!');
+            message.error("Không thể lấy thông tin nhân viên!");
             console.log(err);
         }
-    }
-
-    handleTableChange = (pagination, filters, sorter) => {
-        const pager = {...this.state.pagination};
-        pager.current = pagination.current;
-        this.setState({pagination: pager});
-        this.getData({
-            results: pagination.pageSize,
-            page: pagination.current,
-            ...filters,
-        });
     };
 
-    handleAddStaffButton = (e) => {
-        this.setState({
-            modalVisible: true, isCreateModal: true, modalData: {
-                username: '',
-                password: '',
-                full_name: '',
-                email: '',
-                group_id: undefined,
-            }
-        });
-        this.formRef.props.form.resetFields();
+    const handleCancel = () => {
+        history.push('/staff');
     };
 
-    handleEdit = async (id) => {
-        let res;
-        try {
-            res = await axios.get('/staff/' + id, {params: {fields: this.fields.join(',')}});
-        } catch (err) {
-            message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi lấy thông tin nhân viên.");
+    useEffect(() => {
+        form.resetFields();
+        if (id !== 'new') {
+            getData(id);
             return;
         }
-        this.setState({
-            modalVisible: true, isCreateModal: false, modalData: {
-                id: id,
-                username: res.data.username,
-                password: res.data.password,
-                full_name: res.data.full_name,
-                email: res.data.email,
-                group_id: res.data.group_id,
-                active: res.data.active === 1,
-            }
-        });
-    };
+        setVisible(true);
+    }, [id]);
 
-    setFormRef = formRef => this.formRef = formRef;
-
-    cancelModal = () => {
-        this.setState({modalVisible: false});
-    };
-
-    handleSubmit = () => {
-        const {form} = this.formRef.props;
-        form.validateFields((err, values) => {
-            if (err) {
-                return;
-            }
-
-            if (!this.state.modalData.id) { // Add new
-                axios.post("/staff", values)
-                    .then((response) => {
-                        message.success("Tạo nhân viên thành công.");
-                        this.setState({modalVisible: false});
-                        form.resetFields();
-                        this.getData();
-                    })
-                    .catch((err) => {
-                        message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi tạo nhân viên mới.");
-                    });
-            } else {
-                axios.put("/staff/" + this.state.modalData.id, values)
-                    .then((response) => {
-                        message.success("Cập nhật thông tin nhân viên thành công.");
-                        this.setState({modalVisible: false});
-                        form.resetFields();
-                        this.getData();
-                    })
-                    .catch((err) => {
-                        message.error(err.response.data && err.response.data.userMessage ? err.response.data.userMessage : "Lỗi khi cập nhật thông tin nhân viên.");
-                    });
-            }
-        });
-    };
-
-    componentDidMount() {
-        if (this.props.staff.token) {
-            this.getData();
-        }
-    }
-
-    render() {
-        return (
-            <div>
-                <PageHeader
-                    style={{
-                        border: '1px solid rgb(235, 237, 240)',
-                    }}
-                    title="Nhân viên"
-                    subTitle="Quản lý nhân viên"
-                />
-                <div className="container">
-                    <Table columns={this.columns} rowKey={record => record.id} loading={this.state.loading}
-                           dataSource={this.state.data} onChange={this.handleTableChange}
-                           pagination={this.state.pagination}
-                           scroll={{x: true}} size="small"
-                           title={() => (
-                               <Button onClick={this.handleAddStaffButton} icon={<UserAddOutlined/>}>Thêm nhân
-                                   viên</Button>
-                           )}
-                    />
-                </div>
-                <StaffModal wrappedComponentRef={this.setFormRef}
-                            isCreate={this.state.isCreateModal}
-                            props={{
-                                visible: this.state.modalVisible,
-                                title: "Nhân viên",
-                                onCancel: this.cancelModal,
-                                onOk: this.handleSubmit,
-                            }}
-                            data={this.state.modalData}
-                />
-            </div>
-        );
-    }
-}
-
-
-const StaffModal = Form.create({name: 'staff_modal'})(
-    class extends React.Component {
-        render() {
-            const {getFieldDecorator} = this.props.form;
-            return (
-                <Modal {...this.props.props}>
-                    <Form>
-                        <Form.Item label="Tên đăng nhập">
-                            {getFieldDecorator('username', {
-                                rules: [{required: true, message: 'Vui lòng nhập tên đăng nhập.'}],
-                                initialValue: this.props.data.username
-                            })(<Input disabled={!this.props.isCreate}/>)}
-                        </Form.Item>
-                        <Form.Item label="Mật khẩu">
-                            {getFieldDecorator('password', this.props.isCreate ? {
-                                rules: [{required: true, message: 'Vui lòng nhập mật khẩu.'}],
-                            } : {})(<Input.Password/>)}
-                        </Form.Item>
-                        <Form.Item label="Họ tên">
-                            {getFieldDecorator('full_name', {
-                                rules: [{required: true, message: 'Vui lòng nhập họ tên.'}],
-                                initialValue: this.props.data.full_name,
-                            })(<Input/>)}
-                        </Form.Item>
-                        <Form.Item label="Email">
-                            {getFieldDecorator('email', {
-                                rules: [{type: 'email', message: 'Vui lòng nhập email hợp lệ. VD: admin@gmail.com'}],
-                                initialValue: this.props.data.email,
-                            })(<Input/>)}
-                        </Form.Item>
-                        <Form.Item label="Loại tài khoản">
-                            {getFieldDecorator('group_id', {
-                                rules: [{required: true, message: 'Vui lòng chọn loại tài khoản.'}],
-                                initialValue: this.props.data.group_id,
-                            })(<Select placeholder="Chọn loại tài khoản">
-                                {userGroupIDMap.map((ele) => (
-                                    <Select.Option value={ele.value} key={ele.value}>{ele.text}</Select.Option>))}
-                            </Select>)}
-                        </Form.Item>
-                        <Form.Item>
-                            {getFieldDecorator('active', {
-                                rules: [{type: "boolean", message: 'Giá trị không hợp lệ.'}],
-                                initialValue: this.props.data.active,
-                                valuePropName: 'checked',
-                            })(<Checkbox>Kích hoạt tài khoản</Checkbox>)}
-                        </Form.Item>
-                    </Form>
-                </Modal>
-            );
-        }
-    }
-);
-
-const mapStateToProps = state => {
-    return {
-        staff: state.staff,
-    };
+    return (
+        <Modal
+            title={title}
+            visible={isVisible}
+            onCancel={handleCancel}
+        >
+            <Form
+                layout="vertical"
+                form={form}
+            >
+                <Form.Item
+                    name="username"
+                    label="Tên đăng nhập"
+                    rules={[{required: true, message: 'Vui lòng nhập tên đăng nhập.'}]}
+                >
+                    <Input disabled={!isCreate}/>
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    label="Mật khẩu"
+                    rules={isCreate ? [{required: true, message: 'Vui lòng nhập mật khẩu.'}] : []}
+                >
+                    <Input.Password/>
+                </Form.Item>
+                <Form.Item
+                    name="full_name"
+                    label="Họ tên"
+                    rules={[{required: true, message: 'Vui lòng nhập họ tên.'}]}
+                >
+                    <Input/>
+                </Form.Item>
+                <Form.Item
+                    name="email"
+                    label="Email"
+                    rules={[{type: 'email', message: 'Vui lòng nhập email hợp lệ. VD: admin@gmail.com'}]}
+                >
+                    <Input/>
+                </Form.Item>
+                <Form.Item
+                    name="group_id"
+                    label="Loại tài khoản"
+                    rules={[{required: true, message: 'Vui lòng chọn loại tài khoản.'}]}
+                >
+                    <Select placeholder="Chọn loại tài khoản">
+                        {userGroupIDMap.map((ele) => (
+                            <Select.Option value={ele.value} key={ele.value}>{ele.text}</Select.Option>))}
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    name="active"
+                    valuePropName="checked"
+                    rules={[{type: "boolean", message: 'Giá trị không hợp lệ.'}]}
+                >
+                    <Checkbox>Kích hoạt tài khoản</Checkbox>
+                </Form.Item>
+            </Form>
+        </Modal>
+    );
 };
 
 export default StaffPageHook;

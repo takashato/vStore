@@ -25,3 +25,16 @@ export const STAFF_LIST_QUERY = gql`
         }
     }
 `;
+
+export const GET_STAFF_QUERY = gql`
+    query Staff($id: ID!){
+        staff(id: $id) {
+            id
+            username
+            full_name
+            email
+            group_id
+            active
+        }
+    }
+`;
