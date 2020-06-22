@@ -1,25 +1,14 @@
-import React from 'react';
-import { EditOutlined, UserAddOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import React, {useEffect, useState} from 'react';
+import {EditOutlined, UserAddOutlined} from '@ant-design/icons';
+import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import {
-    Table,
-    message,
-    PageHeader,
-    Tag,
-    Modal,
-    Button,
-    Popconfirm,
-    Tooltip,
-    Input,
-    Select,
-    Divider,
-    Checkbox,
-} from 'antd';
+import {Button, Checkbox, Input, message, Modal, PageHeader, Select, Table, Tag, Tooltip,} from 'antd';
 import axios from "../../libs/axios";
-import {connect} from "react-redux";
+import momentTz, {convertDatetimeFormat} from "../../libs/moment";
+import {useApolloClient} from "@apollo/react-hooks";
+import {STAFF_LIST_QUERY} from "../../graphql/query";
+import TableWithCursorPagination from "../customs/TableWithCursorPagination";
 import moment from "moment";
-import momentTz from "../../libs/moment";
 
 const userGroupIDMap = [
     {
@@ -36,6 +25,149 @@ const userGroupIDMap = [
         color: 'red',
     }
 ];
+
+const StaffPageHook = (props) => {
+    const client = useApolloClient();
+
+    const [loading, setLoading] = useState(false);
+    const [data, setData] = useState([]);
+    const [pagination, setPagination] = useState({});
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalData, setModalData] = useState({});
+    const [isCreateModal, setCreateModal] = useState(false);
+
+    // Colums processing
+    const columns = [
+        {
+            title: 'ID',
+            dataIndex: 'id',
+        }, {
+            title: 'Tên đăng nhập',
+            dataIndex: 'username',
+        }, {
+            title: 'Họ tên',
+            dataIndex: 'full_name',
+        }, {
+            title: 'Email',
+            dataIndex: 'email',
+        }, {
+            title: 'Ngày tạo',
+            dataIndex: 'created_at',
+            render: data => convertDatetimeFormat(data),
+        }, {
+            title: 'Loại tài khoản',
+            dataIndex: 'group_id',
+            filters: userGroupIDMap,
+            render: value => {
+                const group = userGroupIDMap.find(ele => ele.value === value);
+                if (group) {
+                    return (<Tag color={group.color}>{group.text}</Tag>);
+                }
+                return null;
+            }
+        }, {
+            title: 'Trạng thái',
+            dataIndex: 'active',
+            render: value => {
+                return (value === 1 ? <Tag color="green">Hoạt động</Tag> : <Tag color="red">Ngưng hoạt động</Tag>);
+            }
+        },
+        {
+            title: 'Hành động',
+            dataIndex: 'actions',
+            fixed: 'right',
+            render: (text, record) =>
+                data.length >= 1 ? (
+                    <>
+                        <Tooltip title="Sửa" placement="bottom">
+                            <Button icon={<EditOutlined/>} onClick={() => this.handleEdit(record.id)}/>
+                        </Tooltip>
+                    </>
+                ) : null,
+        }
+    ];
+
+    // Events
+    const getData = async (variables = {limit: 10, offset: 0}) => {
+        setLoading(true);
+        try {
+            let {data} = await client.query({
+                query: STAFF_LIST_QUERY,
+                variables,
+            });
+            let newPagination = {...pagination};
+            newPagination.total = data.staffs_offset.count;
+            setPagination(newPagination);
+            setData(data.staffs_offset.rows);
+            setLoading(false);
+        } catch (err) {
+            message.error('Lỗi khi lấy dữ liệu!');
+            console.log(err);
+        }
+    };
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        const pager = {...pagination};
+        pager.current = pagination.current;
+        setPagination(pager);
+        getData({
+            results: pagination.pageSize,
+            page: pagination.current,
+            ...filters,
+        });
+    };
+
+    const handleAddStaffButton = async (e) => {
+        await Promise.all([
+            setModalVisible(true),
+            setCreateModal(true),
+            setModalData({
+                username: '',
+                password: '',
+                full_name: '',
+                email: '',
+                group_id: undefined,
+            }),
+        ]);
+        this.formRef.props.form.resetFields();
+    };
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+    return (
+        <div>
+            <PageHeader
+                style={{
+                    border: '1px solid rgb(235, 237, 240)',
+                }}
+                title="Nhân viên"
+                subTitle="Quản lý nhân viên"
+            />
+            <div className="container">
+                <Table columns={columns} rowKey={record => record.id} loading={loading}
+                       dataSource={data} onChange={handleTableChange}
+                       pagination={false}
+                       scroll={{x: true}} size="small"
+                       title={() => (
+                           <Button onClick={handleAddStaffButton} icon={<UserAddOutlined/>}>Thêm nhân viên</Button>
+                       )}
+                />
+            </div>
+            {/*<StaffModal wrappedComponentRef={this.setFormRef}*/}
+            {/*            isCreate={isCreateModal}*/}
+            {/*            props={{*/}
+            {/*                visible: modalVisible,*/}
+            {/*                title: "Nhân viên",*/}
+            {/*                onCancel: this.cancelModal,*/}
+            {/*                onOk: this.handleSubmit,*/}
+            {/*            }}*/}
+            {/*            data={modalData}*/}
+            {/*/>*/}
+        </div>
+    );
+};
 
 class StaffPage extends React.Component {
     state = {
@@ -97,7 +229,7 @@ class StaffPage extends React.Component {
                 this.state.data.length >= 1 ? (
                     <>
                         <Tooltip title="Sửa" placement="bottom">
-                            <Button icon={<EditOutlined />} onClick={() => this.handleEdit(record.id)}/>
+                            <Button icon={<EditOutlined/>} onClick={() => this.handleEdit(record.id)}/>
                         </Tooltip>
                     </>
                 ) : null,
@@ -229,7 +361,8 @@ class StaffPage extends React.Component {
                            pagination={this.state.pagination}
                            scroll={{x: true}} size="small"
                            title={() => (
-                               <Button onClick={this.handleAddStaffButton} icon={<UserAddOutlined />}>Thêm nhân viên</Button>
+                               <Button onClick={this.handleAddStaffButton} icon={<UserAddOutlined/>}>Thêm nhân
+                                   viên</Button>
                            )}
                     />
                 </div>
@@ -308,4 +441,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps)(StaffPage);
+export default StaffPageHook;

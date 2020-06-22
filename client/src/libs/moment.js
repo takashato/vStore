@@ -1,5 +1,8 @@
 import moment from 'moment';
 
-const momentTz = (time) => moment(time, "Asia/Ho_chi_minh");
+export const convertDateFormat = (data) => moment.utc(data).format('DD/MM/YYYY');
+export const convertDatetimeFormat = (data) => moment.utc(data).format('HH:mm:ss DD/MM/YYYY');
+
+const momentTz = (time) => moment(time);
 
 export default momentTz;

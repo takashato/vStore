@@ -8,3 +8,20 @@ export const LOGIN_QUERY = gql`
         }
     }
 `;
+
+export const STAFF_LIST_QUERY = gql`
+    query StaffList($limit: Int, $offset: Int) {
+        staffs_offset(limit: $limit, offset: $offset) {
+            count
+            rows {
+                id
+                username
+                full_name
+                email
+                created_at
+                group_id
+                active
+            }
+        }
+    }
+`;
