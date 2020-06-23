@@ -73,7 +73,7 @@ export async function sale(request, h) {
             const invoiceDetail = await InvoiceDetail.build({
                 invoice_id: invoice.id,
                 product_id: product.id,
-                price: product.price,
+                price: product.original_price || product.price,
                 quantity: detail.amount,
                 total_value: product_total_value,
                 discount_value: product_discount_value,
