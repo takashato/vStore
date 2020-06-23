@@ -9,6 +9,16 @@ type Staff {
     updated_at: GraphQLDateTime
 }
 
+input StaffInput {
+    id: ID
+    username: String
+    full_name: String
+    email: String
+    group_id: Int
+    active: Int
+    password: String
+}
+
 type StaffConnection {
     pageInfo: PageInfo!
     edges: [StaffEdge]

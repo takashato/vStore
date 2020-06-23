@@ -1,3 +1,10 @@
 type Mutation {
     test: String
+
+    staff(staff: StaffInput!): Staff
+}
+
+type Result {
+    success: Boolean!
+    message: String
 }

@@ -7,6 +7,9 @@ import axios from "../../libs/axios";
 import momentTz, {convertDatetimeFormat} from "../../libs/moment";
 import {useApolloClient} from "@apollo/react-hooks";
 import {GET_STAFF_QUERY, STAFF_LIST_QUERY} from "../../graphql/query";
+import {CREATE_UPDATE_STAFF_MUTATION} from "../../graphql/mutation";
+import {processGraphqlError} from "../../libs/process_graphql_error";
+import {GraphQLError} from "graphql";
 
 const userGroupIDMap = [
     {
@@ -34,11 +37,8 @@ const StaffPageHook = (props) => {
         current: 1,
         pageSize: 10,
     });
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalData, setModalData] = useState({});
-    const [isCreateModal, setCreateModal] = useState(false);
 
-    // Colums processing
+    // Columns processing
     const columns = [
         {
             title: 'ID',
@@ -123,6 +123,14 @@ const StaffPageHook = (props) => {
         history.push(`/staff/${id}`);
     };
 
+    const handleReload = () => {
+        console.log("Reload!!!");
+        getData({
+            limit: pagination.pageSize,
+            offset: pagination.pageSize * (pagination.current - 1),
+        });
+    };
+
     useEffect(() => {
         getData({
             limit: pagination.pageSize,
@@ -150,7 +158,7 @@ const StaffPageHook = (props) => {
                 />
             </div>
             <Route path="/staff/:id">
-                <StaffModalHook/>
+                <StaffModalHook reload={handleReload}/>
             </Route>
             {/*<StaffModal wrappedComponentRef={this.setFormRef}*/}
             {/*            isCreate={isCreateModal}*/}
@@ -166,7 +174,7 @@ const StaffPageHook = (props) => {
     );
 };
 
-const StaffModalHook = (props) => {
+const StaffModalHook = ({reload}) => {
     const client = useApolloClient();
     const history = useHistory();
 
@@ -202,6 +210,26 @@ const StaffModalHook = (props) => {
         history.push('/staff');
     };
 
+    const handleOk = async () => {
+        try {
+            const values = form.getFieldsValue();
+            values.active = !values.active ? 0 : 1;
+            const {data} = await client.mutate({
+                mutation: CREATE_UPDATE_STAFF_MUTATION,
+                variables: {
+                    staff: values
+                }
+            });
+            message.success("Lưu thông tin nhân viên thành công");
+            reload();
+            history.push('/staff');
+        } catch (error) {
+            console.log(error.extensions);
+            processGraphqlError(error, form);
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
         form.resetFields();
         if (id !== 'new') {
@@ -216,11 +244,18 @@ const StaffModalHook = (props) => {
             title={title}
             visible={isVisible}
             onCancel={handleCancel}
+            onOk={handleOk}
         >
             <Form
                 layout="vertical"
                 form={form}
             >
+                <Form.Item
+                    name="id"
+                    noStyle
+                >
+                    <Input type="hidden"/>
+                </Form.Item>
                 <Form.Item
                     name="username"
                     label="Tên đăng nhập"
@@ -233,7 +268,7 @@ const StaffModalHook = (props) => {
                     label="Mật khẩu"
                     rules={isCreate ? [{required: true, message: 'Vui lòng nhập mật khẩu.'}] : []}
                 >
-                    <Input.Password/>
+                    <Input.Password autocomplete="new-password"/>
                 </Form.Item>
                 <Form.Item
                     name="full_name"
