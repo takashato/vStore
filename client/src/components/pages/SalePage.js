@@ -2,7 +2,7 @@ import React from 'react';
 import {DeleteOutlined} from '@ant-design/icons';
 import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import {Button, Col, Divider, InputNumber, message, notification, Row, Select, Table, Typography,} from "antd";
+import {Button, Col, Divider, InputNumber, message, notification, Row, Select, Table, Typography, Tooltip,} from "antd";
 import ProductSelector from "../forms/ProductSelector";
 import axios from "../../libs/axios";
 import {number_format} from "../../libs/number_formater";
@@ -38,7 +38,7 @@ class SalePage extends React.Component {
                 dataIndex: 'price',
                 render: (data, record) => (<>
                     <Typography.Text strong>{number_format(data)}</Typography.Text><br/>
-                    {record.original_price ?
+                    {record.original_price && record.original_price > record.price ?
                         <Typography.Text delete>{number_format(record.original_price)}</Typography.Text> : null}
                 </>),
             }, {
@@ -46,13 +46,17 @@ class SalePage extends React.Component {
                 dataIndex: 'total_money',
                 render: (data, record) => (<>
                     <Typography.Text strong>{number_format(record.amount * record.price)}</Typography.Text><br/>
-                    {record.original_price ? <Typography.Text
+                    {record.original_price && record.original_price > record.price ? <Typography.Text
                         delete>{number_format(record.amount * record.original_price)}</Typography.Text> : null}
                 </>)
             }, {
                 title: '',
-                render: (data, record) => (<><Button type="danger" icon={<DeleteOutlined/>}
-                                                     onClick={() => this.handleDelete(record.id)}/></>)
+                render: (data, record) => (<>
+                                                <Tooltip title="Xóa" placement="leftTop">
+                                                    <Button type="danger" icon={<DeleteOutlined/>}
+                                                     onClick={() => this.handleDelete(record.id)}/>
+                                                </Tooltip>
+                                           </>)
             }
         ];
     }
@@ -153,7 +157,9 @@ class SalePage extends React.Component {
 
         const total_money = this.state.details.reduce((acc, current) => acc + current.amount * current.price, 0);
         const total_orignal_money = this.state.details.reduce((acc, current) => acc + current.amount * (current.original_price || current.price), 0);
-        const total_charge_money = this.state.prepaid - total_money;
+        const total_discount_money = total_orignal_money - total_money;
+        const total_charge_money = Math.max(0, this.state.prepaid - total_money + total_discount_money);
+        const total = total_money - total_discount_money;
         return (
             <div>
                 <Row gutter={[16, 8]}>
@@ -164,7 +170,9 @@ class SalePage extends React.Component {
                         <Divider/>
                     </Col>
                     <Col lg={6}>
-                        <Form>
+                        <Form
+                            layout="vertical"
+                        >
                             <Form.Item label="Khách hàng">
                                 <CustomerSelector onChange={this.handleCustomer} value={this.state.customer}
                                                   allowClear/>
@@ -184,7 +192,10 @@ class SalePage extends React.Component {
                             </Form.Item>
                             <Form.Item label="Giảm giá">
                                 <Typography.Title
-                                    level={4}>{number_format(total_orignal_money - total_money)}</Typography.Title>
+                                    level={4}>{number_format(total_discount_money)}</Typography.Title>
+                            </Form.Item>
+                            <Form.Item label="Thành tiền">
+                                <Typography.Title level={4}>{number_format(total)}</Typography.Title>
                             </Form.Item>
                             <Form.Item label="Tiền thối">
                                 <Typography.Title level={4}>{number_format(total_charge_money)}</Typography.Title>

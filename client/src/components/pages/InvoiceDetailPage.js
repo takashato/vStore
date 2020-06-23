@@ -99,8 +99,12 @@ class InvoiceDetailPage extends React.Component {
                             dataIndex: 'price',
                             render: (data) => number_format(data),
                         }, {
+                            title: 'Giảm giá',
+                            dataIndex: 'discount_value',
+                            render: (data) => number_format(data),
+                        }, {
                             title: 'Thành tiền',
-                            dataIndex: 'total_money',
+                            dataIndex: 'total_final_value',
                             render: (data) => number_format(data),
                         }
                     ]} dataSource={data.details} pagination={false} title={() => (

@@ -6,7 +6,7 @@ import {number_format} from "../../libs/number_formater";
 import InvoiceDetailPage from "./InvoiceDetailPage";
 import {EyeOutlined} from '@ant-design/icons';
 import '@ant-design/compatible/assets/index.css';
-import {Button, message, PageHeader, Table, Tooltip} from "antd";
+import {Button, message, PageHeader, Table, Tooltip, Tag} from "antd";
 
 class InvoicePage extends React.Component {
     render() {
@@ -68,7 +68,12 @@ const InvoiceManager = connect(mapStateToProps)(
                     render: (data) => number_format(data),
                 }, {
                     title: 'Phương thức thanh toán',
-                    dataIndex: 'pay_method'
+                    dataIndex: 'pay_method',
+                    render: (value) => {
+                        if (value === 0) return (<Tag color="green">Tiền mặt</Tag>);
+                        if (value === 1) return (<Tag color="blue">Thẻ</Tag>);
+                        if (value === 2) return (<Tag color="purple">MOMO</Tag>);
+                    }
                 }
             ];
             this.fields = this.columns.map(col => col.dataIndex);
