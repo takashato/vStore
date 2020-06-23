@@ -153,7 +153,9 @@ class SalePage extends React.Component {
 
         const total_money = this.state.details.reduce((acc, current) => acc + current.amount * current.price, 0);
         const total_orignal_money = this.state.details.reduce((acc, current) => acc + current.amount * (current.original_price || current.price), 0);
-        const total_charge_money = this.state.prepaid - total_money;
+        const total_discount_money = total_orignal_money - total_money;
+        const total_charge_money = Math.max(0, this.state.prepaid - total_money + total_discount_money);
+        const total = total_money - total_discount_money;
         return (
             <div>
                 <Row gutter={[16, 8]}>
@@ -164,7 +166,9 @@ class SalePage extends React.Component {
                         <Divider/>
                     </Col>
                     <Col lg={6}>
-                        <Form>
+                        <Form
+                            layout="vertical"
+                        >
                             <Form.Item label="Khách hàng">
                                 <CustomerSelector onChange={this.handleCustomer} value={this.state.customer}
                                                   allowClear/>
@@ -184,7 +188,10 @@ class SalePage extends React.Component {
                             </Form.Item>
                             <Form.Item label="Giảm giá">
                                 <Typography.Title
-                                    level={4}>{number_format(total_orignal_money - total_money)}</Typography.Title>
+                                    level={4}>{number_format(total_discount_money)}</Typography.Title>
+                            </Form.Item>
+                            <Form.Item label="Thành tiền">
+                                <Typography.Title level={4}>{number_format(total)}</Typography.Title>
                             </Form.Item>
                             <Form.Item label="Tiền thối">
                                 <Typography.Title level={4}>{number_format(total_charge_money)}</Typography.Title>
