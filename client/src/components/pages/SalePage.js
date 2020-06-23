@@ -2,7 +2,7 @@ import React from 'react';
 import {DeleteOutlined} from '@ant-design/icons';
 import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import {Button, Col, Divider, InputNumber, message, notification, Row, Select, Table, Typography,} from "antd";
+import {Button, Col, Divider, InputNumber, message, notification, Row, Select, Table, Typography, Tooltip,} from "antd";
 import ProductSelector from "../forms/ProductSelector";
 import axios from "../../libs/axios";
 import {number_format} from "../../libs/number_formater";
@@ -38,7 +38,7 @@ class SalePage extends React.Component {
                 dataIndex: 'price',
                 render: (data, record) => (<>
                     <Typography.Text strong>{number_format(data)}</Typography.Text><br/>
-                    {record.original_price ?
+                    {record.original_price && record.original_price > record.price ?
                         <Typography.Text delete>{number_format(record.original_price)}</Typography.Text> : null}
                 </>),
             }, {
@@ -46,13 +46,17 @@ class SalePage extends React.Component {
                 dataIndex: 'total_money',
                 render: (data, record) => (<>
                     <Typography.Text strong>{number_format(record.amount * record.price)}</Typography.Text><br/>
-                    {record.original_price ? <Typography.Text
+                    {record.original_price && record.original_price > record.price ? <Typography.Text
                         delete>{number_format(record.amount * record.original_price)}</Typography.Text> : null}
                 </>)
             }, {
                 title: '',
-                render: (data, record) => (<><Button type="danger" icon={<DeleteOutlined/>}
-                                                     onClick={() => this.handleDelete(record.id)}/></>)
+                render: (data, record) => (<>
+                                                <Tooltip title="Xóa" placement="leftTop">
+                                                    <Button type="danger" icon={<DeleteOutlined/>}
+                                                     onClick={() => this.handleDelete(record.id)}/>
+                                                </Tooltip>
+                                           </>)
             }
         ];
     }
