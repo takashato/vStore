@@ -3,6 +3,7 @@ import sequelize from "../../../db";
 import Staff from "../../../models/staff_imported";
 import moment from "moment";
 import ResponseBuilder from "../../../helpers/response_builder";
+import Customer from "../../../models/customer_imported";
 
 const {Op} = sequelize;
 
@@ -25,7 +26,7 @@ export async function getStatInfo(request, h) {
                 data[attribute] = await Staff.count({where: {active: 1}});
                 break;
             case 'total_customer':
-                data[attribute] = await Staff.count();
+                data[attribute] = await Customer.count();
                 break;
         }
     }
