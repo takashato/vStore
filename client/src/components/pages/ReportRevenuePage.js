@@ -97,17 +97,19 @@ class ReportRevenuePage extends React.Component {
                             </Form.Item>
                         </Form>
                     </div>
-                    <Table columns={this.columns} rowKey="date" dataSource={this.state.data}
-                           loading={this.state.loading}
-                           pagination={false} size="small"
-                           ref={(ref) => this.tableRef = ref}
-                           title={() => (
-                               <div>
-                                   <Typography.Title level={4}>Báo cáo doanh thu</Typography.Title>
-                                   <div>Thời gian tạo: {moment().format('HH:mm:ss DD/MM/YYYY')}</div>
-                                   <div>Có tất cả {this.state.data.length} mục trong báo cáo.</div>
-                               </div>
-                           )}/>
+                    <div ref={(ref) => this.tableRef = ref} className="container">
+                        <Table columns={this.columns} rowKey="date" dataSource={this.state.data}
+                               loading={this.state.loading}
+                               pagination={false} size="small"
+                               title={() => (
+                                   <div>
+                                       <Typography.Title level={4}>Báo cáo doanh thu</Typography.Title>
+                                       <div>Thời gian tạo: {moment().format('HH:mm:ss DD/MM/YYYY')}</div>
+                                       <div>Có tất cả {this.state.data.length} mục trong báo cáo.</div>
+                                   </div>
+                               )}
+                        />
+                    </div>
                 </div>
             </div>
         );

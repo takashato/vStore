@@ -130,16 +130,18 @@ class ReportPage extends React.Component {
                             </Form.Item>
                         </Form>
                     </div>
-                    <Table columns={this.columns} rowKey="id" dataSource={this.state.data} loading={this.state.loading}
-                           onChange={this.handleTableChange} pagination={false} size="small"
-                           ref={(ref) => this.tableRef = ref}
-                           title={() => (
-                               <div>
-                                   <Typography.Title level={4}>Báo cáo kiểm kho</Typography.Title>
-                                   <div>Thời gian tạo: {moment().format('HH:mm:ss DD/MM/YYYY')}</div>
-                                   <div>Có tất cả {this.state.pagination.total} sản phẩm.</div>
-                               </div>
-                           )}/>
+                    <div ref={(ref) => this.tableRef = ref} className="container">
+                        <Table columns={this.columns} rowKey="id" dataSource={this.state.data} loading={this.state.loading}
+                               onChange={this.handleTableChange} pagination={false} size="small"
+                               title={() => (
+                                   <div>
+                                       <Typography.Title level={4}>Báo cáo kiểm kho</Typography.Title>
+                                       <div>Thời gian tạo: {moment().format('HH:mm:ss DD/MM/YYYY')}</div>
+                                       <div>Có tất cả {this.state.pagination.total} sản phẩm.</div>
+                                   </div>
+                               )}
+                        />
+                    </div>
                 </div>
             </div>
         );
