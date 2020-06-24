@@ -2,8 +2,9 @@ import {UserInputError} from "apollo-server-errors";
 import Bcrypt from "bcrypt";
 import Staff from "../../models/staff_imported";
 import isValidPassword from "../../helpers/password_validator";
+import {resolver} from "graphql-sequelize";
 
-export const staffMutationResolver = async (parents, {staff: input}) => {
+export const staffMutationResolver = async (parents, {staff: input}, context, info) => {
     if (!input) {
         throw new UserInputError("Vui lòng nhập đầy đủ thông tin", []);
     }
@@ -73,5 +74,5 @@ export const staffMutationResolver = async (parents, {staff: input}) => {
     if (!await staff.save()) {
         throw new Error("Không thể lưu thông tin nhân viên.");
     }
-    return staff;
+    return resolver(Staff)(parents, {id: staff.id}, context, info);
 };
