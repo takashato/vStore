@@ -215,7 +215,9 @@ const CustomerModal = Form.create({name: 'customer_modal'})(
             const {getFieldDecorator} = this.props.form;
             return (
                 <Modal {...this.props.props}>
-                    <Form>
+                    <Form
+                        layout="vertical"
+                    >
                         <Form.Item label="Họ tên">
                             {getFieldDecorator('full_name', {
                                 rules: [{required: true, message: 'Vui lòng nhập họ tên.'}],
@@ -231,7 +233,7 @@ const CustomerModal = Form.create({name: 'customer_modal'})(
                         <Form.Item label="Ngày sinh">
                             {getFieldDecorator('birthday', {
                                 initialValue: this.props.data.birthday,
-                            })(<DatePicker format="DD/MM/YYYY"/>)}
+                            })(<DatePicker format="DD/MM/YYYY" style={{width: '100%'}}/>)}
                         </Form.Item>
                     </Form>
                 </Modal>

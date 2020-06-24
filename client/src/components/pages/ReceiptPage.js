@@ -257,7 +257,9 @@ const CreateReceiptForm = Form.create({name: 'receipt_modal'})(
             const {getFieldDecorator} = this.props.form;
             return (
                 <Modal {...this.props.props} width={700}>
-                    <Form>
+                    <Form
+                        layout="vertical"
+                    >
                         <Form.Item label="Mô tả">
                             {getFieldDecorator('description')(<Input.TextArea
                                 placeholder="Nhập ghi chú / mô tả cho phiếu xuất này"/>)}
