@@ -1,8 +1,26 @@
 {
-  "username": "root",
-  "password": null,
-  "database": "vstore",
-  "host": "127.0.0.1",
-  "dialect": "mysql",
-  "timezone": "+00:00"
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "vstore",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "timezone": "+00:00"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "vstore",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "timezone": "+00:00"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "vstore",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "timezone": "+00:00"
+  }
 }
