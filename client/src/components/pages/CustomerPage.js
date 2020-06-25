@@ -188,7 +188,8 @@ class CustomerPage extends React.Component {
                                            hàng</Button>
                                    </Form.Item>
                                    <Form.Item>
-                                       <Input.Search placeholder="Tìm kiếm khách hàng..." onSearch={this.handleSearch}/>
+                                       <Input.Search placeholder="Tìm kiếm khách hàng..." allowClear
+                                                     onSearch={this.handleSearch}/>
                                    </Form.Item>
                                </Form>
                            )}/>
