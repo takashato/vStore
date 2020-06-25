@@ -304,7 +304,7 @@ const AddReceiptRowForm = Form.create({name: 'add_receipt_row_form'})(
                         {getFieldDecorator('amount', {
                             rules: [{required: true, message: "Vui lòng nhập số lượng"}],
                             initialValue: 1,
-                        })(<InputNumber/>)}
+                        })(<InputNumber min={1}/>)}
                     </Form.Item>
                     <Form.Item label="Đơn giá">
                         {getFieldDecorator('price', {
