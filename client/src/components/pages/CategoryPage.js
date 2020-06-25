@@ -159,7 +159,8 @@ class CategoryPage extends React.Component {
                                                mục</Button>
                                        </Form.Item> : null}
                                    <Form.Item>
-                                       <Input.Search placeholder="Tìm kiếm danh mục..." onSearch={this.handleSearch}/>
+                                       <Input.Search placeholder="Tìm kiếm danh mục..." allowClear
+                                                     onSearch={this.handleSearch}/>
                                    </Form.Item>
                                </Form>
                            )}/>
