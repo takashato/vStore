@@ -16,6 +16,7 @@ class SalePage extends React.Component {
         customer: undefined,
         prepaid: 0,
         pay_method: "0",
+        charge_money: 0,
     };
 
     constructor(props) {
@@ -124,6 +125,11 @@ class SalePage extends React.Component {
     handleComplete = async () => {
         if (this.state.details.length <= 0) {
             message.error("Vui lòng thêm ít nhất một mặt hàng.");
+            return;
+        }
+        if(this.state.charge_money < 0) {
+            message.error("Tiền thanh toán không đủ.");
+            return;
         }
         try {
             const res = await axios.post('/sale', {
@@ -141,6 +147,7 @@ class SalePage extends React.Component {
                 customer: undefined,
                 prepaid: 0,
                 pay_method: "0",
+                charge_money: 0,
             });
         } catch (err) {
             console.error(err);
@@ -158,6 +165,7 @@ class SalePage extends React.Component {
         const total_money = this.state.details.reduce((acc, current) => acc + current.amount * current.price, 0);
         const total_orignal_money = this.state.details.reduce((acc, current) => acc + current.amount * (current.original_price || current.price), 0);
         const total_discount_money = total_orignal_money - total_money;
+        this.state.charge_money = this.state.prepaid - total_money + total_discount_money;
         const total_charge_money = Math.max(0, this.state.prepaid - total_money + total_discount_money);
         const total = total_money - total_discount_money;
         return (
