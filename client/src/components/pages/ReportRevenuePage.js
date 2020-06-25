@@ -88,7 +88,7 @@ class ReportRevenuePage extends React.Component {
                         <Form layout="inline">
                             <Form.Item>
                                 <DatePicker.RangePicker defaultValue={this.state.range} onChange={this.handleDate}
-                                                        format={dateFormat}/>
+                                                        format={dateFormat} allowClear={false}/>
                             </Form.Item>
                             <Form.Item style={{float: "right"}}>
                                 <ReactToPrint trigger={() => (<Button icon={<PrinterOutlined/>}>In Báo Cáo</Button>)}
