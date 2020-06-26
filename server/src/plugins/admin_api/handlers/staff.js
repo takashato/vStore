@@ -3,7 +3,7 @@ import JWT from "jsonwebtoken";
 import {Op} from "sequelize";
 
 import secureConfig from "../../../config/secure.json";
-import Staff from "../../../models/staff_imported";
+import Staff from "../../../models/staff";
 import ResponseBuilder from "../../../helpers/response_builder";
 
 import permissionConfig from "../../../config/permission.json";

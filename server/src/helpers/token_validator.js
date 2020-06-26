@@ -1,4 +1,4 @@
-import Staff from '../models/staff_imported';
+import Staff from '../models/staff';
 
 const validate = async function (decoded, request, h) {
     // do your checks to see if the person is valid

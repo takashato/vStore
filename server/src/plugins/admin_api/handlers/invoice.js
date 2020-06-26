@@ -1,10 +1,10 @@
 import ResponseBuilder from "../../../helpers/response_builder";
-import Staff from "../../../models/staff_imported";
-import Customer from "../../../models/customer_imported";
-import Invoice from "../../../models/invoice_exported";
+import Staff from "../../../models/staff";
+import Customer from "../../../models/customer";
+import Invoice from "../../../models/invoice";
 import sequelize from "../../../db";
-import InvoiceDetail from "../../../models/invoice_detail_exported";
-import Product from "../../../models/product_imported";
+import InvoiceDetail from "../../../models/invoice_detail";
+import Product from "../../../models/product";
 
 
 const casualInvoiceExportFields = [

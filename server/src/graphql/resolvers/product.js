@@ -1,5 +1,5 @@
 import {resolver} from "graphql-sequelize";
-import Product from "../../models/product_imported";
+import Product from "../../models/product";
 
 
 const ProductResolver = {

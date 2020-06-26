@@ -1,6 +1,6 @@
 import Sequelize from "sequelize";
 import sequelize from "../db";
-import Product from "./product_imported";
+import Product from "./product";
 
 const InvoiceDetail = sequelize.define('invoice_detail', {
     id: {

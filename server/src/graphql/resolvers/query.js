@@ -1,11 +1,11 @@
-import ProductCategory from "../../models/product_category_imported";
+import ProductCategory from "../../models/product_category";
 import {createConnectionResolver, createNodeInterface, resolver} from "graphql-sequelize";
-import Product from "../../models/product_imported";
-import Customer from "../../models/customer_imported";
+import Product from "../../models/product";
+import Customer from "../../models/customer";
 import sequelize from "../../db";
-import Staff from "../../models/staff_imported";
-import Receipt from "../../models/receipt_imported";
-import ReceiptDetail from "../../models/receipt_detail_imported";
+import Staff from "../../models/staff";
+import Receipt from "../../models/receipt";
+import ReceiptDetail from "../../models/receipt_detail";
 import {authenticate} from "./auth";
 import resolverForOffsetPagination from "../../helpers/graphql_offset_pagination";
 

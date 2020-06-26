@@ -1,6 +1,6 @@
 import {UserInputError} from "apollo-server-errors";
 import Bcrypt from "bcrypt";
-import Staff from "../../models/staff_imported";
+import Staff from "../../models/staff";
 import isValidPassword from "../../helpers/password_validator";
 import {resolver} from "graphql-sequelize";
 

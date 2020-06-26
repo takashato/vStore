@@ -1,7 +1,7 @@
 import ResponseBuilder from "../../../helpers/response_builder";
-import Product from "../../../models/product_imported";
+import Product from "../../../models/product";
 import Sequelize, {Op} from "sequelize";
-import ProductCategory from "../../../models/product_category_imported";
+import ProductCategory from "../../../models/product_category";
 
 const casualProductExportFields = [
     'id',

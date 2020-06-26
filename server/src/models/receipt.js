@@ -1,8 +1,8 @@
 import Sequelize from "sequelize";
 import sequelize from "../db";
-import Staff from "./staff_imported";
-import Customer from "./customer_imported";
-import ReceiptDetail from "./receipt_detail_imported";
+import Staff from "./staff";
+import Customer from "./customer";
+import ReceiptDetail from "./receipt_detail";
 
 const Receipt = sequelize.define('receipt', {
     id: {

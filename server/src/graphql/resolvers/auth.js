@@ -1,4 +1,4 @@
-import Staff from "../../models/staff_imported";
+import Staff from "../../models/staff";
 import ResponseBuilder from "../../helpers/response_builder";
 import Bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";

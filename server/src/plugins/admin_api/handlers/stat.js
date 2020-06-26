@@ -1,9 +1,9 @@
-import Product from "../../../models/product_imported";
+import Product from "../../../models/product";
 import sequelize from "../../../db";
-import Staff from "../../../models/staff_imported";
+import Staff from "../../../models/staff";
 import moment from "moment";
 import ResponseBuilder from "../../../helpers/response_builder";
-import Customer from "../../../models/customer_imported";
+import Customer from "../../../models/customer";
 
 const {Op} = sequelize;
 

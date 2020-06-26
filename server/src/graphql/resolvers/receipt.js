@@ -1,5 +1,5 @@
 import {createConnectionResolver, resolver} from "graphql-sequelize";
-import Receipt from "../../models/receipt_imported";
+import Receipt from "../../models/receipt";
 
 const ReceiptResolver = {
     staff: resolver(Receipt.Staff),

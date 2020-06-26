@@ -1,6 +1,6 @@
 import ResponseBuilder from "../../../helpers/response_builder";
 import Sequelize, {Op} from "sequelize";
-import Customer from "../../../models/customer_imported";
+import Customer from "../../../models/customer";
 
 const casualCustomerExportFields = ['id', 'full_name', 'phone_number', 'birthday', 'created_at', 'updated_at'];
 const editableCustomerFields = ['full_name', 'phone_number', 'birthday'];

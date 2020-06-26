@@ -1,6 +1,6 @@
 import Sequelize from "sequelize";
 import sequelize from "../db";
-import SettingGroup from "./setting_group_imported";
+import SettingGroup from "./setting_group";
 
 const Setting = sequelize.define('setting', {
     varname: {

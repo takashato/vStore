@@ -1,7 +1,7 @@
 import Sequelize from "sequelize";
 import sequelize from "../db";
-import ProductCategory from "./product_category_imported";
-import Staff from "./staff_imported";
+import ProductCategory from "./product_category";
+import Staff from "./staff";
 
 const Product = sequelize.define('product', {
     id: {

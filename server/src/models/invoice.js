@@ -1,8 +1,8 @@
 import Sequelize from "sequelize";
 import sequelize from "../db";
-import Staff from "./staff_imported";
-import Customer from "./customer_imported";
-import InvoiceDetail from "./invoice_detail_exported";
+import Staff from "./staff";
+import Customer from "./customer";
+import InvoiceDetail from "./invoice_detail";
 
 const Invoice = sequelize.define('invoice', {
     id: {
