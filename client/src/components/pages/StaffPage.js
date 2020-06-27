@@ -2,14 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {EditOutlined, UserAddOutlined} from '@ant-design/icons';
 import '@ant-design/compatible/assets/index.css';
 import {Button, Checkbox, Form, Input, message, Modal, PageHeader, Select, Table, Tag, Tooltip,} from 'antd';
-import {Route, useParams, useHistory} from 'react-router-dom';
-import axios from "../../libs/axios";
-import momentTz, {convertDatetimeFormat} from "../../libs/moment";
-import {useApolloClient} from "@apollo/react-hooks";
+import {Route, useHistory, useParams} from 'react-router-dom';
+import {convertDatetimeFormat} from "../../libs/moment";
+import {useApolloClient, useQuery} from "@apollo/react-hooks";
 import {GET_STAFF_QUERY, STAFF_LIST_QUERY} from "../../graphql/query";
 import {CREATE_UPDATE_STAFF_MUTATION} from "../../graphql/mutation";
 import {processGraphqlError} from "../../libs/process_graphql_error";
-import {GraphQLError} from "graphql";
 
 const userGroupIDMap = [
     {
@@ -28,14 +26,27 @@ const userGroupIDMap = [
 ];
 
 const StaffPageHook = (props) => {
-    const client = useApolloClient();
     const history = useHistory();
 
-    const [loading, setLoading] = useState(false);
-    const [data, setData] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
+    });
+
+    const {loading, error, data, refetch} = useQuery(STAFF_LIST_QUERY, {
+        variables: {
+            limit: pagination.pageSize,
+            offset: pagination.pageSize * (pagination.current - 1),
+        },
+        onCompleted: (data) => {
+            if (data && data.staffs_offset) {
+                const newPagination = {...pagination, total: data.staffs_offset.count};
+                setPagination(newPagination);
+            }
+        },
+        onError: err => {
+            message.error('Lỗi khi lấy dữ liệu.')
+        },
     });
 
     // Columns processing
@@ -76,43 +87,26 @@ const StaffPageHook = (props) => {
         },
         {
             title: 'Hành động',
-            dataIndex: 'actions',
             fixed: 'right',
             render: (text, record) =>
-                data.length >= 1 ? (
+                (
                     <>
                         <Tooltip title="Sửa" placement="bottom">
                             <Button icon={<EditOutlined/>} onClick={() => handleEdit(record.id)}/>
                         </Tooltip>
                     </>
-                ) : null,
+                ),
         }
     ];
 
-    // Events
-    const getData = async (variables = {limit: 2, offset: 0}, newPagination = pagination) => {
-        setLoading(true);
-        try {
-            let {data} = await client.query({
-                query: STAFF_LIST_QUERY,
-                variables,
-            });
-            newPagination.total = data.staffs_offset.count;
-            setPagination(newPagination);
-            setData(data.staffs_offset.rows);
-            setLoading(false);
-        } catch (err) {
-            message.error('Lỗi khi lấy dữ liệu!');
-            console.log(err);
-        }
-    };
-
     const handleTableChange = (newPagination, filters, sorter) => {
-        getData({
-            limit: newPagination.pageSize,
-            offset: newPagination.pageSize * (newPagination.current - 1),
-            ...filters,
-        }, newPagination);
+        setPagination(newPagination);
+        refetch({
+            variables: {
+                limit: newPagination.pageSize,
+                offset: newPagination.pageSize * (newPagination.current - 1),
+            }
+        });
     };
 
     const handleAddStaffButton = (e) => {
@@ -124,19 +118,13 @@ const StaffPageHook = (props) => {
     };
 
     const handleReload = () => {
-        console.log("Reload!!!");
-        getData({
+        refetch({
             limit: pagination.pageSize,
             offset: pagination.pageSize * (pagination.current - 1),
         });
     };
 
-    useEffect(() => {
-        getData({
-            limit: pagination.pageSize,
-            offset: pagination.pageSize * (pagination.current - 1),
-        });
-    }, []);
+    const exportedData = (data && data.staffs_offset) ? data.staffs_offset.rows : null;
 
     return (
         <div>
@@ -149,7 +137,7 @@ const StaffPageHook = (props) => {
             />
             <div className="container">
                 <Table columns={columns} rowKey={record => record.id} loading={loading}
-                       dataSource={data} onChange={handleTableChange}
+                       dataSource={exportedData} onChange={handleTableChange}
                        pagination={pagination}
                        scroll={{x: true}} size="small"
                        title={() => (
@@ -158,23 +146,13 @@ const StaffPageHook = (props) => {
                 />
             </div>
             <Route path="/staff/:id">
-                <StaffModalHook reload={handleReload}/>
+                <StaffModalHook/>
             </Route>
-            {/*<StaffModal wrappedComponentRef={this.setFormRef}*/}
-            {/*            isCreate={isCreateModal}*/}
-            {/*            props={{*/}
-            {/*                visible: modalVisible,*/}
-            {/*                title: "Nhân viên",*/}
-            {/*                onCancel: this.cancelModal,*/}
-            {/*                onOk: this.handleSubmit,*/}
-            {/*            }}*/}
-            {/*            data={modalData}*/}
-            {/*/>*/}
         </div>
     );
 };
 
-const StaffModalHook = ({reload}) => {
+const StaffModalHook = () => {
     const client = useApolloClient();
     const history = useHistory();
 
@@ -218,10 +196,11 @@ const StaffModalHook = ({reload}) => {
                 mutation: CREATE_UPDATE_STAFF_MUTATION,
                 variables: {
                     staff: values
-                }
+                },
+                refetchQueries: ['StaffList'],
             });
             message.success("Lưu thông tin nhân viên thành công");
-            reload();
+            // reload();
             history.push('/staff');
         } catch (error) {
             console.log(error.extensions);
