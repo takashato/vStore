@@ -4,7 +4,7 @@ import './MainLayout.css';
 import SideBar from './SideBar';
 import TopBar from "./TopBar";
 import {Route, Switch, useHistory} from "react-router-dom";
-import StaffPage from "../pages/StaffPage";
+import StaffPage from "../pages/staff/StaffPage";
 import FooterLayout from "./FooterLayout";
 import CategoryPage from "../pages/CategoryPage";
 import ProductPage from "../pages/ProductPage";
