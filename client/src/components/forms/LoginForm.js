@@ -55,6 +55,12 @@ const LoginForm = (props) => {
     };
 
     return (
+        <LoginFormComponent isLoading={isLoading} form={form} onFinish={onFinish} onFinishFailed={onFinishFailed}/>
+    );
+};
+
+const LoginFormComponent = ({isLoading, form, onFinish, onFinishFailed}) => {
+    return (
         <Form form={form} onFinish={onFinish} onFinishFailed={onFinishFailed} className="login-form">
             <Form.Item
                 name="username"

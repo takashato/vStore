@@ -4,20 +4,17 @@ import {Divider} from 'antd';
 
 import './LoginLayout.css';
 
-class LoginLayout extends React.Component {
-    render() {
-        return (
-            <div className="login-area">
-                <div className="login-wrapper">
-                    <div className="login-logo">
-                        <img src={process.env.PUBLIC_URL + "/login-logo.png"} width="100%" height="auto"/>
-                    </div>
-                    <Divider orientation="left">ĐĂNG NHẬP</Divider>
-                    <LoginForm/>
-                </div>
+const LoginLayout = () => (
+    <div className="login-area">
+        <div className="login-wrapper">
+            <div className="login-logo">
+                <img src={process.env.PUBLIC_URL + "/login-logo.png"} width="100%" height="auto"/>
             </div>
-        );
-    }
-}
+            <Divider orientation="left">ĐĂNG NHẬP</Divider>
+            <LoginForm/>
+        </div>
+    </div>
+);
+
 
 export default LoginLayout;
