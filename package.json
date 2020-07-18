@@ -15,7 +15,7 @@
 
     "post-build": "run-script-os",
     "post-build:windows": "echo d | xcopy /e client\\build\\* server\\build\\public\\admin && echo d | xcopy /e server\\src\\graphql\\types server\\build\\graphql\\types",
-    "post-build:nix": "mkdir -p server/build/public/admin && cp -r ./client/build/* server/build/public/admin && mkdir -p server/build/graphql/types && cp -r ./server/src/graphql/types"
+    "post-build:nix": "mkdir -p server/build/public/admin && cp -r ./client/build/* server/build/public/admin && mkdir -p server/build/graphql/types && cp -r ./server/src/graphql/types/* ./server/build/graphql/types"
   },
   "repository": {
     "type": "git",
