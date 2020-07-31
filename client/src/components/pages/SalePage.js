@@ -166,8 +166,8 @@ class SalePage extends React.Component {
         const total_orignal_money = this.state.details.reduce((acc, current) => acc + current.amount * (current.original_price || current.price), 0);
         const total_discount_money = total_orignal_money - total_money;
         this.state.charge_money = this.state.prepaid - total_money + total_discount_money;
-        const total_charge_money = Math.max(0, this.state.prepaid - total_money + total_discount_money);
-        const total = total_money - total_discount_money;
+        const total = total_money;
+        const total_charge_money = Math.max(0, this.state.prepaid - total);
         return (
             <div>
                 <Row gutter={[16, 8]}>
@@ -196,7 +196,7 @@ class SalePage extends React.Component {
                                 <InputFormatedNumnber onChange={this.handlePrepaid} value={this.state.prepaid}/>
                             </Form.Item>
                             <Form.Item label="Tổng tiền">
-                                <Typography.Title level={4}>{number_format(total_money)}</Typography.Title>
+                                <Typography.Title level={4}>{number_format(total_orignal_money)}</Typography.Title>
                             </Form.Item>
                             <Form.Item label="Giảm giá">
                                 <Typography.Title
