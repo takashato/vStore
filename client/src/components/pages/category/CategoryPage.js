@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {EditOutlined, PlusOutlined} from '@ant-design/icons';
 import {Form} from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import {Button, Input, message, Modal, PageHeader, Table, Tooltip} from "antd";
-import axios from "../../libs/axios";
-import momentTz from "../../libs/moment";
-import {connect} from "react-redux";
+import axios from "../../../libs/axios";
+import momentTz from "../../../libs/moment";
+import {connect, useSelector} from "react-redux";
 
 class CategoryPage extends React.Component {
     state = {
@@ -176,6 +176,50 @@ class CategoryPage extends React.Component {
         );
     }
 }
+
+const CategoryPageHook = ({prop}) => {
+    const [pagination, setPagination] = useState({});
+    const [search, setSearch] = useState(undefined);
+
+    const permissions = {};
+
+    return (
+        <div>
+            <PageHeader
+                style={{
+                    border: '1px solid rgb(235, 237, 240)',
+                }}
+                title="Danh mục sản phẩm"
+                subTitle="Quản lý danh mục sản phẩm"
+            />
+            <div className="container">
+                <Table columns={this.columns} rowKey="id" dataSource={this.state.data} loading={this.state.loading}
+                       onChange={this.handleTableChange} pagination={this.state.pagination} size="small"
+                       scroll={{x: true}}
+                       title={() => (
+                           <Form layout="inline">
+                               {permissions.product.write ?
+                                   <Form.Item>
+                                       <Button icon={<PlusOutlined/>} onClick={this.handleAddButton}>Thêm danh
+                                           mục</Button>
+                                   </Form.Item> : null}
+                               <Form.Item>
+                                   <Input.Search placeholder="Tìm kiếm danh mục..." allowClear
+                                                 onSearch={this.handleSearch}/>
+                               </Form.Item>
+                           </Form>
+                       )}/>
+            </div>
+            <AddCategoryModal wrappedComponentRef={(formRef) => this.formRef = formRef}
+                              props={{
+                                  title: 'Danh mục',
+                                  visible: this.state.modalVisible,
+                                  onCancel: () => this.setState({modalVisible: false, modalData: {}}),
+                                  onOk: this.handleSubmit,
+                              }} data={this.state.modalData}/>
+        </div>
+    );
+};
 
 const AddCategoryModal = Form.create({name: 'category_modal'})(
     class extends React.Component {

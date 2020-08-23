@@ -16,5 +16,4 @@ const LoginLayout = () => (
     </div>
 );
 
-
 export default LoginLayout;

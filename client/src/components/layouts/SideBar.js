@@ -47,12 +47,23 @@ class SideBar extends React.Component {
         const {groups} = this.state;
         let defaultOpenKeys = [];
 
-        if (this.props.location.pathname === "/category" || this.props.location.pathname === "/product") {
-            defaultOpenKeys = ['k_product'];
+        switch(this.props.location.pathname) {
+            case "/category":
+            case "/product":
+                defaultOpenKeys = ['k_product'];
+                break;
+            case "/staff":
+            case "/staff-group":
+                defaultOpenKeys = ['k_staff'];
+                break;
+            case "/report/inventory":
+            case "/report/revenue":
+                defaultOpenKeys = ['k_report'];
+                break;
+            default:
+                break;
         }
-        if (this.props.location.pathname === "/report/inventory" || this.props.location.pathname === "/report/revenue") {
-            defaultOpenKeys = ['k_report'];
-        }
+
         if (!this.props.staff.staff) return null;
         const {permissions} = this.props.staff.staff;
         if (!permissions) return null;
@@ -73,12 +84,25 @@ class SideBar extends React.Component {
                         </Link>
                     </Menu.Item>
                     {permissions.staff ?
-                        <Menu.Item key="/staff">
-                            <Link to='/staff'>
+                        <Menu.SubMenu key="k_staff" title={
+                            <span>
                                 <UserOutlined/>
                                 <span>Nhân viên</span>
-                            </Link>
-                        </Menu.Item> : null}
+                             </span>
+                        }>
+                            <Menu.Item key="/staff">
+                                <Link to='/staff'>
+                                    <UserOutlined/>
+                                    <span>Nhân viên</span>
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key="/staff-group">
+                                <Link to='/staff-group'>
+                                    <TeamOutlined/>
+                                    <span>Nhóm nhân viên</span>
+                                </Link>
+                            </Menu.Item>
+                        </Menu.SubMenu> : null}
                     {permissions.product.read ?
                         <Menu.SubMenu key="k_product" title={
                             <span>
