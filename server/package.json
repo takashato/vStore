@@ -20,7 +20,7 @@
     "@babel/runtime": "^7.10.2",
     "@graphql-tools/load-files": "^6.0.9",
     "@graphql-tools/merge": "^6.0.9",
-    "@hapi/hapi": "^19.1.1",
+    "@hapi/hapi": "^20.0.0",
     "@hapi/inert": "^6.0.1",
     "@hapi/joi": "^17.1.1",
     "@hapi/vision": "^6.0.0",
@@ -32,13 +32,13 @@
     "graphql-relay": "^0.6.0",
     "graphql-sequelize": "^9.4.0",
     "graphql-tools": "^6.0.9",
-    "hapi-auth-jwt2": "^8.8.1",
+    "hapi-auth-jwt2": "^10.1.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.26.0",
     "moment-timezone": "^0.5.31",
     "mysql": "^2.18.1",
     "mysql2": "^2.1.0",
-    "sequelize": "^5.21.12"
+    "sequelize": "^6.3.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
@@ -47,8 +47,8 @@
     "@babel/preset-env": "^7.10.2",
     "@babel/register": "^7.10.1",
     "babel-watch": "^7.0.0",
-    "nodemon": "^1.19.4",
-    "sequelize-auto": "^0.4.29",
-    "sequelize-cli": "^5.5.1"
+    "nodemon": "^2.0.4",
+    "sequelize-auto": "^0.5.3",
+    "sequelize-cli": "^6.2.0"
   }
 }

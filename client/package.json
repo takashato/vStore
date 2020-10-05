@@ -7,11 +7,11 @@
   "dependencies": {
     "@ant-design/compatible": "^1.0.2",
     "@ant-design/icons": "^4.2.1",
-    "@apollo/react-hooks": "^3.1.5",
+    "@apollo/react-hooks": "^4.0.0",
     "antd": "^4.3.5",
     "apollo-boost": "^0.4.9",
-    "axios": "^0.19.2",
-    "bizcharts": "^3.5.9",
+    "axios": "^0.20.0",
+    "bizcharts": "^4.0.13",
     "graphql": "^15.1.0",
     "graphql-tag": "^2.10.3",
     "lodash.debounce": "^4.0.8",
@@ -47,7 +47,7 @@
     ]
   },
   "devDependencies": {
-    "chromedriver": "^83.0.0",
+    "chromedriver": "^84.0.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "enzyme-to-json": "^3.5.0",
