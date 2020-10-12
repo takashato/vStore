@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import 'styles/index.less';
 import './App.css';
 import LoginLayout from "./components/layouts/LoginLayout";
 import MainLayout from "./components/layouts/MainLayout";
@@ -7,10 +8,10 @@ import {ApolloProvider} from "@apollo/react-hooks";
 import config from "./config.json";
 import {ConfigProvider, Spin} from "antd";
 import viVN from "antd/es/locale/vi_VN";
-import store from "./store";
+import store from "./states/store";
 import client from "./graphql/client";
 import {BrowserRouter, Route, Switch, useHistory} from "react-router-dom";
-import {setToken} from "./redux/actions/staff";
+import {setToken} from "./states/actions/staff";
 
 const App = (props) => {
     const history = useHistory();

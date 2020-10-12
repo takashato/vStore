@@ -4,7 +4,7 @@ import {Dropdown, Layout, Menu} from 'antd';
 
 import './TopBar.css';
 import {connect} from "react-redux";
-import {doLogout} from "../../redux/actions/staff";
+import {doLogout} from "../../states/actions/staff";
 
 const {Header} = Layout;
 
