@@ -1,19 +1,13 @@
 import React, {useEffect, useState} from 'react';
-
-
-import {Provider, useDispatch, useSelector} from "react-redux";
-import {ApolloProvider} from "@apollo/react-hooks";
-import {ConfigProvider, Spin} from "antd";
-import viVN from "antd/es/locale/vi_VN";
-
-import "./assets/vendors/style.js";
-import "./styles/wieldy.less";
-
+import './App.css';
 import LoginLayout from "./components/layouts/LoginLayout";
 import MainLayout from "./components/layouts/MainLayout";
-
+import {Provider, useDispatch, useSelector} from "react-redux";
+import {ApolloProvider} from "@apollo/react-hooks";
 import config from "./config.json";
-import store from "./redux/store";
+import {ConfigProvider, Spin} from "antd";
+import viVN from "antd/es/locale/vi_VN";
+import store from "./store";
 import client from "./graphql/client";
 import {BrowserRouter, Route, Switch, useHistory} from "react-router-dom";
 import {setToken} from "./redux/actions/staff";
