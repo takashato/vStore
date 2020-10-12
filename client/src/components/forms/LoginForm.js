@@ -7,7 +7,7 @@ import {useDispatch} from "react-redux";
 import {useApolloClient} from "@apollo/react-hooks";
 import {LOGIN_QUERY} from "../../graphql/query";
 
-import {setToken} from "../../states/actions/staff";
+import {setToken} from "../../states/redux/actions/staff";
 
 import './LoginForm.css';
 

@@ -8,10 +8,11 @@ import {ApolloProvider} from "@apollo/react-hooks";
 import config from "./config.json";
 import {ConfigProvider, Spin} from "antd";
 import viVN from "antd/es/locale/vi_VN";
-import store from "./states/store";
+import store from "./states/redux/store";
 import client from "./graphql/client";
 import {BrowserRouter, Route, Switch, useHistory} from "react-router-dom";
-import {setToken} from "./states/actions/staff";
+import {setToken} from "./states/redux/actions/staff";
+import {RecoilRoot} from "recoil";
 
 const App = (props) => {
     const history = useHistory();
@@ -81,13 +82,15 @@ const AppContainer = () => {
 
 const ProvidedApp = () => {
     return (
-        <Provider store={store}>
-            <ApolloProvider client={client}>
-                <ConfigProvider locale={viVN}>
-                    <AppContainer/>
-                </ConfigProvider>
-            </ApolloProvider>
-        </Provider>
+        <RecoilRoot>
+            <Provider store={store}>
+                <ApolloProvider client={client}>
+                    <ConfigProvider locale={viVN}>
+                        <AppContainer/>
+                    </ConfigProvider>
+                </ApolloProvider>
+            </Provider>
+        </RecoilRoot>
     );
 };
 

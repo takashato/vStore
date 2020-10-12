@@ -71,11 +71,12 @@ class SideBar extends React.Component {
             <Sider
                 breakpoint="lg"
                 collapsedWidth="0"
+                theme="light"
             >
                 <div className="logo">
                     <img src={process.env.PUBLIC_URL + "/logo.png"} width="100%" height="auto"/>
                 </div>
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={this.props.location.pathname}
+                <Menu theme="light" mode="inline" defaultSelectedKeys={this.props.location.pathname}
                       defaultOpenKeys={defaultOpenKeys}>
                     <Menu.Item key="/dashboard">
                         <Link to="/dashboard">

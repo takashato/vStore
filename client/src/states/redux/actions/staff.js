@@ -1,4 +1,4 @@
-import axios from "../../libs/axios";
+import axios from "../../../libs/axios";
 import {message} from "antd";
 
 export const TOKEN_UPDATED = 'TOKEN_UPDATED';
