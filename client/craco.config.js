@@ -17,9 +17,6 @@ module.exports = function ({env}) {
                             javascriptEnabled: true,
                         },
                     },
-                    cssLoaderOptions: {
-                        modules: { localIdentName: "[local]_[hash:base64:5]" }
-                    },
                 }
             },
         ],
