@@ -1,3 +1,4 @@
+const path = require('path');
 const withSass = require("@zeit/next-sass");
 const withLess = require("@zeit/next-less");
 const withCSS = require("@zeit/next-css");
@@ -15,11 +16,15 @@ module.exports = withCSS({
         importLoaders: 1,
         localIdentName: "[local]___[hash:base64:5]",
     },
+    webpack: (config, options) => {
+        config.resolve.modules.push(path.resolve('./'))
+        return config;
+    },
     ...withLess(
         withSass({
             lessLoaderOptions: {
                 javascriptEnabled: true,
             },
         })
-    ),
+    )
 });
