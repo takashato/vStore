@@ -1,7 +1,6 @@
-import {Layout, Skeleton} from "antd";
+import {Layout} from "antd";
 
 import '../../styles/main.less';
-import dynamic from "next/dynamic";
 import SideBar from "./SideBar";
 
 
