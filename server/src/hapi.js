@@ -31,6 +31,12 @@ export async function init() {
             Inert,
             Vision,
             HapiAuthJWT2,
+            {
+                plugin: require('hapi-cors'),
+                options: {
+                    origins: ['*']
+                }
+            }
         ]);
         // GraphQL
         await apolloServer.applyMiddleware({

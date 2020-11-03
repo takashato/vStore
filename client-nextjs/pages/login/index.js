@@ -1,4 +1,4 @@
-import {Button, Checkbox, Form, Input, message} from "antd";
+import {Button, Checkbox, Form, Input, message, notification} from "antd";
 import {useSetRecoilState} from "recoil";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 
@@ -23,6 +23,9 @@ const LoginContainer = () => {
             const {data} = await loginService.doLogin({username, password});
             setToken(data.token);
             (save_password ? localStorage : sessionStorage).setItem('session_token', data.token)
+            notification.success({
+               message: "Đăng nhập thành công!",
+            });
         } catch (err) {
             if (err.response) {
                 const {code, userMessage} = err.response.data;
@@ -35,7 +38,7 @@ const LoginContainer = () => {
 
                 if (errorField) {
                     form.setFields([{
-                        name: 'username',
+                        name: errorField,
                         errors: [userMessage],
                     }]);
                     return;
@@ -60,6 +63,7 @@ const Login = ({isLoading, form, onFinish, onFinishFailed}) => {
                 <Form.Item
                     name="username"
                     rules={[{required: true, message: 'Vui lòng nhập tên tài khoản!'}]}
+                    hasFeedback
                 >
                     <Input
                         prefix={<UserOutlined style={{color: 'rgba(0,0,0,.25)'}}/>}
@@ -69,6 +73,7 @@ const Login = ({isLoading, form, onFinish, onFinishFailed}) => {
                 <Form.Item
                     name="password"
                     rules={[{required: true, message: 'Vui lòng nhập mật khẩu!'}]}
+                    hasFeedback
                 >
                     <Input.Password
                         prefix={<LockOutlined style={{color: 'rgba(0,0,0,.25)'}}/>}

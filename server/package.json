@@ -33,6 +33,7 @@
     "graphql-sequelize": "^9.4.0",
     "graphql-tools": "^6.0.9",
     "hapi-auth-jwt2": "^10.1.0",
+    "hapi-cors": "^1.0.3",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.26.0",
     "moment-timezone": "^0.5.31",
