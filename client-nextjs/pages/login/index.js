@@ -1,13 +1,12 @@
 import {Button, Checkbox, Form, Input, message, notification} from "antd";
 import {useSetRecoilState} from "recoil";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
-
-import LoginLayout from "../../components/layouts/LoginLayout";
 import {userTokenSelector} from "../../state/recoil/user";
 
 import "../../styles/login.less";
 import {useState} from "react";
 import loginService from "../../services/loginService";
+import Head from "next/head";
 
 const LoginContainer = () => {
     const setToken = useSetRecoilState(userTokenSelector);
@@ -24,7 +23,7 @@ const LoginContainer = () => {
             setToken(data.token);
             (save_password ? localStorage : sessionStorage).setItem('session_token', data.token)
             notification.success({
-               message: "Đăng nhập thành công!",
+                message: "Đăng nhập thành công!",
             });
         } catch (err) {
             if (err.response) {
@@ -58,7 +57,10 @@ const LoginContainer = () => {
 
 const Login = ({isLoading, form, onFinish, onFinishFailed}) => {
     return (
-        <LoginLayout>
+        <>
+            <Head>
+                <title>Đăng nhập</title>
+            </Head>
             <Form form={form} onFinish={onFinish} onFinishFailed={onFinishFailed} className="login-form">
                 <Form.Item
                     name="username"
@@ -93,7 +95,7 @@ const Login = ({isLoading, form, onFinish, onFinishFailed}) => {
                     </Button>
                 </Form.Item>
             </Form>
-        </LoginLayout>
+        </>
     );
 };
 

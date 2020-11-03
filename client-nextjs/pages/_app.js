@@ -5,6 +5,8 @@ import viVN from 'antd/lib/locale/vi_VN';
 import {useRouter} from "next/router";
 import {userTokenSelector} from "../state/recoil/user";
 import {useEffect, useState} from "react";
+import LoginLayout from "../components/layouts/LoginLayout";
+import MainLayout from "../components/layouts/MainLayout";
 
 
 function MyApp({Component, pageProps}) {
@@ -44,7 +46,6 @@ const AppContainer = ({children}) => {
             if (router.pathname !== '/login' && !token) {
                 setRefPath(router.pathname);
                 await router.push('/login');
-                setInitialized(true);
                 return;
             }
             if (token) {
@@ -57,7 +58,7 @@ const AppContainer = ({children}) => {
                 setInitialized(true);
             }
         })()
-    }, [fetched, token, refPath]);
+    }, [fetched, token]);
 
     if (!fetched || !initialized) {
         return (
@@ -67,7 +68,10 @@ const AppContainer = ({children}) => {
         );
     }
 
-    return children;
+    if (router.pathname === "/login") {
+        return <LoginLayout>{children}</LoginLayout>;
+    }
+    return <MainLayout>{children}</MainLayout>;
 };
 
 export default MyApp
