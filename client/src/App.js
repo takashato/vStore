@@ -6,13 +6,15 @@ import MainLayout from "./components/layouts/MainLayout";
 import {Provider, useDispatch, useSelector} from "react-redux";
 import {ApolloProvider} from "@apollo/react-hooks";
 import config from "./config.json";
-import {ConfigProvider, Spin} from "antd";
+import {ConfigProvider, Spin, Typography} from "antd";
 import viVN from "antd/es/locale/vi_VN";
 import store from "./states/redux/store";
 import client from "./graphql/client";
 import {BrowserRouter, Route, Switch, useHistory} from "react-router-dom";
 import {setToken} from "./states/redux/actions/staff";
 import {RecoilRoot} from "recoil";
+import {getRealRoutes} from "./components/routes";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 const App = (props) => {
     const history = useHistory();
@@ -58,6 +60,12 @@ const App = (props) => {
             </Spin>
         );
     }
+
+    const notFoundContent = () => (
+        <Typography.Title>Trang không tồn tại hoặc bạn không được phép truy
+            cập!</Typography.Title>
+    );
+
     return (
         <>
             <Switch>
@@ -65,7 +73,22 @@ const App = (props) => {
                     <LoginLayout/>
                 </Route>
                 <Route>
-                    <MainLayout/>
+                    <MainLayout>
+                        <Switch>
+                            {getRealRoutes().map(route => {
+                                return (
+                                    <ProtectedRoute
+                                        permissions={route.permissions}
+                                        path={route.path}
+                                        exact={route.exact ?? true}
+                                        fallback={notFoundContent}
+                                    >
+                                        <route.component/>
+                                    </ProtectedRoute>
+                                );
+                            })}
+                        </Switch>
+                    </MainLayout>
                 </Route>
             </Switch>
         </>

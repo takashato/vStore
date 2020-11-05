@@ -12,7 +12,6 @@ const ProtectedArea = ({permissions = [], children, fallback, ...rest}) => {
             setAllowed(false);
             return;
         }
-        console.log('protected area permission', permissionValues);
         const values = Object.values(permissionValues || {});
 
         if (values.length <= 0) {

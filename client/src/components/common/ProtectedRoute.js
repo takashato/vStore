@@ -3,7 +3,7 @@ import usePermission from "../hooks/usePermission";
 import {useSelector} from "react-redux";
 import {Route} from "react-router-dom";
 
-const ProtectedRoute = ({permissions = [], children, ...rest}) => {
+const ProtectedRoute = ({permissions = [], children, fallback, ...rest}) => {
     const permissionValues = usePermission(permissions);
     const staff = useSelector(state => state.staff)
     const [isAllowed, setAllowed] = useState(false);
@@ -13,7 +13,15 @@ const ProtectedRoute = ({permissions = [], children, ...rest}) => {
             setAllowed(false);
             return;
         }
-        for (const permissionValue of permissionValues) {
+
+        const values = Object.values(permissionValues || {});
+
+        if (values.length <= 0) {
+            setAllowed(false);
+            return;
+        }
+
+        for (const permissionValue of values) {
             if (!permissionValue) {
                 setAllowed(false);
                 return;
@@ -22,10 +30,13 @@ const ProtectedRoute = ({permissions = [], children, ...rest}) => {
         setAllowed(true);
     }, [permissionValues, staff]);
 
+    console.log('protected route ', isAllowed, ' data ', rest);
+    console.log(permissions, ' => ', permissionValues);
+
     return (
         isAllowed
             ? <Route {...rest}>{children}</Route>
-            : null
+            : (fallback ? fallback() : null)
     );
 };
 
