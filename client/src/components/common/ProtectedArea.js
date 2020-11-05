@@ -2,7 +2,7 @@ import usePermission from "../hooks/usePermission";
 import {useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 
-const ProtectedArea = ({permissions = [], children, ...rest}) => {
+const ProtectedArea = ({permissions = [], children, fallback, ...rest}) => {
     const permissionValues = usePermission(permissions);
     const staff = useSelector(state => state.staff)
     const [isAllowed, setAllowed] = useState(false);
@@ -29,7 +29,7 @@ const ProtectedArea = ({permissions = [], children, ...rest}) => {
         setAllowed(true);
     }, [permissionValues, staff]);
 
-    if (!isAllowed) return null;
+    if (!isAllowed) return fallback ? fallback() : null;
     return React.Children.map(children, child => {
         if (React.isValidElement(child)) {
             return React.cloneElement(child, {...rest});
