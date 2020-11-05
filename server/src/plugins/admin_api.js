@@ -7,6 +7,7 @@ import applySaleRoute from "./admin_api/routes/sale";
 import applyStatRoute from "./admin_api/routes/stat";
 import applyInvoiceRoute from "./admin_api/routes/invoice";
 import applySettingRoute from "./admin_api/routes/setting";
+import applyPermissionRoute from "./admin_api/routes/permission";
 
 const AdminApiPlugin = {
     name: 'admin_api',
@@ -20,6 +21,7 @@ const AdminApiPlugin = {
         applyStatRoute(server);
         applyInvoiceRoute(server);
         applySettingRoute(server);
+        applyPermissionRoute(server);
     },
 };
 

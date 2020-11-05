@@ -12,7 +12,7 @@ const StaffGroupPermission = sequelize.define('staff_group_permission', {
     },
     group_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     key: {
         type: Sequelize.STRING,

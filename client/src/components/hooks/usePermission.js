@@ -1,14 +1,27 @@
 import {useEffect, useState} from 'react';
-import {useSelector} from "react-redux";
+import {useRecoilState} from "recoil";
+import {permissionState} from "../../states/recoil/atoms/permission";
+import PermissionService from "../../services/PermissionService";
 
-const usePermission = (name) => {
+const usePermission = (key, forceRefetch = false) => {
     const [result, setResult] = useState(false);
-    const permissions = useSelector(state => state.permissions);
-    const permission = permissions[name] || false;
+    const [permissions, setPermissions] = useRecoilState(permissionState);
+    const permission = permissions[key];
 
     useEffect(() => {
-        setResult(permission);
-    }, [permission]);
+        if (permissions[key] !== undefined && !forceRefetch) {
+            setResult(permissions[key]);
+            return;
+        }
+        let fetchedData = false;
+        try {
+            const {data} = PermissionService.getPermission(key);
+            fetchedData = !!data.hasPermission;
+        } catch (err) {
+            //
+        }
+        setPermissions({...permissions, [key]: fetchedData});
+    }, [key, permission, forceRefetch]);
 
     return result;
 };

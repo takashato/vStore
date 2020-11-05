@@ -1,3 +1,4 @@
+import Sequelize from 'sequelize';
 import sequelize from "../db";
 
 const Permission = sequelize.define('permission', {
