@@ -20,7 +20,7 @@ import ReportRevenuePage from "./pages/ReportRevenuePage";
 
 const routes = [
     {
-        path: ['/', '/dashboard'],
+        path: [ '/dashboard', '/'],
         exact: true,
         icon: <DashboardOutlined/>,
         name: "Trang chính",
