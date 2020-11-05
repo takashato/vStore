@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
-    DashboardOutlined,
     DatabaseOutlined,
     FileTextOutlined,
     FormOutlined,
@@ -16,11 +15,11 @@ import {
 } from '@ant-design/icons';
 
 import {Layout, Menu, message} from "antd";
-import {Link, withRouter} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 
 import './SideBar.css';
-import {connect} from "react-redux";
 import axios from "../../libs/axios";
+import routes, {getRealRoutes} from "../routes";
 
 const {Sider} = Layout;
 
@@ -47,7 +46,7 @@ class SideBar extends React.Component {
         const {groups} = this.state;
         let defaultOpenKeys = [];
 
-        switch(this.props.location.pathname) {
+        switch (this.props.location.pathname) {
             case "/category":
             case "/product":
                 defaultOpenKeys = ['k_product'];
@@ -78,12 +77,6 @@ class SideBar extends React.Component {
                 </div>
                 <Menu theme="light" mode="inline" defaultSelectedKeys={this.props.location.pathname}
                       defaultOpenKeys={defaultOpenKeys}>
-                    <Menu.Item key="/dashboard">
-                        <Link to="/dashboard">
-                            <DashboardOutlined/>
-                            <span>Trang chính</span>
-                        </Link>
-                    </Menu.Item>
                     {permissions.staff ?
                         <Menu.SubMenu key="k_staff" title={
                             <span>
@@ -197,4 +190,91 @@ const mapStateToProps = state => {
     }
 };
 
-export default withRouter(connect(mapStateToProps)(SideBar));
+const SideBarHook = () => {
+    const history = useHistory();
+
+    return (
+        <Sider
+            breakpoint="lg"
+            collapsedWidth="0"
+            theme="light"
+        >
+            <div className="logo">
+                <img src={process.env.PUBLIC_URL + "/logo.png"} width="100%" height="auto"/>
+            </div>
+            <RenderedSidebar pathname={history.location.pathname}/>
+        </Sider>
+    );
+};
+
+const RenderedSidebar = ({pathname}) => {
+    const [defaultSelectedKeys, setDefaultSelectedKeys] = useState(undefined);
+    const [defaultOpenKeys, setDefaultOpenKeys] = useState(undefined)
+
+    useEffect(() => {
+        // Open key
+        const realRoutes = getRealRoutes();
+        for (const realRoute of realRoutes) {
+            let matched;
+            for (const path of realRoute.path) {
+                if ((realRoute.exact && pathname === path)
+                    || (!realRoute.exact && pathname.startsWith(path))
+                ) {
+                    matched = realRoute.path[0];
+                    break;
+                }
+            }
+            if (matched) {
+                setDefaultSelectedKeys([matched]);
+                if (realRoute.hasOwnProperty('parent')) {
+                    setDefaultOpenKeys([realRoute.parent.children[0].path[0]])
+                } else {
+                    setDefaultOpenKeys([]);
+                }
+                break;
+            }
+        }
+    }, [pathname]);
+
+
+    if (!defaultSelectedKeys || !defaultOpenKeys) return null;
+    return (
+        <Menu theme="light" mode="inline" defaultSelectedKeys={defaultSelectedKeys} defaultOpenKeys={defaultOpenKeys}>
+            {routes.map((menu) => {
+                if (!menu.hasOwnProperty('children')) {
+                    return (
+                        <Menu.Item key={menu.path[0]}>
+                            <Link to={menu.path[0]}>
+                                {menu.icon}
+                                <span>{menu.name}</span>
+                            </Link>
+                        </Menu.Item>
+                    );
+                }
+                return (
+                    <Menu.SubMenu key={menu.children[0].path[0]} title={
+                        <span>
+                        {menu.icon}
+                            <span>{menu.name}</span>
+                    </span>
+                    }>
+                        {menu.children.map(subMenu => {
+                            return (
+                                <Menu.Item key={subMenu.path[0]}>
+                                    <Link to={subMenu.path[0]}>
+                                        {subMenu.icon}
+                                        <span>{subMenu.name}</span>
+                                    </Link>
+                                </Menu.Item>
+                            );
+                        })}
+                    </Menu.SubMenu>
+                );
+            })}
+        </Menu>
+    );
+}
+
+// export default withRouter(connect(mapStateToProps)(SideBar));
+
+export default SideBarHook;
