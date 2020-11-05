@@ -15,6 +15,8 @@ import {setToken} from "./states/redux/actions/staff";
 import {RecoilRoot} from "recoil";
 import {getRealRoutes} from "./components/routes";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import UnauthorizedPage from "./components/pages/error/UnauthorizedPage";
+import NotFoundPage from "./components/pages/error/NotFoundPage";
 
 const App = (props) => {
     const history = useHistory();
@@ -62,8 +64,7 @@ const App = (props) => {
     }
 
     const notFoundContent = () => (
-        <Typography.Title>Trang không tồn tại hoặc bạn không được phép truy
-            cập!</Typography.Title>
+        <UnauthorizedPage/>
     );
 
     return (
@@ -87,6 +88,9 @@ const App = (props) => {
                                     </ProtectedRoute>
                                 );
                             })}
+                            <Route>
+                                <NotFoundPage/>
+                            </Route>
                         </Switch>
                     </MainLayout>
                 </Route>
