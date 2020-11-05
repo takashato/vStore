@@ -14,11 +14,5 @@ export async function getUserPermission(request, h) {
         });
         returnObj[permissionKey] = result ? result.value == 1 : false;
     }
-    const returnObjValues = Object.values(returnObj);
-    if (returnObjValues.length <= 1) {
-        return {
-            hasPermission: returnObjValues[0],
-        }
-    }
     return returnObj;
 }

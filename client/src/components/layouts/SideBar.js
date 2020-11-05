@@ -20,6 +20,7 @@ import {Link, useHistory} from "react-router-dom";
 import './SideBar.css';
 import axios from "../../libs/axios";
 import routes, {getRealRoutes} from "../routes";
+import ProtectedArea from "../common/ProtectedArea";
 
 const {Sider} = Layout;
 
@@ -243,12 +244,14 @@ const RenderedSidebar = ({pathname}) => {
             {routes.map((menu) => {
                 if (!menu.hasOwnProperty('children')) {
                     return (
-                        <Menu.Item key={menu.path[0]}>
-                            <Link to={menu.path[0]}>
-                                {menu.icon}
-                                <span>{menu.name}</span>
-                            </Link>
-                        </Menu.Item>
+                        <ProtectedArea permissions={menu.permissions}>
+                            <Menu.Item key={menu.path[0]}>
+                                <Link to={menu.path[0]}>
+                                    {menu.icon}
+                                    <span>{menu.name}</span>
+                                </Link>
+                            </Menu.Item>
+                        </ProtectedArea>
                     );
                 }
                 return (
@@ -260,12 +263,14 @@ const RenderedSidebar = ({pathname}) => {
                     }>
                         {menu.children.map(subMenu => {
                             return (
-                                <Menu.Item key={subMenu.path[0]}>
-                                    <Link to={subMenu.path[0]}>
-                                        {subMenu.icon}
-                                        <span>{subMenu.name}</span>
-                                    </Link>
-                                </Menu.Item>
+                                <ProtectedArea permissions={subMenu.permissions}>
+                                    <Menu.Item key={subMenu.path[0]}>
+                                        <Link to={subMenu.path[0]}>
+                                            {subMenu.icon}
+                                            <span>{subMenu.name}</span>
+                                        </Link>
+                                    </Menu.Item>
+                                </ProtectedArea>
                             );
                         })}
                     </Menu.SubMenu>

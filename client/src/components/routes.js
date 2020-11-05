@@ -37,7 +37,7 @@ const routes = [
                 icon: <UserOutlined/>,
                 name: "Nhân viên",
                 component: StaffPage,
-                permission: ['staff.list'],
+                permissions: ['staff.list'],
             },
             {
                 path: ['/staff-group'],
@@ -67,7 +67,7 @@ const routes = [
                 icon: <UnorderedListOutlined/>,
                 name: "Danh mục",
                 component: CategoryPage,
-                permission: ['category.list'],
+                permissions: ['category.list'],
             }
         ]
     },
@@ -77,7 +77,7 @@ const routes = [
         icon: <ShoppingCartOutlined/>,
         name: "Bán hàng",
         component: SalePage,
-        permission: ['sale'],
+        permissions: ['sale'],
     },
     {
         path: ['/invoice'],
@@ -85,7 +85,7 @@ const routes = [
         icon: <FileTextOutlined/>,
         name: "Hóa đơn / đơn hàng",
         component: InvoicePage,
-        permission: ['invoice.list'],
+        permissions: ['invoice.list'],
     },
     {
         path: ['/receipt'],
@@ -93,7 +93,7 @@ const routes = [
         icon: <SnippetsOutlined/>,
         name: "Nhập / xuất kho",
         component: ReceiptPage,
-        permission: ['receipt.list'],
+        permissions: ['receipt.list'],
     },
     {
         path: ['/customer'],
@@ -101,7 +101,7 @@ const routes = [
         icon: <TeamOutlined/>,
         name: "Khách hàng",
         component: CustomerPage,
-        permission: ['customer.list'],
+        permissions: ['customer.list'],
     },
     {
         icon: <FormOutlined/>,
@@ -121,7 +121,7 @@ const routes = [
                 icon: <StockOutlined/>,
                 name: "Doanh thu",
                 component: ReportRevenuePage,
-                permission: ['report.revenue'],
+                permissions: ['report.revenue'],
             }
         ]
     },
