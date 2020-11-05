@@ -7,7 +7,7 @@ export async function getUserPermission(request, h) {
 
     const returnObj = {};
     for (const permissionKey of permissionList) {
-        const result = await Permission.findOne({
+        const result = await StaffGroupPermission.findOne({
             where: {
                 group_id: request.staff.group_id,
                 key: permissionKey
@@ -17,9 +17,8 @@ export async function getUserPermission(request, h) {
             returnObj[permissionKey] = result.value == 1;
             continue;
         }
-        const defaultResult = await StaffGroupPermission.findOne({
+        const defaultResult = await Permission.findOne({
             where: {
-                group_id: request.staff.group_id,
                 key: permissionKey
             }
         });
