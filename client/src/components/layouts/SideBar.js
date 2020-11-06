@@ -203,7 +203,7 @@ const SideBarHook = () => {
             theme="light"
         >
             <div className="logo">
-                <img src={process.env.PUBLIC_URL + "/logo.png"} width="100%" height="auto"/>
+                <img src={process.env.PUBLIC_URL + "/logo-blacktext.png"} width="100%" height="auto"/>
             </div>
             <RenderedSidebar pathname={history.location.pathname}/>
         </Sider>
