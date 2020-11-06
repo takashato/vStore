@@ -38,33 +38,34 @@ const App = (props) => {
             if (token) {
                 await dispatch(setToken(token));
             }
-            // Fetch Permission
-            try {
-                const {data} = await PermissionService.getPermission();
-                setPermissions({...data});
-            } catch (err) {
-                message.error('Không thể lấy thông tin phân quyền!');
-                return;
-            }
             setFetched(true);
         })();
     }, []);
 
     useEffect(() => {
-        console.log('path app', history.location.pathname);
-        console.log('ref path', refPath);
-        if (fetched) {
-            setInitialized(true);
-            if (history.location.pathname !== '/login' && !staff.token) {
-                setRefPath(history.location.pathname);
-                history.push('/login');
-            } else if (staff.token) {
-                if (refPath === '/login') {
-                    history.push('/');
+        (async () => {
+            if (fetched) {
+                // Fetch Permission
+                try {
+                    const {data} = await PermissionService.getPermission();
+                    setPermissions({...data});
+                } catch (err) {
+                    if (history.location.pathname !== '/login') {
+                        message.error('Không thể lấy thông tin phân quyền!');
+                    }
                 }
-                history.push(refPath);
+                setInitialized(true);
+                if (history.location.pathname !== '/login' && !staff.token) {
+                    setRefPath(history.location.pathname);
+                    history.push('/login');
+                } else if (staff.token) {
+                    if (refPath === '/login') {
+                        history.push('/');
+                    }
+                    history.push(refPath);
+                }
             }
-        }
+        })();
     }, [fetched, staff.token]);
 
     if (!fetched || !initialized) {
