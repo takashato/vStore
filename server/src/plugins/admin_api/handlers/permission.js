@@ -1,28 +1,27 @@
 import StaffGroupPermission from "../../../models/staff_group_permission";
 import Permission from "../../../models/permission";
+import ResponseBuilder from "../../../helpers/response_builder";
 
 export async function getUserPermission(request, h) {
     const {query} = request;
-    const permissionList = query.list ? query.list.split(',') : [];
 
     const returnObj = {};
-    for (const permissionKey of permissionList) {
-        const result = await StaffGroupPermission.findOne({
-            where: {
-                group_id: request.staff.group_id,
-                key: permissionKey
-            }
-        });
-        if (result) {
-            returnObj[permissionKey] = result.value == 1;
-            continue;
+
+    try {
+        const permissions = await Permission.findAll();
+        for (const permission of permissions) {
+            const userPermission = await StaffGroupPermission.findOne({
+                where: {
+                    group_id: request.staff.group_id,
+                    key: permission.key,
+                }
+            });
+            returnObj[permission.key] = userPermission ? userPermission.value == 1 : permission.default_value == 1;
         }
-        const defaultResult = await Permission.findOne({
-            where: {
-                key: permissionKey
-            }
-        });
-        returnObj[permissionKey] = defaultResult ? defaultResult.value == 1 : false;
+    } catch (err) {
+        return ResponseBuilder.error(h, ResponseBuilder.INTERNAL_ERROR, 'Không thể lấy thông tin phân quyền.');
     }
+
+    returnObj['_default'] = true;
     return returnObj;
 }

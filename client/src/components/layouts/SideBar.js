@@ -21,6 +21,8 @@ import './SideBar.css';
 import axios from "../../libs/axios";
 import routes, {getRealRoutes} from "../routes";
 import ProtectedArea from "../common/ProtectedArea";
+import {useRecoilValue} from "recoil";
+import {permissionState} from "../../states/recoil/atoms/permission";
 
 const {Sider} = Layout;
 
@@ -209,8 +211,11 @@ const SideBarHook = () => {
 };
 
 const RenderedSidebar = ({pathname}) => {
+    const permissions = useRecoilValue(permissionState);
+
     const [defaultSelectedKeys, setDefaultSelectedKeys] = useState(undefined);
     const [defaultOpenKeys, setDefaultOpenKeys] = useState(undefined)
+    const [initialized, setInitialized] = useState(false);
 
     useEffect(() => {
         // Open key
@@ -237,14 +242,27 @@ const RenderedSidebar = ({pathname}) => {
         }
     }, [pathname]);
 
+    const handleSelectMenu = ({item, key, keyPath, selectedKeys, domEvent}) => {
+        setDefaultSelectedKeys([key]);
+    }
+
+    const handleInit = (key) => {
+        if (defaultSelectedKeys.includes(key)) {
+            console.log('force key reload ', key);
+            setDefaultSelectedKeys([key]);
+        }
+    }
 
     if (!defaultSelectedKeys || !defaultOpenKeys) return null;
     return (
-        <Menu theme="light" mode="inline" defaultSelectedKeys={defaultSelectedKeys} defaultOpenKeys={defaultOpenKeys}>
+        <Menu theme="light" mode="inline"
+              selectedKeys={defaultSelectedKeys}
+              onSelect={handleSelectMenu}
+        >
             {routes.map((menu) => {
                 if (!menu.hasOwnProperty('children')) {
                     return (
-                        <ProtectedArea permissions={menu.permissions}>
+                        <ProtectedArea permissions={menu.permissions} onInitialized={() => handleInit(menu.path[0])}>
                             <Menu.Item key={menu.path[0]}>
                                 <Link to={menu.path[0]}>
                                     {menu.icon}
@@ -254,6 +272,31 @@ const RenderedSidebar = ({pathname}) => {
                         </ProtectedArea>
                     );
                 }
+
+                let hiddenMenu = 0;
+                const subMenuList = menu.children.map(subMenu => {
+                    let hasPermissionCount = 0;
+                    for (const permissionKey of subMenu.permissions) {
+                        if (permissions[permissionKey]) {
+                            hasPermissionCount++;
+                            continue;
+                        }
+                    }
+                    if (hasPermissionCount <= 0) hiddenMenu++;
+                    return (
+                        <ProtectedArea permissions={subMenu.permissions} onInitialized={() => handleInit(subMenu.path[0])}>
+                            <Menu.Item key={subMenu.path[0]}>
+                                <Link to={subMenu.path[0]}>
+                                    {subMenu.icon}
+                                    <span>{subMenu.name}</span>
+                                </Link>
+                            </Menu.Item>
+                        </ProtectedArea>
+                    );
+                });
+
+                if (hiddenMenu === menu.children.length) return null;
+
                 return (
                     <Menu.SubMenu key={menu.children[0].path[0]} title={
                         <span>
@@ -261,18 +304,7 @@ const RenderedSidebar = ({pathname}) => {
                             <span>{menu.name}</span>
                     </span>
                     }>
-                        {menu.children.map(subMenu => {
-                            return (
-                                <ProtectedArea permissions={subMenu.permissions}>
-                                    <Menu.Item key={subMenu.path[0]}>
-                                        <Link to={subMenu.path[0]}>
-                                            {subMenu.icon}
-                                            <span>{subMenu.name}</span>
-                                        </Link>
-                                    </Menu.Item>
-                                </ProtectedArea>
-                            );
-                        })}
+                        {subMenuList}
                     </Menu.SubMenu>
                 );
             })}

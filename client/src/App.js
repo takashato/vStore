@@ -6,23 +6,26 @@ import MainLayout from "./components/layouts/MainLayout";
 import {Provider, useDispatch, useSelector} from "react-redux";
 import {ApolloProvider} from "@apollo/react-hooks";
 import config from "./config.json";
-import {ConfigProvider, Spin, Typography} from "antd";
+import {ConfigProvider, message, Spin, Typography} from "antd";
 import viVN from "antd/es/locale/vi_VN";
 import store from "./states/redux/store";
 import client from "./graphql/client";
 import {BrowserRouter, Route, Switch, useHistory} from "react-router-dom";
 import {setToken} from "./states/redux/actions/staff";
-import {RecoilRoot} from "recoil";
+import {RecoilRoot, useSetRecoilState} from "recoil";
 import {getRealRoutes} from "./components/routes";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import UnauthorizedPage from "./components/pages/error/UnauthorizedPage";
 import NotFoundPage from "./components/pages/error/NotFoundPage";
+import {permissionSelector, permissionState} from "./states/recoil/atoms/permission";
+import PermissionService from "./services/PermissionService";
 
 const App = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
     const staff = useSelector(state => state.staff);
+    const setPermissions = useSetRecoilState(permissionSelector);
 
     const [fetched, setFetched] = useState(false);
     const [initialized, setInitialized] = useState(false);
@@ -30,9 +33,18 @@ const App = (props) => {
 
     useEffect(() => {
         (async () => {
+            // Fetch token
             const token = localStorage.getItem('session_token') || sessionStorage.getItem('session_token');
             if (token) {
                 await dispatch(setToken(token));
+            }
+            // Fetch Permission
+            try {
+                const {data} = await PermissionService.getPermission();
+                setPermissions({...data});
+            } catch (err) {
+                message.error('Không thể lấy thông tin phân quyền!');
+                return;
             }
             setFetched(true);
         })();
@@ -79,12 +91,13 @@ const App = (props) => {
                             {getRealRoutes().map(route => {
                                 return (
                                     <ProtectedRoute
+                                        key={route.path[0]}
                                         permissions={route.permissions}
                                         path={route.path}
                                         exact={route.exact ?? true}
                                         fallback={notFoundContent}
                                     >
-                                        <route.component/>
+                                        {route.component ? <route.component/> : null}
                                     </ProtectedRoute>
                                 );
                             })}

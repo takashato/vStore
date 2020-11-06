@@ -2,15 +2,18 @@ import {atom, selector} from "recoil";
 
 export const permissionState = atom({
     key: 'permissionState',
-    default: {}
+    default: {
+        _default: false,
+    }
 });
 
 export const permissionSelector = selector({
     key: 'permissionState/selector',
     get: ({get}) => get(permissionState),
-    set: ({get, set}, newValue) => {
+    set: async ({get, set}, newValue) => {
         const oldValue = get(permissionState);
         const newToSet = {...newValue, ...oldValue};
-        set(permissionState, newToSet);
+        console.log('selector!', newToSet);
+        await set(permissionState, newToSet);
     }
 })
