@@ -30,9 +30,6 @@ const ProtectedRoute = ({permissions = [], children, fallback, ...rest}) => {
         setAllowed(true);
     }, [permissionValues, staff]);
 
-    console.log('protected route ', isAllowed, ' data ', rest);
-    console.log(permissions, ' => ', permissionValues);
-
     return (
         isAllowed
             ? <Route {...rest}>{children}</Route>
