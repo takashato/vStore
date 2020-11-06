@@ -262,7 +262,7 @@ const RenderedSidebar = ({pathname}) => {
             {routes.map((menu) => {
                 if (!menu.hasOwnProperty('children')) {
                     return (
-                        <ProtectedArea permissions={menu.permissions} onInitialized={() => handleInit(menu.path[0])}>
+                        <ProtectedArea key={menu.path[0]} permissions={menu.permissions}>
                             <Menu.Item key={menu.path[0]}>
                                 <Link to={menu.path[0]}>
                                     {menu.icon}
@@ -284,7 +284,7 @@ const RenderedSidebar = ({pathname}) => {
                     }
                     if (hasPermissionCount <= 0) hiddenMenu++;
                     return (
-                        <ProtectedArea permissions={subMenu.permissions} onInitialized={() => handleInit(subMenu.path[0])}>
+                        <ProtectedArea key={subMenu.path[0]} permissions={subMenu.permissions}>
                             <Menu.Item key={subMenu.path[0]}>
                                 <Link to={subMenu.path[0]}>
                                     {subMenu.icon}

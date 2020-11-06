@@ -13,7 +13,6 @@ export const permissionSelector = selector({
     set: async ({get, set}, newValue) => {
         const oldValue = get(permissionState);
         const newToSet = {...newValue, ...oldValue};
-        console.log('selector!', newToSet);
         await set(permissionState, newToSet);
     }
 })
