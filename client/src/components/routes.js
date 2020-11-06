@@ -1,26 +1,32 @@
 import React from 'react';
 import {
     DashboardOutlined,
-    DatabaseOutlined, FileTextOutlined, FormOutlined, ShoppingCartOutlined, SnippetsOutlined, StockOutlined,
+    DatabaseOutlined,
+    FileTextOutlined,
+    FormOutlined,
+    ShoppingCartOutlined,
+    SnippetsOutlined,
+    StockOutlined,
     TagsOutlined,
     TeamOutlined,
     UnorderedListOutlined,
     UserOutlined
 } from "@ant-design/icons";
-import DashboardPage from "./pages/DashboardPage";
-import StaffPage from "./pages/staff/StaffPage";
-import ProductPage from "./pages/ProductPage";
-import CategoryPage from "./pages/category/CategoryPage";
-import SalePage from "./pages/SalePage";
-import InvoicePage from "./pages/InvoicePage";
-import ReceiptPage from "./pages/ReceiptPage";
-import CustomerPage from "./pages/CustomerPage";
-import ReportPage from "./pages/ReportPage";
-import ReportRevenuePage from "./pages/ReportRevenuePage";
+
+const DashboardPage = React.lazy(() => import( "./pages/DashboardPage"));
+const StaffPage = React.lazy(() => import( "./pages/staff/StaffPage"));
+const ProductPage = React.lazy(() => import( "./pages/ProductPage"));
+const CategoryPage = React.lazy(() => import("./pages/category/CategoryPage"));
+const SalePage = React.lazy(() => import("./pages/SalePage"));
+const InvoicePage = React.lazy(() => import("./pages/InvoicePage"));
+const ReceiptPage = React.lazy(() => import("./pages/ReceiptPage"));
+const CustomerPage = React.lazy(() => import("./pages/CustomerPage"));
+const ReportPage = React.lazy(() => import("./pages/ReportPage"));
+const ReportRevenuePage = React.lazy(() => import("./pages/ReportRevenuePage"));
 
 const routes = [
     {
-        path: [ '/dashboard', '/'],
+        path: ['/dashboard', '/'],
         exact: true,
         icon: <DashboardOutlined/>,
         name: "Trang chính",
@@ -127,7 +133,7 @@ const routes = [
     },
 ];
 
-export const getRealRoutes = () =>  {
+export const getRealRoutes = () => {
     const realRoutes = [];
     for (const menu of routes) {
         if (!menu.hasOwnProperty('children')) {

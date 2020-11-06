@@ -6,7 +6,7 @@ import MainLayout from "./components/layouts/MainLayout";
 import {Provider, useDispatch, useSelector} from "react-redux";
 import {ApolloProvider} from "@apollo/react-hooks";
 import config from "./config.json";
-import {ConfigProvider, message, Spin, Typography} from "antd";
+import {ConfigProvider, message, Spin} from "antd";
 import viVN from "antd/es/locale/vi_VN";
 import store from "./states/redux/store";
 import client from "./graphql/client";
@@ -17,7 +17,7 @@ import {getRealRoutes} from "./components/routes";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import UnauthorizedPage from "./components/pages/error/UnauthorizedPage";
 import NotFoundPage from "./components/pages/error/NotFoundPage";
-import {permissionSelector, permissionState} from "./states/recoil/atoms/permission";
+import {permissionSelector} from "./states/recoil/atoms/permission";
 import PermissionService from "./services/PermissionService";
 
 const App = (props) => {
@@ -87,24 +87,30 @@ const App = (props) => {
                 </Route>
                 <Route>
                     <MainLayout>
-                        <Switch>
-                            {getRealRoutes().map(route => {
-                                return (
-                                    <ProtectedRoute
-                                        key={route.path[0]}
-                                        permissions={route.permissions}
-                                        path={route.path}
-                                        exact={route.exact ?? true}
-                                        fallback={notFoundContent}
-                                    >
-                                        {route.component ? <route.component/> : null}
-                                    </ProtectedRoute>
-                                );
-                            })}
-                            <Route>
-                                <NotFoundPage/>
-                            </Route>
-                        </Switch>
+                        <React.Suspense fallback={
+                            <Spin tip="Đang tải trang, vui lòng chờ...">
+                                <div className='loading-screen'/>
+                            </Spin>
+                        }>
+                            <Switch>
+                                {getRealRoutes().map(route => {
+                                    return (
+                                        <ProtectedRoute
+                                            key={route.path[0]}
+                                            permissions={route.permissions}
+                                            path={route.path}
+                                            exact={route.exact ?? true}
+                                            fallback={notFoundContent}
+                                        >
+                                            {route.component ? <route.component/> : null}
+                                        </ProtectedRoute>
+                                    );
+                                })}
+                                <Route>
+                                    <NotFoundPage/>
+                                </Route>
+                            </Switch>
+                        </React.Suspense>
                     </MainLayout>
                 </Route>
             </Switch>
