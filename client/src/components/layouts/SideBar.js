@@ -242,22 +242,11 @@ const RenderedSidebar = ({pathname}) => {
         }
     }, [pathname]);
 
-    const handleSelectMenu = ({item, key, keyPath, selectedKeys, domEvent}) => {
-        setDefaultSelectedKeys([key]);
-    }
-
-    const handleInit = (key) => {
-        if (defaultSelectedKeys.includes(key)) {
-            console.log('force key reload ', key);
-            setDefaultSelectedKeys([key]);
-        }
-    }
-
     if (!defaultSelectedKeys || !defaultOpenKeys) return null;
     return (
         <Menu theme="light" mode="inline"
-              selectedKeys={defaultSelectedKeys}
-              onSelect={handleSelectMenu}
+              defaultSelectedKeys={defaultSelectedKeys}
+              defaultOpenKeys={defaultOpenKeys}
         >
             {routes.map((menu) => {
                 if (!menu.hasOwnProperty('children')) {
