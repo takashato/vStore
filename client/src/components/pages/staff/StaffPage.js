@@ -8,7 +8,6 @@ import {useQuery} from "@apollo/react-hooks";
 import {STAFF_LIST_QUERY} from "../../../graphql/query";
 import {userGroupIDMap} from "../../../constants/userGroupIDMap";
 import StaffModal from "./StaffModal";
-import usePermission from "../../hooks/usePermission";
 
 const StaffPageHook = (props) => {
     const history = useHistory();

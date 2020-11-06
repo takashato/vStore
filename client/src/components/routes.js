@@ -23,6 +23,7 @@ const ReceiptPage = React.lazy(() => import("./pages/ReceiptPage"));
 const CustomerPage = React.lazy(() => import("./pages/CustomerPage"));
 const ReportPage = React.lazy(() => import("./pages/ReportPage"));
 const ReportRevenuePage = React.lazy(() => import("./pages/ReportRevenuePage"));
+const StaffGroupPage = React.lazy(() => import('./pages/staff-group/StaffGroupPage'));
 
 const routes = [
     {
@@ -47,10 +48,10 @@ const routes = [
             },
             {
                 path: ['/staff-group'],
-                exact: false,
+                exact: true,
                 icon: <TeamOutlined/>,
                 name: "Nhóm nhân viên",
-                component: null,
+                component: StaffGroupPage,
                 permissions: ['staff_group.list'],
             }
         ]
