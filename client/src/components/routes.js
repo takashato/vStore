@@ -25,7 +25,7 @@ const routes = [
         icon: <DashboardOutlined/>,
         name: "Trang chính",
         component: DashboardPage,
-        permissions: [],
+        permissions: ['dashboard'],
     },
     {
         icon: <UserOutlined/>,
