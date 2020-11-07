@@ -26,6 +26,7 @@
     "@hapi/vision": "^6.0.0",
     "apollo-server-errors": "^2.4.1",
     "apollo-server-hapi": "^2.14.3",
+    "axios": "^0.21.0",
     "bcrypt": "^5.0.0",
     "graphql": "^15.1.0",
     "graphql-iso-date": "^3.6.1",

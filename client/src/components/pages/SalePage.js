@@ -127,10 +127,6 @@ class SalePage extends React.Component {
             message.error("Vui lòng thêm ít nhất một mặt hàng.");
             return;
         }
-        if(this.state.charge_money < 0) {
-            message.error("Tiền thanh toán không đủ.");
-            return;
-        }
         try {
             const res = await axios.post('/sale', {
                 customer_id: this.state.customer ? this.state.customer.key : null,
@@ -142,6 +138,9 @@ class SalePage extends React.Component {
                 message: 'Đã tạo đơn hàng # ' + res.data.id + '!',
                 description: <Button onClick={() => this.goToInvoice(res.data.id)}>Xem đơn hàng</Button>
             });
+            if (res.redirectUrl) {
+                window.open(res.redirectUrl, '_blank');
+            }
             this.setState({
                 details: [],
                 customer: undefined,

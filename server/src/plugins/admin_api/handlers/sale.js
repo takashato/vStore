@@ -6,13 +6,14 @@ import Invoice from "../../../models/invoice";
 import InvoiceDetail from "../../../models/invoice_detail";
 import Receipt from "../../../models/receipt";
 import ReceiptDetail from "../../../models/receipt_detail";
+import {requestPayment} from "../../../helpers/momo";
 
 export async function sale(request, h) {
     const {payload} = request;
 
     const {customer_id, pay_method, prepaid_value, details} = payload;
 
-    if (!prepaid_value || !details || details.length <= 0) {
+    if (!details || details.length <= 0) {
         return ResponseBuilder.inputError(h, 'Vui lòng điền đẩy đủ thông tin.', 'missing_required_fields');
     }
 
@@ -123,7 +124,23 @@ export async function sale(request, h) {
         // Commit changes
         await transaction.commit();
 
-        return {id: invoice.id};
+        let redirectUrl = false;
+        if (pay_method == "2") {
+            const data = await requestPayment({
+                requestId: invoice.id.toString(),
+                amount: invoice.total_final_value.toString(),
+                orderId: invoice.id.toString(),
+                returnUrl: "http://localhost:3000/admin/callback/test",
+                notifyUrl: "http://localhost:3000/admin/callback/test",
+                extraData: "",
+            });
+            redirectUrl = data.payUrl;
+        }
+
+        return {
+            id: invoice.id,
+            redirectUrl,
+        };
     } catch (err) {
         if (transaction) await transaction.rollback();
         console.error(err);
