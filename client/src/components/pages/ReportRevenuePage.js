@@ -8,6 +8,7 @@ import moment from "moment";
 import axios from "../../libs/axios";
 import {number_format} from "../../libs/number_formater";
 import enumerateDaysBetweenDates from "../../libs/date_enumerator";
+import {Line} from "@ant-design/charts";
 
 const dateFormat = 'DD/MM/YYYY';
 
@@ -74,6 +75,20 @@ class ReportRevenuePage extends React.Component {
     }
 
     render() {
+        console.log(this.state.data);
+        const chartConfig = {
+            data: this.state.data.map((e) => ({...e, date: e.date.format("D/M/Y")})),
+            xField: "date",
+            yField: "revenue",
+            meta: {
+                // date: {
+                //     formatter: (moment) => {
+                //         return moment.format('d/m/Y');
+                //     }
+                // }
+            }
+        };
+
         return (
             <div>
                 <PageHeader
@@ -96,6 +111,9 @@ class ReportRevenuePage extends React.Component {
                                               pageStyle="padding: 20px;"/>
                             </Form.Item>
                         </Form>
+                    </div>
+                    <div>
+                        {this.state.data ? <Line {...chartConfig}/> : null}
                     </div>
                     <div ref={(ref) => this.tableRef = ref} className="container">
                         <Table columns={this.columns} rowKey="date" dataSource={this.state.data}

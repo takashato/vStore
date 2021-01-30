@@ -5,6 +5,7 @@
   "homepage": "/admin",
   "proxy": "http://localhost:3001",
   "dependencies": {
+    "@ant-design/charts": "^1.0.17",
     "@ant-design/compatible": "^1.0.2",
     "@ant-design/icons": "^4.2.1",
     "@apollo/react-hooks": "^4.0.0",
